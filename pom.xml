@@ -9,11 +9,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- Project information -->
-	<groupId>com.authdb</groupId>
+	<groupId>com.craftfire</groupId>
 	<artifactId>authdb</artifactId>
 	<version>dev-SNAPSHOT</version>
 	<name>AuthDB</name>
-	<url>http://www.authdb.com</url>
+	<url>http://www.craftfire.com</url>
 	<description>Script and custom MySQL database user authentication and security plugin for Bukkit-based Minecraft servers.</description>
 
 	<properties>

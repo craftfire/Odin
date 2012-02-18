@@ -9,7 +9,7 @@ AuthDB is licensed under GNU LESSER GENERAL PUBLIC LICENSE Version 3.
 
 Who is CraftFire?
 -----------------
-CraftFire is the team behind AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, and TextWrap.  
+CraftFire is the team behind AuthAPI, AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, and TextWrap.  
 [![Wulfspider](https://secure.gravatar.com/avatar/6f2a0dcb60cd1ebee57875f9326bc98c?d=mm&r=pg&s=48)](http://forums.spout.org/members/wulfspider.1/) 
 [![Contex](https://secure.gravatar.com/avatar/166ba849fcd905c8842cb062b879bc09?d=mm&r=pg&s=48)](forums.bukkit.org/members/contex.17559/) 
 
@@ -56,5 +56,5 @@ Coding and Pull Request Conventions
 [Twitter Logo]: http://cdn.spout.org/img/button/twitter_follow_us.png
 [Facebook]: http://facebook.com/CraftFire
 [Facebook Logo]: http://cdn.spout.org/img/button/facebook_like_us.png
-[Donate]: https://www.paypal.com/cgi-bin/webscr?hosted_button_id=4K4LNLGDM9T6Y&page_style=AuthDB&item_name=AuthDB+donation+%28from+github.com%29&cmd=_s-xclick
+[Donate]: https://www.paypal.com/cgi-bin/webscr?hosted_button_id=4K4LNLGDM9T6Y&page_style=CraftFire&item_name=AuthDB+donation+%28from+github.com%29&cmd=_s-xclick
 [Donate Logo]: http://cdn.spout.org/img/button/donate_paypal_96x96.png
