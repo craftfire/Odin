@@ -1,0 +1,101 @@
+<!--
+	Maven build file for AuthDB
+
+	Copyright (c) 2011-2012 CraftFire <http://www.craftfire.com>
+	AuthDB is licensed under GNU LESSER GENERAL PUBLIC LICENSE Version 3.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Project information -->
+	<groupId>com.authdb</groupId>
+	<artifactId>authdb</artifactId>
+	<version>dev-SNAPSHOT</version>
+	<name>AuthDB</name>
+	<url>http://www.authdb.com</url>
+	<description>Script and custom MySQL database user authentication and security plugin for Bukkit-based Minecraft servers.</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bukkit.version>1.1-R5-SNAPSHOT</bukkit.version>
+		<build.number>Unknown</build.number>
+	</properties>
+
+	<!-- License -->
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<!-- Source code -->
+	<scm>
+		<developerConnection>scm:git:git@github.com:CraftFire/${project.name}.git</developerConnection>
+		<connection>scm:git:git://github.com/CraftFire/${project.name}.git</connection>
+		<url>https://github.com/CraftFire/${project.name}</url>
+	</scm>
+
+	<!-- Continuous integration -->
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://ci.craftfire.com</url>
+	</ciManagement>
+
+	<!-- Repository locations -->
+	<repositories>
+		<repository>
+			<id>craftfire-repo</id>
+			<url>http://repo.craftfire.com</url>
+		</repository>
+	</repositories>
+
+	<!-- Dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>${bukkit.version}</version>
+		</dependency>
+	</dependencies>
+
+	<!-- Build -->
+	<build>
+		<defaultGoal>clean install</defaultGoal>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<!-- Resources -->
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}</directory>
+				<includes>
+					<include>LICENSE.txt</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+		</resources>
+		<!-- Build plugins -->
+		<plugins>
+			<!-- Compile plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
