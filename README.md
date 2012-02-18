@@ -9,7 +9,7 @@ AuthDB is licensed under GNU LESSER GENERAL PUBLIC LICENSE Version 3.
 
 Who is CraftFire?
 -----------------
-CraftFire is the team behind AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, and TextWrap.
+CraftFire is the team behind AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, and TextWrap.  
 [![Wulfspider](https://secure.gravatar.com/avatar/6f2a0dcb60cd1ebee57875f9326bc98c?d=mm&r=pg&s=48)](http://forums.spout.org/members/wulfspider.1/) 
 [![Contex](https://secure.gravatar.com/avatar/166ba849fcd905c8842cb062b879bc09?d=mm&r=pg&s=48)](forums.bukkit.org/members/contex.17559/) 
 
