@@ -151,10 +151,10 @@ public class AuthDBPlayerBase {
     }
 
     public boolean hasMinLength() {
-        return this.username < AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_minimum);
+        return this.username.length() < AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_minimum);
     }
 
     public boolean hasMaxLength() {
-        return this.username > AuthDBManager.cfgMngr.getInteger(ConfigurationNode.user_maximum);
+        return this.username.length() > AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_maximum);
     }
 }

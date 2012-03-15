@@ -18,7 +18,7 @@ package com.craftfire.authdb.layer.bukkit.listeners;
 
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.configuration.ConfigurationNode;
-import com.craftfire.authdb.layer.bukkit.AuthDBPlugin;
+import com.craftfire.authdb.layer.bukkit.AuthDB;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
 import org.bukkit.event.EventHandler;
@@ -27,9 +27,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 public class AuthDBPlayerListener implements Listener {
-    private AuthDBPlugin plugin;
+    private AuthDB plugin;
 
-    public AuthDBPlayerListener(AuthDBPlugin plugin) {
+    public AuthDBPlayerListener(AuthDB plugin) {
         this.plugin = plugin;
     }
 
@@ -61,7 +61,7 @@ public class AuthDBPlayerListener implements Listener {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getString(ConfigurationNode.link_rename) && player.isLinked()) {
+        if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.link_rename) && player.isLinked()) {
             player.setLinkedName();
         }
 

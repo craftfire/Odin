@@ -45,10 +45,28 @@ public enum ConfigurationNode {
     customdb_emailrequired (ConfigurationFile.advanced, "customdb.emailrequired", false),
     customdb_encryption (ConfigurationFile.advanced, "customdb.encryption", "md5"),
 
+    join_restrict (ConfigurationFile.advanced, "session.restrict", true),
+
+    register_enabled (ConfigurationFile.advanced, "register.enabled", true),
+    register_force (ConfigurationFile.advanced, "register.force", true),
+    register_delay (ConfigurationFile.advanced, "register.delay", "4 seconds"),
+    register_timeout (ConfigurationFile.advanced, "register.timeout", "3 minutes"),
+
+    link_enabled (ConfigurationFile.advanced, "link.enabled", true),
+    link_rename (ConfigurationFile.advanced, "link.rename", true),
+
+    username_minimum (ConfigurationFile.advanced, "username.minimum", 3),
+    username_maximum (ConfigurationFile.advanced, "username.maximum", 16),
+
     session_enabled (ConfigurationFile.advanced, "session.enabled", true),
     session_start (ConfigurationFile.advanced, "session.start", "login"),
     session_length (ConfigurationFile.advanced, "session.length", "1 hour"),
-    session_protect (ConfigurationFile.advanced, "session.protect", true);
+    session_protect (ConfigurationFile.advanced, "session.protect", true),
+
+    filter_action (ConfigurationFile.advanced, "filter.action", "kick"),
+    filter_username (ConfigurationFile.advanced, "filter.username", "`~!@#$%^&*()-=+{[]}|\\\\:;\\\"<,>.?/"),
+    filter_password (ConfigurationFile.advanced, "filter.password", "$&\\\\\\\""),
+    filter_whitelist (ConfigurationFile.advanced, "filter.whitelist", "Contex,Wulfspider");
 
     public String node;
     public Object data;

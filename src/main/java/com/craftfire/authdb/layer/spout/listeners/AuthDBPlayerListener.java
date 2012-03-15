@@ -16,7 +16,7 @@
  */
 package com.craftfire.authdb.layer.spout.listeners;
 
-import com.craftfire.authdb.layer.spout.AuthDBPlugin;
+import com.craftfire.authdb.layer.spout.AuthDB;
 import org.spout.api.event.EventHandler;
 import org.spout.api.event.Listener;
 import org.spout.api.event.Order;
@@ -27,9 +27,9 @@ import org.spout.api.event.player.PlayerLeaveEvent;
 import org.spout.api.event.server.PreCommandEvent;
 
 public class AuthDBPlayerListener implements Listener {
-    private AuthDBPlugin plugin;
+    private AuthDB plugin;
 
-    public AuthDBPlayerListener(AuthDBPlugin plugin) {
+    public AuthDBPlayerListener(AuthDB plugin) {
         this.plugin = plugin;
     }
 
