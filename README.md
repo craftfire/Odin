@@ -9,7 +9,7 @@ AuthDB is licensed under GNU LESSER GENERAL PUBLIC LICENSE Version 3.
 
 Who is CraftFire?
 -----------------
-CraftFire is the team behind AuthAPI, AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, and TextWrap.  
+CraftFire is the team behind AuthAPI, AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, CraftCommons, and TextWrap.  
 [![Wulfspider](https://secure.gravatar.com/avatar/6f2a0dcb60cd1ebee57875f9326bc98c?d=mm&r=pg&s=48)](http://forums.spout.org/members/wulfspider.1/) 
 [![Contex](https://secure.gravatar.com/avatar/166ba849fcd905c8842cb062b879bc09?d=mm&r=pg&s=48)](forums.bukkit.org/members/contex.17559/) 
 
@@ -33,9 +33,9 @@ AuthDB uses Maven to handle its dependencies.
 Coding and Pull Request Conventions
 -----------------------------------
 * Generally follow the Oracle coding standards.
-* Use tabs, no spaces.
+* 80 column limit.
+* Use spaces, no tabs.
 * No trailing whitespaces.
-* No 80 column limit or midstatement newlines.
 * Pull requests must compile and work.
 * Pull requests must be formatted properly.
 * Number of commits in a pull request should be kept to a minimum.
