@@ -16,7 +16,7 @@
  */
 package com.craftfire.authdb.layer.bukkit.managers;
 
-import com.craftfire.authdb.layer.bukkit.AuthDBPlugin;
+import com.craftfire.authdb.layer.bukkit.AuthDB;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -25,12 +25,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MessageHandler {
-    private final AuthDBPlugin plugin;
+    private final AuthDB plugin;
     private final File configfile;
     private final String file = "messages.yml";
     private FileConfiguration config = null;
 
-    public MessageHandler(final AuthDBPlugin plugin) {
+    public MessageHandler(final AuthDB plugin) {
         this.plugin = plugin;
         this.configfile = new File(plugin.getDataFolder(), this.file);
     }

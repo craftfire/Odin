@@ -16,13 +16,13 @@
  */
 package com.craftfire.authdb.layer.bukkit.api;
 
-import com.craftfire.authdb.layer.bukkit.managers.AuthDBBukkitPlayer;
+import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import org.bukkit.event.HandlerList;
 
 public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
-    protected AuthDBBukkitPlayer player;
+    protected AuthDBPlayer player;
 
-    protected AuthDBPlayerLoginEvent(AuthDBBukkitPlayer player) {
+    protected AuthDBPlayerLoginEvent(AuthDBPlayer player) {
         this.player = player;
     }
 
@@ -31,7 +31,7 @@ public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
      *
      * @return player who tried to login
      */
-    public AuthDBBukkitPlayer getPlayer() {
+    public AuthDBPlayer getPlayer() {
         return this.player;
     }
 
