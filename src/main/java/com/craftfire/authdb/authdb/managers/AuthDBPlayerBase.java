@@ -17,6 +17,7 @@
 package com.craftfire.authdb.authdb.managers;
 
 import com.craftfire.authapi.classes.ScriptUser;
+import com.craftfire.authdb.authdb.managers.configuration.ConfigurationNode;
 
 public class AuthDBPlayerBase {
     protected String username;
@@ -31,6 +32,22 @@ public class AuthDBPlayerBase {
      */
     public AuthDBPlayerBase(final String username) {
         this.username = username;
+        load();
+    }
+    
+    public void save() {
+        AuthDBManager.userStorage.put(this.username, this);
+    }
+
+    public void load() {
+        if (AuthDBManager.userStorage.containsKey(this.username)) {
+            /* TODO */
+            AuthDBPlayerBase temp = AuthDBManager.userStorage.get(this.username);
+            this.username = temp.getUsername();
+            this.user = temp.getUser();
+            this.status = temp.getStatus();
+            this.ip = temp.getIP();
+        }
     }
     
     public String getUsername() {
@@ -60,21 +77,24 @@ public class AuthDBPlayerBase {
     }
 
     public boolean isAuthenticated() {
-        /* TODO */
-        return false;
-    }
-
-    public void setAuthenticated(boolean authenticated) {
-        /* TODO */
+        return AuthDBManager.userAuthenticated.contains(this.username);
     }
 
     public boolean logout() {
-        /* TODO */
+        if (AuthDBManager.userAuthenticated.contains(this.username)) {
+            AuthDBManager.userAuthenticated.remove(this.username);
+            return true;
+        }
         return false;
     }
 
     public boolean login(String password) {
-        /* TODO */
+        if (! AuthDBManager.userAuthenticated.contains(this.username)) {
+            if (AuthDBManager.authAPI.authenticate(this.username, password)) {
+                AuthDBManager.userAuthenticated.add(this.username);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -83,22 +103,32 @@ public class AuthDBPlayerBase {
         return null;
     }
 
+    public boolean hasSession() {
+        return AuthDBManager.userSessions.contains(this.username);
+    }
+
     public boolean isRegistered() {
         if (this.status != null && this.status.equals(Status.Registered)) {
             return true;
         } else {
-            if (AuthDBManager.authAPI.getScript().isRegistered(this.username)) {
+            if (this.status.equals(Status.Authenticated)) {
+                return true;
+            } else if (AuthDBManager.authAPI.getScript().isRegistered(this.username)) {
                 this.status = Status.Registered;
                 return true;
             } else {
                 this.status = Status.Guest;
             }
         }
+        return false;
     }
 
     public boolean isGuest() {
-        if (this.status != null && this.status.equals(Status.Guest)) {
-            return true;
+        if (this.status != null) {
+            if (this.status.equals(Status.Guest)) {
+                return true;
+            }
+            return false;
         } else {
             if (! AuthDBManager.authAPI.getScript().isRegistered(this.username)) {
                 this.status = Status.Guest;
@@ -109,8 +139,7 @@ public class AuthDBPlayerBase {
         }
         return false;
     }
-    
-    
+
     public Status getStatus() {
         return this.status;
     }
@@ -119,5 +148,13 @@ public class AuthDBPlayerBase {
         Guest,
         Registered,
         Authenticated
+    }
+
+    public boolean hasMinLength() {
+        return this.username < AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_minimum);
+    }
+
+    public boolean hasMaxLength() {
+        return this.username > AuthDBManager.cfgMngr.getInteger(ConfigurationNode.user_maximum);
     }
 }

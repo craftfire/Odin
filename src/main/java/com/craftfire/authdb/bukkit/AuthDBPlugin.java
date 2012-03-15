@@ -19,6 +19,7 @@ package com.craftfire.authdb.bukkit;
 import com.craftfire.authapi.AuthAPI;
 import com.craftfire.authapi.ScriptAPI;
 import com.craftfire.authdb.authdb.managers.AuthDBManager;
+import com.craftfire.authdb.authdb.managers.configuration.ConfigurationManager;
 import com.craftfire.authdb.bukkit.api.AuthDBDisableEvent;
 import com.craftfire.authdb.bukkit.api.AuthDBEnableEvent;
 import com.craftfire.authdb.bukkit.listeners.AuthDBPlayerListener;
@@ -55,16 +56,6 @@ public class AuthDBPlugin extends JavaPlugin {
 
         loadConfiguration();
 
-        AuthDBManager.dataManager = new DataManager(true,
-                                                    0,
-                                                    "localhost",
-                                                    3306,
-                                                    "craftfire",
-                                                    "craftfire",
-                                                    "craftfire",
-                                                    "xf__112__");
-        AuthDBManager.authAPI = new AuthAPI(ScriptAPI.Scripts.XF, "1.1.2",  AuthDBManager.dataManager);
-
         getServer().getPluginManager().registerEvents(new AuthDBPlayerListener(this), this);
         setupPermissions();
         setupChat();
@@ -87,14 +78,23 @@ public class AuthDBPlugin extends JavaPlugin {
         return true;
     }
 
+    protected void setClasses() {
+        AuthDBManager.dataManager = new DataManager(true,
+                0,
+                "localhost",
+                3306,
+                "craftfire",
+                "craftfire",
+                "craftfire",
+                "xf__112__");
+        AuthDBManager.authAPI = new AuthAPI(ScriptAPI.Scripts.XF, "1.1.2",  AuthDBManager.dataManager);
+        AuthDBManager.cfgMngr = new ConfigurationManager();
+        //AuthDBManager.invMngr
+    }
+
     private void loadConfiguration() {
         getConfig().options().copyDefaults(true);
         saveConfig();
-
-        msgCtrl = new MessageHandler(this);
-        msgCtrl.getConfig().options().copyDefaults(true);
-        msgCtrl.saveConfig();
-        msgCtrl.reloadConfig();
     }
 
     private Boolean setupPermissions() {

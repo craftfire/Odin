@@ -14,22 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.authdb.managers;
+package com.craftfire.authdb.bukkit.util;
 
-import com.craftfire.authapi.AuthAPI;
-import com.craftfire.authdb.authdb.managers.configuration.ConfigurationManager;
-import com.craftfire.commons.DataManager;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import com.craftfire.authdb.bukkit.managers.AuthDBPlayer;
+import org.bukkit.entity.Player;
 
-public class AuthDBManager {
-    public static AuthAPI authAPI;
-    public static DataManager dataManager;
-    public static ConfigurationManager cfgMngr;
-    public static InventoryManager invMngr;
-    
-    public static HashSet<String> userSessions = new HashSet<String>();
-    public static HashSet<String> userAuthenticated = new HashSet<String>();
-    public static HashMap<String, AuthDBPlayerBase> userStorage = new HashMap<String, AuthDBPlayerBase>();
+public class AuthDBUtil {
+    public static AuthDBPlayer getPlayer(Player player) {
+        return new AuthDBPlayer(player);
+    }
 }

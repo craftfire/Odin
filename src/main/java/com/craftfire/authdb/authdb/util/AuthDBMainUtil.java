@@ -14,8 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.authdb.managers;
+package com.craftfire.authdb.authdb.util;
 
-public class ConfigurationManager {
+import com.craftfire.authdb.authdb.managers.AuthDBPlayerBase;
 
+public class AuthDBMainUtil {
+    public static AuthDBPlayerBase getUser(String username) {
+        return new AuthDBPlayerBase(username);
+    }
 }

@@ -24,14 +24,14 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 
-public class AuthDBBukkitPlayer extends AuthDBPlayerBase {
+public class AuthDBPlayer extends AuthDBPlayerBase {
     protected Player player;
     /**
      * Default constructor for the object.
      *
      * @param player player object.
      */
-    public AuthDBBukkitPlayer(Player player) {
+    public AuthDBPlayer(Player player) {
         super(player.getName());
         this.player = player;
     }
@@ -42,6 +42,16 @@ public class AuthDBBukkitPlayer extends AuthDBPlayerBase {
 
     public String getDisplayName() {
         return this.player.getDisplayName();
+    }
+    
+    public void setDisplayName(String name) {
+        this.player.setDisplayName(name);
+    }
+
+    public void setLinkedName() {
+        if (isLinked()) {
+            setDisplayName(getLinkedName());
+        }
     }
 
     public boolean hasPermissions(String permission) {
