@@ -17,7 +17,7 @@
 package com.craftfire.authdb.layer.bukkit.managers;
 
 import com.craftfire.authdb.managers.AuthDBPlayerBase;
-import com.craftfire.authdb.layer.bukkit.AuthDBPlugin;
+import com.craftfire.authdb.layer.bukkit.AuthDB;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -55,11 +55,11 @@ public class AuthDBPlayer extends AuthDBPlayerBase {
     }
 
     public boolean hasPermissions(String permission) {
-        return AuthDBPlugin.permission.has(this.player, permission);
+        return AuthDB.permission.has(this.player, permission);
     }
 
     public boolean hasPermissions(CommandSender sender, String permission) {
-        return AuthDBPlugin.permission.has(sender, permission);
+        return AuthDB.permission.has(sender, permission);
     }
 
     public PlayerInventory getInventory() {
@@ -68,7 +68,7 @@ public class AuthDBPlayer extends AuthDBPlayerBase {
 
     public void storeInventory() {
         try {
-            AuthDBPlugin.inventoryManager.storeInventory(this.player,
+            AuthDB.inventoryManager.storeInventory(this.player,
                                                          this.player.getInventory().getContents(),
                                                          this.player.getInventory().getArmorContents());
         } catch (IOException e) {
@@ -77,6 +77,6 @@ public class AuthDBPlayer extends AuthDBPlayerBase {
     }
 
     public void restoreInventory() {
-        AuthDBPlugin.inventoryManager.setInventoryFromStorage(this.player);
+        AuthDB.inventoryManager.setInventoryFromStorage(this.player);
     }
 }
