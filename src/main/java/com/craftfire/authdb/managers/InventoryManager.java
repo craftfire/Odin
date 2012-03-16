@@ -17,4 +17,25 @@
 package com.craftfire.authdb.managers;
 
 public class InventoryManager {
+    public void setInventory(String player, String inventory) {
+        AuthDBManager.playerInventory.put(player, inventory);
+    }
+
+    public String getInventory(String player) {
+        if (AuthDBManager.playerInventory.containsKey(player)) {
+            return AuthDBManager.playerInventory.get(player);
+        }
+        return null;
+    }
+
+    public void setArmor(String player, String armor) {
+        AuthDBManager.playerArmor.put(player, armor);
+    }
+
+    public String getArmor(String player) {
+        if (AuthDBManager.playerArmor.containsKey(player)) {
+            return AuthDBManager.playerArmor.get(player);
+        }
+        return null;
+    }
 }

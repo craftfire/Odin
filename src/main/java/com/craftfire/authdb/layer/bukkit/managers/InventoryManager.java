@@ -16,9 +16,12 @@
  */
 package com.craftfire.authdb.layer.bukkit.managers;
 
+import com.craftfire.authdb.managers.AuthDBManager;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -84,17 +87,14 @@ public class InventoryManager {
                 armorinv.append("0:0:0:0:0,");
             }
         }
-        /* TODO */
-        //MoinIRC.inventories.put(player.getName(), inv.toString());
-        //MoinIRC.armor.put(player.getName(), armorinv.toString());
+        AuthDBManager.playerInventory.put(player.getName(), inv.toString());
+        AuthDBManager.playerArmor.put(player.getName(), armorinv.toString());
     }
 
     public ItemStack[] getInventory(Player player) {
-        /* TODO */
-        /*
-        if (MoinIRC.inventories.containsKey(player.getName())) {
-            String data = MoinIRC.inventories.get(player.getName());
-            if (data != "" && data != null) {
+        if (AuthDBManager.playerInventory.containsKey(player.getName())) {
+            String data = AuthDBManager.playerInventory.get(player.getName());
+            if (data != null && ! data.isEmpty()) {
                 String[] inv = data.split(",");
                 ItemStack[] inventory;
                 inventory = new ItemStack[36];
@@ -134,16 +134,13 @@ public class InventoryManager {
                 return inventory;
             }
         }
-        */
         return null;
     }
 
     public ItemStack[] getArmorInventory(Player player) {
-        /* TODO */
-        /*
-        if (MoinIRC.armor.containsKey(player.getName())) {
-            String data = MoinIRC.armor.get(player.getName());
-            if (data != "" && data != null) {
+        if (AuthDBManager.playerArmor.containsKey(player.getName())) {
+            String data = AuthDBManager.playerArmor.get(player.getName());
+            if (data != null && ! data.isEmpty()) {
                 String[] inv = data.split(",");
                 ItemStack[] inventory = new ItemStack[4];
                 for (int i=0; i<inv.length; i++) {
@@ -182,7 +179,6 @@ public class InventoryManager {
                 return inventory;
             }
         }
-        */
         return null;
     }
 }
