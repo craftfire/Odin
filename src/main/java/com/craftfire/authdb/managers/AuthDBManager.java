@@ -18,6 +18,7 @@ package com.craftfire.authdb.managers;
 
 import com.craftfire.authapi.AuthAPI;
 import com.craftfire.authdb.managers.configuration.ConfigurationManager;
+import com.craftfire.authdb.managers.permissions.PermissionsManager;
 import com.craftfire.commons.DataManager;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class AuthDBManager {
     public static DataManager dataManager;
     public static ConfigurationManager cfgMngr;
     public static InventoryManager invMngr;
+    public static PermissionsManager prmMngr;
     
     public static HashSet<String> userSessions = new HashSet<String>();
     public static HashSet<String> userAuthenticated = new HashSet<String>();

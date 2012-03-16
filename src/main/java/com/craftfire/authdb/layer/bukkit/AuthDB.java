@@ -18,12 +18,13 @@ package com.craftfire.authdb.layer.bukkit;
 
 import com.craftfire.authapi.AuthAPI;
 import com.craftfire.authapi.ScriptAPI;
-import com.craftfire.authdb.managers.AuthDBManager;
-import com.craftfire.authdb.managers.configuration.ConfigurationManager;
 import com.craftfire.authdb.layer.bukkit.api.AuthDBDisableEvent;
 import com.craftfire.authdb.layer.bukkit.api.AuthDBEnableEvent;
 import com.craftfire.authdb.layer.bukkit.listeners.AuthDBPlayerListener;
 import com.craftfire.authdb.layer.bukkit.managers.InventoryManager;
+import com.craftfire.authdb.managers.AuthDBManager;
+import com.craftfire.authdb.managers.permissions.PermissionsManager;
+import com.craftfire.authdb.managers.configuration.ConfigurationManager;
 import com.craftfire.commons.DataManager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -89,6 +90,7 @@ public class AuthDB extends JavaPlugin {
                 "xf__112__");
         AuthDBManager.authAPI = new AuthAPI(ScriptAPI.Scripts.XF, "1.1.2",  AuthDBManager.dataManager);
         AuthDBManager.cfgMngr = new ConfigurationManager();
+        AuthDBManager.prmMngr = new PermissionsManager();
         //AuthDBManager.invMngr
     }
 

@@ -16,8 +16,9 @@
  */
 package com.craftfire.authdb.layer.bukkit.managers;
 
-import com.craftfire.authdb.managers.AuthDBUser;
 import com.craftfire.authdb.layer.bukkit.AuthDB;
+import com.craftfire.authdb.managers.AuthDBUser;
+import com.craftfire.authdb.managers.permissions.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -60,6 +61,10 @@ public class AuthDBPlayer extends AuthDBUser {
 
     public boolean hasPermissions(CommandSender sender, String permission) {
         return AuthDB.permission.has(sender, permission);
+    }
+    
+    public boolean hasPermissions(Permission permission) {
+        return AuthDB.permission.has(this.player, permission.permission);
     }
 
     public PlayerInventory getInventory() {
