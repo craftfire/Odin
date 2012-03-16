@@ -21,50 +21,50 @@ import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
+public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
-    protected String reason;
+    protected String linkedname;
     protected boolean successful;
 
-    protected AuthDBPlayerKickEvent(Player player, boolean successful, String reason) {
+    protected AuthDBPlayerUnlinkEvent(Player player, boolean successful, String linkedname) {
         this.player = player;
         this.authDBPlayer = AuthDBUtil.getPlayer(player);
-        this.reason = reason;
+        this.linkedname = linkedname;
         this.successful = successful;
     }
 
     /**
-     * Get the player who got kicked
+     * Get the player who unlinked
      *
-     * @return player who got kicked
+     * @return player who unlinked
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Get the AuthDB player who got kicked
+     * Get the AuthDB player who unlinked
      *
-     * @return AuthDB player who got kicked
+     * @return AuthDB player who unlinked
      */
     public AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
     }
 
     /**
-     * Get the reason for the kick
+     * Get the name of the linked user
      *
-     * @return reason for the kick
+     * @return username of the linked name
      */
-    public String getReason() {
-        return this.reason;
+    public String getLinkedname() {
+        return this.linkedname;
     }
 
     /**
-     * Returns a true if the kick was successful.
+     * Returns a true if the unlink was successful.
      *
-     * @return true if kick was successful, false if not.
+     * @return true if unlink was successful, false if not.
      */
     public boolean isSuccessful() {
         return this.successful;

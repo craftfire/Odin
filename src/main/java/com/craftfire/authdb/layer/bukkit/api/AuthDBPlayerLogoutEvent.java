@@ -17,22 +17,46 @@
 package com.craftfire.authdb.layer.bukkit.api;
 
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
+import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
 public class AuthDBPlayerLogoutEvent extends AuthDBPlayerEvent {
-    protected AuthDBPlayer player;
-    
-    protected AuthDBPlayerLogoutEvent(AuthDBPlayer player) {
+    protected Player player;
+    protected AuthDBPlayer authDBPlayer;
+    protected boolean successful;
+
+    protected AuthDBPlayerLogoutEvent(Player player, boolean successful) {
         this.player = player;
+        this.authDBPlayer = AuthDBUtil.getPlayer(player);
+        this.successful = successful;
     }
 
     /**
      * Get the player who tried to logout.
      *
-     * @return player who tried to login
+     * @return player who tried to logout
      */
-    public AuthDBPlayer getPlayer() {
+    public Player getPlayer() {
         return this.player;
+    }
+
+    /**
+     * Get the AuthDB player who tried to logout.
+     *
+     * @return AuthDB player who tried to logout
+     */
+    public AuthDBPlayer getAuthDBPlayer() {
+        return this.authDBPlayer;
+    }
+
+    /**
+     * Returns a true if the logout was successful.
+     *
+     * @return true if logout was successful, false if not.
+     */
+    public boolean isSuccessful() {
+        return this.successful;
     }
 
     private static final HandlerList handlers = new HandlerList();
