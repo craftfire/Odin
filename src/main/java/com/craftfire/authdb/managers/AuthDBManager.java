@@ -31,9 +31,12 @@ public class AuthDBManager {
     
     public static HashSet<String> userSessions = new HashSet<String>();
     public static HashSet<String> userAuthenticated = new HashSet<String>();
-    public static HashMap<String, AuthDBPlayerBase> userStorage = new HashMap<String, AuthDBPlayerBase>();
+    public static HashMap<String, AuthDBUser> userStorage = new HashMap<String, AuthDBUser>();
+    public static HashMap<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
+
     public static HashMap<String, String> playerInventory = new HashMap<String, String>();
     public static HashMap<String, String> playerArmor = new HashMap<String, String>();
+    public static HashMap<String, Long> playerJoin = new HashMap<String, Long>();
 
     public void clean() {
         userSessions.clear();

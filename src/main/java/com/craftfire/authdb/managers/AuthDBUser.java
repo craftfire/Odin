@@ -19,7 +19,7 @@ package com.craftfire.authdb.managers;
 import com.craftfire.authapi.classes.ScriptUser;
 import com.craftfire.authdb.managers.configuration.ConfigurationNode;
 
-public class AuthDBPlayerBase {
+public class AuthDBUser {
     protected String username;
     private ScriptUser user = null;
     private Status status;
@@ -30,7 +30,7 @@ public class AuthDBPlayerBase {
      *
      * @param username name of the player.
      */
-    public AuthDBPlayerBase(final String username) {
+    public AuthDBUser(final String username) {
         this.username = username;
         load();
     }
@@ -42,7 +42,7 @@ public class AuthDBPlayerBase {
     public void load() {
         if (AuthDBManager.userStorage.containsKey(this.username)) {
             /* TODO */
-            AuthDBPlayerBase temp = AuthDBManager.userStorage.get(this.username);
+            AuthDBUser temp = AuthDBManager.userStorage.get(this.username);
             this.username = temp.getUsername();
             this.user = temp.getUser();
             this.status = temp.getStatus();
@@ -78,6 +78,10 @@ public class AuthDBPlayerBase {
 
     public boolean isAuthenticated() {
         return AuthDBManager.userAuthenticated.contains(this.username);
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        AuthDBManager.userAuthenticated.add(this.username);
     }
 
     public boolean logout() {
@@ -156,5 +160,44 @@ public class AuthDBPlayerBase {
 
     public boolean hasMaxLength() {
         return this.username.length() > AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_maximum);
+    }
+    
+    public long getJoinTime() {
+        if (AuthDBManager.playerJoin.containsKey(this.username)) {
+            return AuthDBManager.playerJoin.get(this.username);
+        }
+        return 0;
+    }
+    
+    public void setJoinTime() {
+        AuthDBManager.playerJoin.put(this.username, System.currentTimeMillis());
+    }
+
+    public void setJoinTime(long time) {
+        AuthDBManager.playerJoin.put(this.username, time);
+    }
+    
+    public int getPasswordAttempts() {
+        if (AuthDBManager.userPasswordAttempts.containsKey(this.username)) {
+            return AuthDBManager.userPasswordAttempts.get(this.username);
+        }
+        return 0;
+    }
+
+    public void setPasswordAttempts(int attempts) {
+        AuthDBManager.userPasswordAttempts.put(this.username, attempts);
+    }
+
+    public void clearPasswordAttempts() {
+        AuthDBManager.userPasswordAttempts.put(this.username, 0);
+    }
+
+    public void increasePasswordAttempts() {
+        if (AuthDBManager.userPasswordAttempts.containsKey(this.username)) {
+            AuthDBManager.userPasswordAttempts.put(this.username,
+                                                   AuthDBManager.userPasswordAttempts.get(this.username) + 1);
+        } else {
+            AuthDBManager.userPasswordAttempts.put(this.username, 1);
+        }
     }
 }

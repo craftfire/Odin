@@ -45,7 +45,7 @@ public class AuthDB extends JavaPlugin {
     public static Chat chat = null;
     public static InventoryManager inventoryManager = new InventoryManager();
 
-    private static AuthDB instance;
+    public static AuthDB instance;
     {
         instance = this;
     }

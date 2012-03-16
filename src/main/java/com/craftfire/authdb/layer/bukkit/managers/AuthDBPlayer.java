@@ -16,7 +16,7 @@
  */
 package com.craftfire.authdb.layer.bukkit.managers;
 
-import com.craftfire.authdb.managers.AuthDBPlayerBase;
+import com.craftfire.authdb.managers.AuthDBUser;
 import com.craftfire.authdb.layer.bukkit.AuthDB;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 
-public class AuthDBPlayer extends AuthDBPlayerBase {
+public class AuthDBPlayer extends AuthDBUser {
     protected Player player;
     /**
      * Default constructor for the object.

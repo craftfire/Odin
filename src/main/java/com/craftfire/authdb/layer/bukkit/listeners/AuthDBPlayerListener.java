@@ -69,6 +69,44 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        boolean allow = false;
+        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        player.setJoinTime();
+
+        if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.link_rename) && player.isLinked()) {
+            /* TODO */
+        }
+
+        player.clearPasswordAttempts();
+
+        if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.session_enabled) &&
+            AuthDBManager.cfgMngr.getInteger(ConfigurationNode.session_length) != 0) {
+            if (player.hasSession()) {
+                /* TODO */
+            }
+        }
+
+        if (! allow) {
+            /* TODO */
+        }
+
+        if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.customdb_enabled) &&
+            AuthDBManager.cfgMngr.getString(ConfigurationNode.customdb_encryption).isEmpty()) {
+            /* TODO */
+        }
+
+        if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.session_enabled) /* TODO */) {
+            allow = true;
+        }
+
+        if (AuthDB.instance.getServer().getOnlineMode() && player.isRegistered()) {
+            allow = true;
+        }
+
+        if (allow) {
+            player.setAuthenticated(true);
+            /* TODO */
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
