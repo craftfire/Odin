@@ -14,7 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.commands;
+package com.craftfire.authdb.util;
 
-public class AuthDBCommands {
+import com.craftfire.authdb.managers.AuthDBUser;
+
+public class Util {
+    public static AuthDBUser getUser(String username) {
+        return new AuthDBUser(username);
+    }
 }

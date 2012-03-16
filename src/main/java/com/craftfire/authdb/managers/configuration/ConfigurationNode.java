@@ -52,8 +52,21 @@ public enum ConfigurationNode {
     register_delay (ConfigurationFile.advanced, "register.delay", "4 seconds"),
     register_timeout (ConfigurationFile.advanced, "register.timeout", "3 minutes"),
 
+    login_enabled (ConfigurationFile.advanced, "login.enabled", true),
+    login_method (ConfigurationFile.advanced, "login.method", "prompt"),
+    login_delay (ConfigurationFile.advanced, "login.delay", "4 seconds"),
+    login_timeout (ConfigurationFile.advanced, "login.timeout", "3 minutes"),
+    login_tries (ConfigurationFile.advanced, "login.tries", 3),
+    login_action (ConfigurationFile.advanced, "login.action", "kick"),
+
     link_enabled (ConfigurationFile.advanced, "link.enabled", true),
     link_rename (ConfigurationFile.advanced, "link.rename", true),
+
+    unlink_enabled (ConfigurationFile.advanced, "unlink.enabled", true),
+    unlink_rename (ConfigurationFile.advanced, "unlink.rename", true),
+
+    password_minimum (ConfigurationFile.advanced, "password.minimum", 3),
+    password_maximum (ConfigurationFile.advanced, "password.maximum", 16),
 
     username_minimum (ConfigurationFile.advanced, "username.minimum", 3),
     username_maximum (ConfigurationFile.advanced, "username.maximum", 16),
@@ -62,6 +75,25 @@ public enum ConfigurationNode {
     session_start (ConfigurationFile.advanced, "session.start", "login"),
     session_length (ConfigurationFile.advanced, "session.length", "1 hour"),
     session_protect (ConfigurationFile.advanced, "session.protect", true),
+
+    guest_commands (ConfigurationFile.advanced, "guest.commands", false),
+    guest_chat (ConfigurationFile.advanced, "guest.chat", false),
+    guest_building (ConfigurationFile.advanced, "guest.building", false),
+    guest_destruction (ConfigurationFile.advanced, "guest.destruction", false),
+    guest_movement (ConfigurationFile.advanced, "guest.movement", false),
+    guest_interactions (ConfigurationFile.advanced, "guest.interactions", false),
+    guest_inventory (ConfigurationFile.advanced, "guest.inventory", false),
+    guest_drop (ConfigurationFile.advanced, "guest.drop", false),
+    guest_pickup (ConfigurationFile.advanced, "guest.pickup", false),
+    guest_health (ConfigurationFile.advanced, "guest.health", false),
+    guest_pvp (ConfigurationFile.advanced, "guest.pvp", false),
+    guest_mobtargeting (ConfigurationFile.advanced, "guest.mobtargeting", false),
+    guest_mobdamage (ConfigurationFile.advanced, "guest.mobdamage", false),
+
+    protection_freeze_enabled (ConfigurationFile.advanced, "protection.freeze.enabled", true),
+    protection_freeze_delay (ConfigurationFile.advanced, "protection.freeze.delay", "2 seconds"),
+    protection_notify_enabled (ConfigurationFile.advanced, "protection.notify.enabled", true),
+    protection_notify_delay (ConfigurationFile.advanced, "protection.notify.delay", "3 seconds"),
 
     filter_action (ConfigurationFile.advanced, "filter.action", "kick"),
     filter_username (ConfigurationFile.advanced, "filter.username", "`~!@#$%^&*()-=+{[]}|\\\\:;\\\"<,>.?/"),

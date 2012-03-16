@@ -125,7 +125,7 @@ public class AuthDBPlayerListener implements Listener {
             /* TODO */
         }
 
-        if (! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guests_inventory) && ! player.isRegistered()) {
+        if (! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guest_inventory) && ! player.isRegistered()) {
             player.getInventory().setContents(new ItemStack[36]);
         }
 
@@ -148,8 +148,8 @@ public class AuthDBPlayerListener implements Listener {
         /* TODO */
         if (! player.isAuthenticated() &&
             player.getJoinTime() != 0 &&
-            ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guests_movement)) {
-            if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.protection_freeze) &&
+            ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guest_movement)) {
+            if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.protection_freeze_enabled) &&
                (player.getJoinTime() + AuthDBManager.cfgMngr.getInteger(ConfigurationNode.protection_freeze_delay)) <
                System.currentTimeMillis() / 1000) {
                player.setJoinTime(0);
@@ -173,7 +173,7 @@ public class AuthDBPlayerListener implements Listener {
                 }
             }
 
-            if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guests_chat)) {
+            if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guest_chat)) {
                 event.setCancelled(true);
             }
         }
@@ -187,7 +187,7 @@ public class AuthDBPlayerListener implements Listener {
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guests_interact)) {
+            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guest_interactions)) {
                 event.setCancelled(true);
             }
         }
@@ -199,7 +199,7 @@ public class AuthDBPlayerListener implements Listener {
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guests_pickup)) {
+            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guest_pickup)) {
                 event.setCancelled(true);
             }
         }
@@ -212,7 +212,7 @@ public class AuthDBPlayerListener implements Listener {
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guests_drop)) {
+            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.guest_drop)) {
                 event.setCancelled(true);
             }
         }
