@@ -66,17 +66,17 @@ public class AuthDBManager {
 
     protected void loadAuthAPI() {
         AuthDBManager.dataManager = new DataManager(
-                AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.database_keepalive),
-                AuthDBManager.cfgMngr.getInteger(ConfigurationNode.database_timeout),
-                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_host),
-                AuthDBManager.cfgMngr.getInteger(ConfigurationNode.database_port),
-                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_name),
-                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_username),
-                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_password),
-                AuthDBManager.cfgMngr.getString(ConfigurationNode.script_tableprefix));
+                AuthDBManager.cfgMngr.getBoolean("database.keepalive"),
+                AuthDBManager.cfgMngr.getInteger("database.timeout"),
+                AuthDBManager.cfgMngr.getString("database.host"),
+                AuthDBManager.cfgMngr.getInteger("database.port"),
+                AuthDBManager.cfgMngr.getString("database.name"),
+                AuthDBManager.cfgMngr.getString("database.username"),
+                AuthDBManager.cfgMngr.getString("database.password"),
+                AuthDBManager.cfgMngr.getString("script.tableprefix"));
         AuthDBManager.authAPI = new AuthAPI(
-                ScriptAPI.Scripts.XF,
-                AuthDBManager.cfgMngr.getString(ConfigurationNode.script_version),
+                AuthDBManager.cfgMngr.getString("script.name"),
+                AuthDBManager.cfgMngr.getString("script.version"),
                 AuthDBManager.dataManager);
     }
 
