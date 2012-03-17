@@ -112,18 +112,17 @@ public class AuthDBUser {
     }
 
     public boolean isRegistered() {
-        if (this.status != null && this.status.equals(Status.Registered)) {
-            return true;
-        } else {
-            if (this.status.equals(Status.Authenticated)) {
-                return true;
-            } else if (AuthDBManager.authAPI.getScript().isRegistered(this.username)) {
-                this.status = Status.Registered;
-                return true;
-            } else {
-                this.status = Status.Guest;
+        if (this.status != null) {
+            switch (this.status) {
+                case Authenticated: return true;
+                case Registered: return true;
+                case Guest: return false;
             }
+        } else if (AuthDBManager.authAPI.getScript().isRegistered(this.username)) {
+            this.status = Status.Registered;
+            return true;
         }
+        this.status = Status.Guest;
         return false;
     }
 

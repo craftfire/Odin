@@ -14,40 +14,51 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api;
+package com.craftfire.authdb.layer.bukkit.api.events;
 
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
+import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
+public class AuthDBPlayerLinkEvent extends AuthDBPlayerEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
+    protected String linkedname;
     protected boolean successful;
 
-    protected AuthDBPlayerLoginEvent(Player player, boolean successful) {
+    protected AuthDBPlayerLinkEvent(Player player, boolean successful, String linkedname) {
         this.player = player;
-        this.authDBPlayer = AuthDBUtil.getPlayer(player);
+        this.authDBPlayer = Util.getPlayer(player);
+        this.linkedname = linkedname;
         this.successful = successful;
     }
 
     /**
-     * Get the player who tried to login.
+     * Get the player who linked
      *
-     * @return player who tried to login
+     * @return player who linked
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Get the AuthDB player who tried to login.
+     * Get the AuthDB player who linked
      *
-     * @return AuthDB player who tried to login
+     * @return AuthDB player who linked
      */
     public AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
+    }
+
+    /**
+     * Get the name of the linked user
+     *
+     * @return username of the linked name
+     */
+    public String getLinkedname() {
+        return this.linkedname;
     }
 
     /**

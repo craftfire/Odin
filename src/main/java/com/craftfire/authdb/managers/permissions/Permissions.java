@@ -16,7 +16,7 @@
  */
 package com.craftfire.authdb.managers.permissions;
 
-public enum Permission {
+public enum Permissions {
     command_register (PermissionsManager.userPermissions + "register"),
     command_unregister (PermissionsManager.userPermissions + "unregister"),
     command_login (PermissionsManager.userPermissions + "login"),
@@ -33,7 +33,7 @@ public enum Permission {
     command_admin_reload (PermissionsManager.adminPermissions + "reload");
 
     public String permission;
-    Permission(String permission) {
+    Permissions(String permission) {
         this.permission = permission;
     }
 }

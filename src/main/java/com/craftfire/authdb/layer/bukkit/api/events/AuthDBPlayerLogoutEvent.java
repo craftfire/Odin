@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api;
+package com.craftfire.authdb.layer.bukkit.api.events;
 
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
+import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
@@ -28,7 +28,7 @@ public class AuthDBPlayerLogoutEvent extends AuthDBPlayerEvent {
 
     protected AuthDBPlayerLogoutEvent(Player player, boolean successful) {
         this.player = player;
-        this.authDBPlayer = AuthDBUtil.getPlayer(player);
+        this.authDBPlayer = Util.getPlayer(player);
         this.successful = successful;
     }
 

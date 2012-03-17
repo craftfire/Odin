@@ -20,34 +20,62 @@ import java.util.HashMap;
 
 public class ConfigurationManager {
     private HashMap<String, Object> config = new HashMap<String, Object>();
+    private HashMap<String, Object> defaults = new HashMap<String, Object>();
 
     public boolean getBoolean(ConfigurationNode config) {
-        if (exist(config) && config.data instanceof Boolean) {
-            return (Boolean) this.config.get(config.node.toLowerCase());
+        String configNode = config.node.toLowerCase();
+        if (exist(config) && this.config.get(configNode) instanceof Boolean) {
+            return (Boolean) this.config.get(configNode);
+        } else if (existDefault(config) && this.defaults.get(configNode) instanceof Boolean) {
+            return (Boolean) this.defaults.get(configNode);
         }
         return false;
     }
 
     public String getString(ConfigurationNode config) {
-        if (exist(config) && config.data instanceof String) {
-            return (String) this.config.get(config.node.toLowerCase());
+        String configNode = config.node.toLowerCase();
+        if (exist(config) && this.config.get(configNode) instanceof String) {
+            return (String) this.config.get(configNode);
+        } else if (existDefault(config) && this.defaults.get(configNode) instanceof Boolean) {
+            return (String) this.defaults.get(configNode);
         }
         return null;
     }
 
     public int getInteger(ConfigurationNode config) {
-        if (exist(config) && config.data instanceof Integer) {
-            return (Integer) this.config.get(config.node.toLowerCase());
+        String configNode = config.node.toLowerCase();
+        if (exist(config) && this.config.get(configNode) instanceof Integer) {
+            return (Integer) this.config.get(configNode);
+        } else if (existDefault(config) && this.defaults.get(configNode) instanceof Boolean) {
+            return (Integer) this.defaults.get(configNode);
         }
         return 0;
     }
-    
-    public void load(HashMap<String, Object> config) {
-        this.config = config;
+
+    public Long getLong(ConfigurationNode config) {
+        String configNode = config.node.toLowerCase();
+        if (exist(config) && this.config.get(configNode) instanceof Integer) {
+            return (Long) this.config.get(configNode);
+        } else if (existDefault(config) && this.defaults.get(configNode) instanceof Boolean) {
+            return (Long) this.defaults.get(configNode);
+        }
+        return null;
     }
     
-    private boolean exist(ConfigurationNode config) {
-        if (this.config.containsKey(config.node.toLowerCase())) {
+    public void load(HashMap<String, Object> config, HashMap<String, Object> defaults) {
+        this.config = config;
+        this.defaults = defaults;
+    }
+    
+    private boolean exist(ConfigurationNode conf) {
+        if (this.config.containsKey(conf.node.toLowerCase())) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean existDefault(ConfigurationNode conf) {
+        if (this.defaults.containsKey(conf.node.toLowerCase())) {
             return true;
         }
         return false;

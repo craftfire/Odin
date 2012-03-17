@@ -7,8 +7,8 @@ customdb:
     emailfield: email                                # Field/column name to use for storing user email addresses. Leave blank to disable email requirement.
     emailrequired: false                             # Enable/disable registration email requirement.
     encryption: md5                                  # Encription type to use for password hashing. Options are MD5, SHA1, and SHA512.
-#    saltfield: salt                                  # NOT IMPLEMENTED YET! Field/column name to use for storing the passwordsalt.
-#    hashformat: "{PASSWORD}{SALT}{NAME}"             # NOT IMPLEMENTED YET! Format/layout to use for the password hash.
+    saltfield: salt                                  # NOT IMPLEMENTED YET! Field/column name to use for storing the passwordsalt.
+    hashformat: "{PASSWORD}{SALT}{NAME}"             # NOT IMPLEMENTED YET! Format/layout to use for the password hash.
 join:
     restrict: true                                   # Only allow registered players to join and show custom message.
 register:
@@ -17,7 +17,7 @@ register:
     delay: 4 seconds                                 # Amount of time before register message is shown to player.
     timeout: 3 minutes                               # Amount of time a player has to register before the configured action is taken.
 login:
-#    enabled: true                                    # NOT IMPLEMENTED YET! Enable/disable players being able to login.
+    enabled: true                                    # NOT IMPLEMENTED YET! Enable/disable players being able to login.
     method: prompt                                   # Login method to use. Options are normal and prompt.
     delay: 4 seconds                                 # Amount of time before login message is shown to player.
     timeout: 3 minutes                               # Amount of time a player has to login before the configured action is taken.

@@ -18,10 +18,10 @@ package com.craftfire.authdb.layer.bukkit.listeners;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
+import com.craftfire.authdb.layer.bukkit.util.Util;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.configuration.ConfigurationNode;
-import com.craftfire.authdb.managers.permissions.Permission;
+import com.craftfire.authdb.managers.permissions.Permissions;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,7 +37,7 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         if (! AuthDBManager.dataManager.isConnected()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
                            "You cannot join when the server has no database connection.");
@@ -72,7 +72,7 @@ public class AuthDBPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         boolean allow = false;
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         player.setJoinTime();
 
         if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.link_rename) && player.isLinked()) {
@@ -113,7 +113,7 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
         if (AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.link_rename) && player.isLinked()) {
             /* TODO */
@@ -143,7 +143,7 @@ public class AuthDBPlayerListener implements Listener {
             return;
         }
 
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
         /* TODO */
         if (! player.isAuthenticated() &&
@@ -164,11 +164,11 @@ public class AuthDBPlayerListener implements Listener {
             return;
         }
 
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
         if (! player.isAuthenticated()) {
             if (AuthDBManager.cfgMngr.getString(ConfigurationNode.login_method).equalsIgnoreCase("prompt")) {
-                if (player.isRegistered() && player.hasPermissions(Permission.command_login)) {
+                if (player.isRegistered() && player.hasPermissions(Permissions.command_login)) {
                     /* TODO */
                 }
             }
@@ -183,7 +183,7 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
@@ -195,7 +195,7 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler
      public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
@@ -208,7 +208,7 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        AuthDBPlayer player =  AuthDBUtil.getPlayer(event.getPlayer());
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);

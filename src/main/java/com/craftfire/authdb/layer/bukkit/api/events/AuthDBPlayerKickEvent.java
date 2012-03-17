@@ -14,57 +14,57 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api;
+package com.craftfire.authdb.layer.bukkit.api.events;
 
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.AuthDBUtil;
+import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
+public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
-    protected String linkedname;
+    protected String reason;
     protected boolean successful;
 
-    protected AuthDBPlayerUnlinkEvent(Player player, boolean successful, String linkedname) {
+    protected AuthDBPlayerKickEvent(Player player, boolean successful, String reason) {
         this.player = player;
-        this.authDBPlayer = AuthDBUtil.getPlayer(player);
-        this.linkedname = linkedname;
+        this.authDBPlayer = Util.getPlayer(player);
+        this.reason = reason;
         this.successful = successful;
     }
 
     /**
-     * Get the player who unlinked
+     * Get the player who got kicked
      *
-     * @return player who unlinked
+     * @return player who got kicked
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Get the AuthDB player who unlinked
+     * Get the AuthDB player who got kicked
      *
-     * @return AuthDB player who unlinked
+     * @return AuthDB player who got kicked
      */
     public AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
     }
 
     /**
-     * Get the name of the linked user
+     * Get the reason for the kick
      *
-     * @return username of the linked name
+     * @return reason for the kick
      */
-    public String getLinkedname() {
-        return this.linkedname;
+    public String getReason() {
+        return this.reason;
     }
 
     /**
-     * Returns a true if the unlink was successful.
+     * Returns a true if the kick was successful.
      *
-     * @return true if unlink was successful, false if not.
+     * @return true if kick was successful, false if not.
      */
     public boolean isSuccessful() {
         return this.successful;

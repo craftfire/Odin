@@ -18,13 +18,14 @@ package com.craftfire.authdb.layer.bukkit;
 
 import com.craftfire.authapi.AuthAPI;
 import com.craftfire.authapi.ScriptAPI;
-import com.craftfire.authdb.layer.bukkit.api.AuthDBDisableEvent;
-import com.craftfire.authdb.layer.bukkit.api.AuthDBEnableEvent;
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBDisableEvent;
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBEnableEvent;
 import com.craftfire.authdb.layer.bukkit.listeners.AuthDBPlayerListener;
 import com.craftfire.authdb.layer.bukkit.managers.InventoryManager;
 import com.craftfire.authdb.managers.AuthDBManager;
-import com.craftfire.authdb.managers.permissions.PermissionsManager;
 import com.craftfire.authdb.managers.configuration.ConfigurationManager;
+import com.craftfire.authdb.managers.permissions.PermissionsManager;
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.DataManager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -36,6 +37,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public class AuthDB extends JavaPlugin {
@@ -55,12 +58,12 @@ public class AuthDB extends JavaPlugin {
     public void onEnable() {
         getDataFolder().mkdirs();
 
-        loadConfiguration();
-
         getServer().getPluginManager().registerEvents(new AuthDBPlayerListener(this), this);
         setupPermissions();
         setupChat();
         setupEconomy();
+        setClasses();
+        loadConfiguration();
         logger.info("AuthDB " + getDescription().getVersion() + " enabled.");
         Bukkit.getServer().getPluginManager().callEvent(new AuthDBEnableEvent());
     }
@@ -91,12 +94,17 @@ public class AuthDB extends JavaPlugin {
         AuthDBManager.authAPI = new AuthAPI(ScriptAPI.Scripts.XF, "1.1.2",  AuthDBManager.dataManager);
         AuthDBManager.cfgMngr = new ConfigurationManager();
         AuthDBManager.prmMngr = new PermissionsManager();
+        AuthDBManager.craftCommons = new CraftCommons();
         //AuthDBManager.invMngr
     }
 
-    private void loadConfiguration() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+    public void loadConfiguration() {
+        try {
+            AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(getDataFolder() + "/config/basic.yml")),
+                                       AuthDBManager.craftCommons.loadLocalYaml("/files/config/basic.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Boolean setupPermissions() {
