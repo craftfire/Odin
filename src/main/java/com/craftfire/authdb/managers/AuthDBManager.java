@@ -17,7 +17,8 @@
 package com.craftfire.authdb.managers;
 
 import com.craftfire.authapi.AuthAPI;
-import com.craftfire.authapi.ScriptAPI;
+import com.craftfire.authapi.exceptions.UnsupportedScript;
+import com.craftfire.authapi.exceptions.UnsupportedVersion;
 import com.craftfire.authdb.managers.permissions.PermissionsManager;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.DataManager;
@@ -74,10 +75,18 @@ public class AuthDBManager {
                 AuthDBManager.cfgMngr.getString("database.username"),
                 AuthDBManager.cfgMngr.getString("database.password"),
                 AuthDBManager.cfgMngr.getString("script.tableprefix"));
-        AuthDBManager.authAPI = new AuthAPI(
-                AuthDBManager.cfgMngr.getString("script.name"),
-                AuthDBManager.cfgMngr.getString("script.version"),
-                AuthDBManager.dataManager);
+        try {
+            AuthDBManager.authAPI = new AuthAPI(
+                    AuthDBManager.cfgMngr.getString("script.name"),
+                    AuthDBManager.cfgMngr.getString("script.version"),
+                    AuthDBManager.dataManager);
+        } catch (UnsupportedScript unsupportedScript) {
+            /* TODO */
+            unsupportedScript.printStackTrace();
+        } catch (UnsupportedVersion unsupportedVersion) {
+            /* TODO */
+            unsupportedVersion.printStackTrace();
+        }
     }
 
     protected void loadConfiguration(File directory) {

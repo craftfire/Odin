@@ -153,11 +153,11 @@ public class AuthDBUser {
     }
 
     public boolean hasMinLength() {
-        return this.username.length() < AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_minimum);
+        return this.username.length() < AuthDBManager.cfgMngr.getInteger("username.minimum");
     }
 
     public boolean hasMaxLength() {
-        return this.username.length() > AuthDBManager.cfgMngr.getInteger(ConfigurationNode.username_maximum);
+        return this.username.length() > AuthDBManager.cfgMngr.getInteger("username.maximum");
     }
     
     public long getJoinTime() {
