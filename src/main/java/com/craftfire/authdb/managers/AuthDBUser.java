@@ -17,7 +17,6 @@
 package com.craftfire.authdb.managers;
 
 import com.craftfire.authapi.classes.ScriptUser;
-import com.craftfire.authdb.managers.configuration.ConfigurationNode;
 
 public class AuthDBUser {
     protected String username;

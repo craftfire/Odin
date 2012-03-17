@@ -17,11 +17,13 @@
 package com.craftfire.authdb.managers;
 
 import com.craftfire.authapi.AuthAPI;
-import com.craftfire.authdb.managers.configuration.ConfigurationManager;
+import com.craftfire.authapi.ScriptAPI;
 import com.craftfire.authdb.managers.permissions.PermissionsManager;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.DataManager;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -48,5 +50,44 @@ public class AuthDBManager {
         userStorage.clear();
         playerInventory.clear();
         playerArmor.clear();
+    }
+
+    public void load(File directory) {
+        setClasses();
+        loadConfiguration(directory);
+        loadAuthAPI();
+    }
+
+    protected void setClasses() {
+        AuthDBManager.cfgMngr = new ConfigurationManager();
+        AuthDBManager.prmMngr = new PermissionsManager();
+        AuthDBManager.craftCommons = new CraftCommons();
+    }
+
+    protected void loadAuthAPI() {
+        AuthDBManager.dataManager = new DataManager(
+                AuthDBManager.cfgMngr.getBoolean(ConfigurationNode.database_keepalive),
+                AuthDBManager.cfgMngr.getInteger(ConfigurationNode.database_timeout),
+                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_host),
+                AuthDBManager.cfgMngr.getInteger(ConfigurationNode.database_port),
+                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_name),
+                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_username),
+                AuthDBManager.cfgMngr.getString(ConfigurationNode.database_password),
+                AuthDBManager.cfgMngr.getString(ConfigurationNode.script_tableprefix));
+        AuthDBManager.authAPI = new AuthAPI(
+                ScriptAPI.Scripts.XF,
+                AuthDBManager.cfgMngr.getString(ConfigurationNode.script_version),
+                AuthDBManager.dataManager);
+    }
+
+    protected void loadConfiguration(File directory) {
+        try {
+            AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(directory + "/config/basic.yml")),
+                    AuthDBManager.craftCommons.loadLocalYaml("/files/config/basic.yml"));
+            AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(directory + "/config/advanced.yml")),
+                    AuthDBManager.craftCommons.loadLocalYaml("/files/config/advanced.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -14,6 +14,7 @@ database:
     password: root                                   # Password used to connect to your database. MySQL only.
     name: forum                                      # Name of the database you are connecting to. MySQL only.
     keepalive: false                                 # Enable/disable keeping database connection alive. Do not use if your connection limit is low. MySQL only.
+    timeout: 0                                       # Amount of time before the MySQL connection should reconnect. This only works when keepalive is true.
 script:
     name: phpBB                                      # Name of the script you are using.
     version: 3.0.8                                   # Version of the script you are using.
