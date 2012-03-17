@@ -92,10 +92,11 @@ public class AuthDBManager {
     protected void loadConfiguration(File directory) {
         try {
             AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(directory + "/config/basic.yml")),
-                    AuthDBManager.craftCommons.loadLocalYaml("/files/config/basic.yml"));
+                    AuthDBManager.craftCommons.loadLocalYaml("files/config/basic.yml"));
             AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(directory + "/config/advanced.yml")),
-                    AuthDBManager.craftCommons.loadLocalYaml("/files/config/advanced.yml"));
+                    AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
         } catch (IOException e) {
+            /* TODO */
             e.printStackTrace();
         }
     }

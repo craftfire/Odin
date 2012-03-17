@@ -24,7 +24,7 @@ public class ConfigurationManager {
 
     public boolean getBoolean(String node) {
         node = node.toLowerCase();
-        if (exist(node) && this.config.get(node) instanceof Integer) {
+        if (exist(node) && this.config.get(node) instanceof Boolean) {
             return (Boolean) this.config.get(node);
         } else if (existDefault(node) && this.defaults.get(node) instanceof Boolean) {
             return (Boolean) this.defaults.get(node);
@@ -34,9 +34,9 @@ public class ConfigurationManager {
 
     public String getString(String node) {
         node = node.toLowerCase();
-        if (exist(node) && this.config.get(node) instanceof Integer) {
+        if (exist(node) && this.config.get(node) instanceof String) {
             return (String) this.config.get(node);
-        } else if (existDefault(node) && this.defaults.get(node) instanceof Boolean) {
+        } else if (existDefault(node) && this.defaults.get(node) instanceof String) {
             return (String) this.defaults.get(node);
         }
         return null;
@@ -46,7 +46,7 @@ public class ConfigurationManager {
         node = node.toLowerCase();
         if (exist(node) && this.config.get(node) instanceof Integer) {
             return (Integer) this.config.get(node);
-        } else if (existDefault(node) && this.defaults.get(node) instanceof Boolean) {
+        } else if (existDefault(node) && this.defaults.get(node) instanceof Integer) {
             return (Integer) this.defaults.get(node);
         }
         return 0;
@@ -54,9 +54,9 @@ public class ConfigurationManager {
 
     public Long getLong(String node) {
         node = node.toLowerCase();
-        if (exist(node) && this.config.get(node) instanceof Integer) {
+        if (exist(node) && this.config.get(node) instanceof Long) {
             return (Long) this.config.get(node);
-        } else if (existDefault(node) && this.defaults.get(node) instanceof Boolean) {
+        } else if (existDefault(node) && this.defaults.get(node) instanceof Long) {
             return (Long) this.defaults.get(node);
         }
         return null;
