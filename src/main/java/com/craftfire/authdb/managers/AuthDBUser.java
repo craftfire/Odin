@@ -17,12 +17,14 @@
 package com.craftfire.authdb.managers;
 
 import com.craftfire.authapi.classes.ScriptUser;
+import com.craftfire.authdb.util.Util;
 
 public class AuthDBUser {
     protected String username;
     private ScriptUser user = null;
     private Status status;
     private String password, ip;
+    private boolean badcharacters;
 
     /**
      * Default constructor for the object.
@@ -31,6 +33,7 @@ public class AuthDBUser {
      */
     public AuthDBUser(final String username) {
         this.username = username;
+        this.badcharacters = Util.hasBadCharacters(username, AuthDBManager.cfgMngr.getString("filter.username"));
         load();
     }
     
@@ -197,5 +200,9 @@ public class AuthDBUser {
         } else {
             AuthDBManager.userPasswordAttempts.put(this.username, 1);
         }
+    }
+    
+    public boolean hasBadCharacters() {
+        return this.badcharacters;
     }
 }

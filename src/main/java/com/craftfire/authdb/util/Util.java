@@ -22,4 +22,20 @@ public class Util {
     public static AuthDBUser getUser(String username) {
         return new AuthDBUser(username);
     }
+
+    public static boolean hasBadCharacters(String string, String filter) {
+        char char1, char2;
+        for (int i= 0; i < string.length(); i++) {
+            char1 = string.charAt(i);
+            for (int a= 0; a < filter.length(); a++) {
+                char2 = filter.charAt(a);
+                if (char1 == char2 || char1 == '\'' || char1 == '\"') {
+                    /* TODO Logging */
+                    return true;
+                }
+                a++;
+            }
+        }
+        return false;
+    }
 }
