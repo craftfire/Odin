@@ -16,6 +16,7 @@
  */
 package com.craftfire.authdb.util;
 
+import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.AuthDBUser;
 
 public class Util {
@@ -37,5 +38,90 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static String stringToTimeLanguage(String timestring) {
+        String[] split = timestring.split(" ");
+        return stringToTimeLanguage(split[0], split[1]);
+    }
+
+    public static String stringToTimeLanguage(String length, String time) {
+        int integer = Integer.parseInt(length);
+        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
+            if (integer > 1) {
+                return AuthDBManager.msgMngr.getString("Core.time.days");
+            } else {
+                return AuthDBManager.msgMngr.getString("Core.time.day");
+            }
+        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
+                   time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
+            if (integer > 1) {
+                return AuthDBManager.msgMngr.getString("Core.time.hours");
+            } else {
+                return AuthDBManager.msgMngr.getString("Core.time.hour");
+            }
+        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
+                   time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
+            if (integer > 1) {
+                return AuthDBManager.msgMngr.getString("Core.time.minutes");
+            } else {
+                return AuthDBManager.msgMngr.getString("Core.time.minute");
+            }
+        } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
+                   time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
+            if (integer > 1) {
+                return AuthDBManager.msgMngr.getString("Core.time.seconds");
+            } else {
+                return AuthDBManager.msgMngr.getString("Core.time.second");
+            }
+        } else if (time.equalsIgnoreCase("milliseconds") || time.equalsIgnoreCase("millisecond") ||
+                   time.equalsIgnoreCase("milli") || time.equalsIgnoreCase("ms")) {
+            if (integer > 1) {
+                return AuthDBManager.msgMngr.getString("Core.time.milliseconds");
+            } else {
+                return AuthDBManager.msgMngr.getString("Core.time.millisecond");
+            }
+        }
+        return time;
+    }
+
+    public static int stringToTicks(String string) {
+        String[] split = string.split(" ");
+        String length = split[0];
+        String time = split[1].toLowerCase();
+        int lengthint = Integer.parseInt(length);
+        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
+            return lengthint * 1728000;
+        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
+                   time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
+            return lengthint * 72000;
+        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
+                   time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
+            return lengthint * 1200;
+        } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
+                   time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
+            return lengthint * 20;
+        }
+        return 0;
+    }
+
+    public static int stringToSeconds(String string) {
+        String[] split = string.split(" ");
+        String length = split[0];
+        String time = split[1].toLowerCase();
+        int lengthint = Integer.parseInt(length);
+        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
+            return lengthint * 86400;
+        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
+                   time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
+            return lengthint * 3600;
+        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
+                   time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
+            return lengthint * 60;
+        } else if (time.equalsIgnoreCase("second") || time.equalsIgnoreCase("seconds") ||
+                   time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
+            return lengthint;
+        }
+        return 0;
     }
 }

@@ -32,9 +32,13 @@ public class AuthDBManager {
     public static AuthAPI authAPI;
     public static DataManager dataManager;
     public static ConfigurationManager cfgMngr;
+    public static CommandManager cmdMngr;
     public static InventoryManager invMngr;
     public static PermissionsManager prmMngr;
+    public static MessageManager msgMngr;
     public static CraftCommons craftCommons;
+    
+    public static String pluginName, pluginVersion;
     
     public static HashSet<String> userSessions = new HashSet<String>();
     public static HashSet<String> userAuthenticated = new HashSet<String>();
@@ -62,6 +66,8 @@ public class AuthDBManager {
     protected void setClasses() {
         AuthDBManager.cfgMngr = new ConfigurationManager();
         AuthDBManager.prmMngr = new PermissionsManager();
+        AuthDBManager.cmdMngr = new CommandManager();
+        AuthDBManager.msgMngr = new MessageManager();
         AuthDBManager.craftCommons = new CraftCommons();
     }
 
