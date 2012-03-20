@@ -101,6 +101,7 @@ public class AuthDBManager {
                     AuthDBManager.craftCommons.loadLocalYaml("files/config/basic.yml"));
             AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(directory + "/config/advanced.yml")),
                     AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
+            /* TODO: Add commands and message loader */
         } catch (IOException e) {
             /* TODO */
             e.printStackTrace();

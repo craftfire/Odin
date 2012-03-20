@@ -25,11 +25,11 @@ public class MessageManager {
     private HashMap<String, String> messages = new HashMap<String, String>();
     private HashMap<String, String> defaults = new HashMap<String, String>();
 
-    public String getString(String node) {
+    public String getMessage(String node, AuthDBUser user) {
         if (exist(node.toLowerCase())) {
-            return this.messages.get(node.toLowerCase());
+            return replace(this.messages.get(node.toLowerCase()), user);
         } else if (existDefault(node.toLowerCase())) {
-            return this.defaults.get(node.toLowerCase());
+            return replace(this.defaults.get(node.toLowerCase()), user);
         }
         return null;
     }
@@ -47,11 +47,7 @@ public class MessageManager {
         return this.defaults.containsKey(node.toLowerCase());
     }
     
-    private String replace(String string, String additional, AuthDBUser user) {
-        String extra = "";
-        if (additional != null) {
-            extra = additional;
-        }
+    private String replace(String string, AuthDBUser user) {
         //TODO string = string.replaceAll("\\{IP\\}", );
         string = string.replaceAll("\\{PLAYER\\}", user.getUsername());
         //TODO string = string.replaceAll("\\{NEWPLAYER\\}", "");
