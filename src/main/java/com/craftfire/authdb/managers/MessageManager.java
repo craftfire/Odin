@@ -64,26 +64,26 @@ public class MessageManager {
         string = string.replaceAll("&", "Â§");
             //TODO string = string.replaceAll("\\{DISPLAYNAME\\}", checkOtherName(player.getName()));
         String email = "";
-        if (AuthDBManager.cfgMngr.getBoolean("customdb.emailrequired")) {
+        if (AuthDBManager.cfgMgr.getBoolean("customdb.emailrequired")) {
             email = "email";
         }
 
-        string = string.replaceAll("\\{USERMIN\\}", AuthDBManager.cfgMngr.getString("username.minimum"));
-        string = string.replaceAll("\\{USERMAX\\}", AuthDBManager.cfgMngr.getString("username.maximum"));
-        string = string.replaceAll("\\{PASSMIN\\}", AuthDBManager.cfgMngr.getString("password.minimum"));
-        string = string.replaceAll("\\{PASSMAX\\}", AuthDBManager.cfgMngr.getString("password.maximum"));
+        string = string.replaceAll("\\{USERMIN\\}", AuthDBManager.cfgMgr.getString("username.minimum"));
+        string = string.replaceAll("\\{USERMAX\\}", AuthDBManager.cfgMgr.getString("username.maximum"));
+        string = string.replaceAll("\\{PASSMIN\\}", AuthDBManager.cfgMgr.getString("password.minimum"));
+        string = string.replaceAll("\\{PASSMAX\\}", AuthDBManager.cfgMgr.getString("password.maximum"));
         string = string.replaceAll("\\{PLUGIN\\}", AuthDBManager.pluginName);
         string = string.replaceAll("\\{VERSION\\}", AuthDBManager.pluginVersion);
         string = string.replaceAll("\\{LOGINTIMEOUT\\}",
-                                        AuthDBManager.cfgMngr.getString("login.timeout").split(" ")[0] + " " +
-                                        Util.stringToTimeLanguage(AuthDBManager.cfgMngr.getString("login.timeout")));
+                                        AuthDBManager.cfgMgr.getString("login.timeout").split(" ")[0] + " " +
+                                        Util.stringToTimeLanguage(AuthDBManager.cfgMgr.getString("login.timeout")));
         string = string.replaceAll("\\{REGISTERTIMEOUT\\}",
-                                        AuthDBManager.cfgMngr.getString("register.timeout").split(" ")[0] + " " +
-                                        Util.stringToTimeLanguage(AuthDBManager.cfgMngr.getString("register.timeout")));
+                                        AuthDBManager.cfgMgr.getString("register.timeout").split(" ")[0] + " " +
+                                        Util.stringToTimeLanguage(AuthDBManager.cfgMgr.getString("register.timeout")));
         string = string.replaceAll("\\{USERBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                              AuthDBManager.cfgMngr.getString("filter.username")));
+                                                              AuthDBManager.cfgMgr.getString("filter.username")));
         string = string.replaceAll("\\{PASSBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                              AuthDBManager.cfgMngr.getString("filter.password")));
+                                                              AuthDBManager.cfgMgr.getString("filter.password")));
         string = string.replaceAll("\\{EMAILREQUIRED\\}", email);
         string = string.replaceAll("\\{NEWLINE\\}", System.getProperty("line.separator"));
         string = string.replaceAll("\\{newline\\}", System.getProperty("line.separator"));
@@ -92,14 +92,14 @@ public class MessageManager {
         string = string.replaceAll("\\{NL\\}", System.getProperty("line.separator"));
         string = string.replaceAll("\\{nl\\}", System.getProperty("line.separator"));
 
-        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMngr.getCommand("user.register") +
-                                                        " (" + AuthDBManager.cmdMngr.getAlias("user.register") + ")");
-        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMngr.getCommand("user.link") +
-                                                        " (" + AuthDBManager.cmdMngr.getAlias("user.link") + ")");
-        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMngr.getCommand("user.unlink") +
-                                                        " (" + AuthDBManager.cmdMngr.getAlias("user.unlink") + ")");
-        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMngr.getCommand("user.login") +
-                                                        " (" + AuthDBManager.cmdMngr.getAlias("user.login") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMgr.getCommand("user.register") +
+                                                        " (" + AuthDBManager.cmdMgr.getAlias("user.register") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMgr.getCommand("user.link") +
+                                                        " (" + AuthDBManager.cmdMgr.getAlias("user.link") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMgr.getCommand("user.unlink") +
+                                                        " (" + AuthDBManager.cmdMgr.getAlias("user.unlink") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", AuthDBManager.cmdMgr.getCommand("user.login") +
+                                                        " (" + AuthDBManager.cmdMgr.getAlias("user.login") + ")");
 
         string = string.replaceAll("\\{BLACK\\}", "Â§0");
         string = string.replaceAll("\\{DARKBLUE\\}", "Â§1");

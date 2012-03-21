@@ -39,20 +39,20 @@ public class AuthDBPlayerListener implements Listener {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         if (! AuthDBManager.dataManager.isConnected()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-                           "You cannot join when the server has no database connection.");
+                    "You cannot join when the server has no database connection.");
             return;
         }
 
-        if (AuthDBManager.cfgMngr.getBoolean("session.protect") && player.hasSession()) {
+        if (AuthDBManager.cfgMgr.getBoolean("session.protect") && player.hasSession()) {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getBoolean("join.restrict") && ! player.isRegistered()) {
+        if (AuthDBManager.cfgMgr.getBoolean("join.restrict") && ! player.isRegistered()) {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getString("filter.action").equalsIgnoreCase("kick") ||
-            AuthDBManager.cfgMngr.getString("filter.action").equalsIgnoreCase("rename")) {
+        if (AuthDBManager.cfgMgr.getString("filter.action").equalsIgnoreCase("kick") ||
+                AuthDBManager.cfgMgr.getString("filter.action").equalsIgnoreCase("rename")) {
             /* TODO */
         }
 
@@ -62,7 +62,7 @@ public class AuthDBPlayerListener implements Listener {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getBoolean("link.rename") && player.isLinked()) {
+        if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
             player.setLinkedName();
         }
 
@@ -74,14 +74,14 @@ public class AuthDBPlayerListener implements Listener {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         player.setJoinTime();
 
-        if (AuthDBManager.cfgMngr.getBoolean("link.rename") && player.isLinked()) {
+        if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
             /* TODO */
         }
 
         player.clearPasswordAttempts();
 
-        if (AuthDBManager.cfgMngr.getBoolean("session.enabled") &&
-            AuthDBManager.cfgMngr.getInteger("session.length") != 0) {
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled") &&
+                AuthDBManager.cfgMgr.getInteger("session.length") != 0) {
             if (player.hasSession()) {
                 /* TODO */
             }
@@ -91,12 +91,12 @@ public class AuthDBPlayerListener implements Listener {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getBoolean("customdb.enabled") &&
-            AuthDBManager.cfgMngr.getString("customdb.encryption").isEmpty()) {
+        if (AuthDBManager.cfgMgr.getBoolean("customdb.enabled") &&
+                AuthDBManager.cfgMgr.getString("customdb.encryption").isEmpty()) {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getBoolean("session.enabled") /* TODO */) {
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled") /* TODO */) {
             allow = true;
         }
 
@@ -114,17 +114,17 @@ public class AuthDBPlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
-        if (AuthDBManager.cfgMngr.getBoolean("link.rename") && player.isLinked()) {
+        if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
             /* TODO */
         }
 
-        if (AuthDBManager.cfgMngr.getBoolean("session.enabled") &&
-            AuthDBManager.cfgMngr.getString("session.start").equalsIgnoreCase("logoff") &&
-            player.isAuthenticated()) {
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled") &&
+                AuthDBManager.cfgMgr.getString("session.start").equalsIgnoreCase("logoff") &&
+                player.isAuthenticated()) {
             /* TODO */
         }
 
-        if (! AuthDBManager.cfgMngr.getBoolean("guest.inventory") && ! player.isRegistered()) {
+        if (! AuthDBManager.cfgMgr.getBoolean("guest.inventory") && ! player.isRegistered()) {
             player.getInventory().setContents(new ItemStack[36]);
         }
 
@@ -146,12 +146,12 @@ public class AuthDBPlayerListener implements Listener {
 
         /* TODO */
         if (! player.isAuthenticated() &&
-            player.getJoinTime() != 0 &&
-            ! AuthDBManager.cfgMngr.getBoolean("guest.movement")) {
-            if (AuthDBManager.cfgMngr.getBoolean("protection.freeze.enabled") &&
-               (player.getJoinTime() + AuthDBManager.cfgMngr.getInteger("protection.freeze.delay")) <
-               System.currentTimeMillis() / 1000) {
-               player.setJoinTime(0);
+                player.getJoinTime() != 0 &&
+                ! AuthDBManager.cfgMgr.getBoolean("guest.movement")) {
+            if (AuthDBManager.cfgMgr.getBoolean("protection.freeze.enabled") &&
+                    (player.getJoinTime() + AuthDBManager.cfgMgr.getInteger("protection.freeze.delay")) <
+                            System.currentTimeMillis() / 1000) {
+                player.setJoinTime(0);
             }
             event.setTo(event.getFrom());
         }
@@ -166,13 +166,13 @@ public class AuthDBPlayerListener implements Listener {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
         if (! player.isAuthenticated()) {
-            if (AuthDBManager.cfgMngr.getString("login.method").equalsIgnoreCase("prompt")) {
+            if (AuthDBManager.cfgMgr.getString("login.method").equalsIgnoreCase("prompt")) {
                 if (player.isRegistered() && player.hasPermissions(Permissions.command_login)) {
                     /* TODO */
                 }
             }
 
-            if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean("guest.chat")) {
+            if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.chat")) {
                 event.setCancelled(true);
             }
         }
@@ -186,19 +186,19 @@ public class AuthDBPlayerListener implements Listener {
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean("guest.interactions")) {
+            } else if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.interactions")) {
                 event.setCancelled(true);
             }
         }
     }
 
     @EventHandler
-     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean("guest.pickup")) {
+            } else if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.pickup")) {
                 event.setCancelled(true);
             }
         }
@@ -211,7 +211,7 @@ public class AuthDBPlayerListener implements Listener {
         if (! player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! AuthDBManager.cfgMngr.getBoolean("guest.drop")) {
+            } else if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.drop")) {
                 event.setCancelled(true);
             }
         }

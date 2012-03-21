@@ -33,7 +33,7 @@ public class AuthDBUser {
      */
     public AuthDBUser(final String username) {
         this.username = username;
-        this.badcharacters = Util.hasBadCharacters(username, AuthDBManager.cfgMngr.getString("filter.username"));
+        this.badcharacters = Util.hasBadCharacters(username, AuthDBManager.cfgMgr.getString("filter.username"));
         load();
     }
     
@@ -156,11 +156,11 @@ public class AuthDBUser {
     }
 
     public boolean hasMinLength() {
-        return this.username.length() < AuthDBManager.cfgMngr.getInteger("username.minimum");
+        return this.username.length() < AuthDBManager.cfgMgr.getInteger("username.minimum");
     }
 
     public boolean hasMaxLength() {
-        return this.username.length() > AuthDBManager.cfgMngr.getInteger("username.maximum");
+        return this.username.length() > AuthDBManager.cfgMgr.getInteger("username.maximum");
     }
     
     public long getJoinTime() {
