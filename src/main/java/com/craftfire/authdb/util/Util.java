@@ -21,9 +21,7 @@ import com.craftfire.authdb.managers.AuthDBUser;
 import com.craftfire.authdb.managers.LoggingHandler;
 import com.craftfire.commons.CraftCommons;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.zip.ZipEntry;
@@ -162,12 +160,12 @@ public class Util {
                         directory = directory.replace("files/translations/", "");
                         directory = directory.replace("/", "");
                         if (! directory.equals("")) {
-                            AuthDBManager.logMgr.debug("Directory: "+directory);
+                            AuthDBManager.logMgr.debug("Directory: " + directory);
                             File f = new File(dir + "/" + directory + "/" + type + ".yml");
-                            if (!f.exists()) {
+                            if (! f.exists()) {
                                 AuthDBManager.logMgr.debug(type + ".yml" + " could not be found in " + dir + "/" +
                                                             directory + "/! Creating " + type + ".yml");
-                                defaultFile(dir ,"translations/" + directory, type + ".yml");
+                                defaultFile(dir + directory + "\\", "translations/" + directory, type + ".yml");
                             }
                             if (type.equals("commands") &&
                                 AuthDBManager.cfgMgr.getString("plugin.language.commands").equalsIgnoreCase(directory)) {
@@ -206,11 +204,11 @@ public class Util {
                 }
             }
         }
-        if (!set && type.equalsIgnoreCase("commands")) {
+        if (! set && type.equalsIgnoreCase("commands")) {
             AuthDBManager.logMgr.info(
-                            "Could not find translation files for " +
+                    "Could not find translation files for " +
                             AuthDBManager.cfgMgr.getString("plugin.language.commands") + ", defaulting to " + language);
-        } else if (!set && type.equalsIgnoreCase("messages")) {
+        } else if (! set && type.equalsIgnoreCase("messages")) {
             AuthDBManager.logMgr.info(
                             "Could not find translation files for " +
                             AuthDBManager.cfgMgr.getString("plugin.language.messages") + ", defaulting to " + language);
@@ -224,30 +222,30 @@ public class Util {
         if (type.equalsIgnoreCase("commands")) {
             AuthDBManager.cfgMgr.load(
                                 CraftCommons.loadYaml(
-                                        new File("plugins/" + dir + "/translations/" + language + "/", type + ".yml")),
-                                AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
+                                        new File(dir + language + "/", type + ".yml")),
+                                AuthDBManager.craftCommons.loadLocalYaml("files/translations/advanced.yml"));
         } else if (type.equalsIgnoreCase("messages")) {
             AuthDBManager.msgMgr.load(
                                 CraftCommons.loadYaml(
-                                        new File("plugins/" + dir + "/translations/" + language + "/", type + ".yml")),
-                                AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
+                                        new File(dir + language + "/", type + ".yml")),
+                                AuthDBManager.craftCommons.loadLocalYaml("files/translations/advanced.yml"));
         }
     }
 
     public void defaultFile(String directory, String subdirectory, String file) {
-        File actual = new File(directory + "/" + subdirectory + "/", file);
-        File dir = new File(directory + "/" + subdirectory + "/", "");
+        File actual = new File(directory, file);
+        File dir = new File(directory, "");
         if (! dir.exists()) {
             if (dir.mkdir()) {
                 AuthDBManager.logMgr.debug("Sucesfully created directory: " + dir);
             }
         }
-        if (!actual.exists()) {
-            java.io.InputStream input = getClass().getResourceAsStream("/files/" + subdirectory + "/" + file);
+        if (! actual.exists()) {
+            InputStream input = getClass().getClassLoader().getResourceAsStream("files/" + subdirectory + "/" + file);
             if (input != null) {
-                java.io.FileOutputStream output = null;
+                FileOutputStream output = null;
                 try {
-                    output = new java.io.FileOutputStream(actual);
+                    output = new FileOutputStream(actual);
                     byte[] buf = new byte[8192];
                     int length = 0;
                     while ((length = input.read(buf)) > 0) {
@@ -258,9 +256,7 @@ public class Util {
                     LoggingHandler.stackTrace(e, Thread.currentThread());
                 } finally {
                     try {
-                        if (input != null) {
-                            input.close();
-                        }
+                        input.close();
                         if (output != null) {
                             output.close();
                         }

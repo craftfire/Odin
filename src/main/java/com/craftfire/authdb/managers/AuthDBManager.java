@@ -110,8 +110,8 @@ public class AuthDBManager {
             AuthDBManager.logMgr.setDebug(AuthDBManager.cfgMgr.getBoolean("plugin.debugmode"));
             AuthDBManager.logMgr.setLogging(AuthDBManager.cfgMgr.getBoolean("plugin.logging"));
             Util util = new Util();
-            util.loadLanguage(directory.getName(), "commands");
-            util.loadLanguage(directory.getName(), "messages");
+            util.loadLanguage(directory.toString() + "\\translations\\", "commands");
+            util.loadLanguage(directory.toString() + "\\translations\\", "messages");
         } catch (IOException e) {
             /* TODO */
             e.printStackTrace();
