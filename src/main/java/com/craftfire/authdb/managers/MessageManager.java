@@ -22,19 +22,28 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class MessageManager {
-    private HashMap<String, String> messages = new HashMap<String, String>();
-    private HashMap<String, String> defaults = new HashMap<String, String>();
+    private HashMap<String, Object> messages = new HashMap<String, Object>();
+    private HashMap<String, Object> defaults = new HashMap<String, Object>();
 
     public String getMessage(String node, AuthDBUser user) {
         if (exist(node.toLowerCase())) {
-            return replace(this.messages.get(node.toLowerCase()), user);
+            return replace((String) this.messages.get(node.toLowerCase()), user);
         } else if (existDefault(node.toLowerCase())) {
-            return replace(this.defaults.get(node.toLowerCase()), user);
+            return replace((String) this.defaults.get(node.toLowerCase()), user);
         }
         return null;
     }
 
-    public void load(HashMap<String, String> defaults, HashMap<String, String> messages) {
+    public String getString(String node) {
+        if (exist(node.toLowerCase())) {
+            return (String) this.messages.get(node.toLowerCase());
+        } else if (existDefault(node.toLowerCase())) {
+            return (String) this.defaults.get(node.toLowerCase());
+        }
+        return null;
+    }
+
+    public void load(HashMap<String, Object> defaults, HashMap<String, Object> messages) {
         this.defaults.putAll(defaults);
         this.messages.putAll(messages);
     }

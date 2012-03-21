@@ -20,6 +20,7 @@ import com.craftfire.authapi.AuthAPI;
 import com.craftfire.authapi.exceptions.UnsupportedScript;
 import com.craftfire.authapi.exceptions.UnsupportedVersion;
 import com.craftfire.authdb.managers.permissions.PermissionsManager;
+import com.craftfire.authdb.util.Util;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.DataManager;
 
@@ -101,7 +102,9 @@ public class AuthDBManager {
                     AuthDBManager.craftCommons.loadLocalYaml("files/config/basic.yml"));
             AuthDBManager.cfgMngr.load(CraftCommons.loadYaml(new File(directory + "/config/advanced.yml")),
                     AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
-            /* TODO: Add commands and message loader */
+            Util util = new Util();
+            util.loadLanguage(directory.getName(), "commands");
+            util.loadLanguage(directory.getName(), "messages");
         } catch (IOException e) {
             /* TODO */
             e.printStackTrace();
