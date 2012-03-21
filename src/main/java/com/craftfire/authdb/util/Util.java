@@ -18,6 +18,7 @@ package com.craftfire.authdb.util;
 
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.AuthDBUser;
+import com.craftfire.authdb.managers.LoggingHandler;
 import com.craftfire.commons.CraftCommons;
 
 import java.io.File;
@@ -58,37 +59,37 @@ public class Util {
         int integer = Integer.parseInt(length);
         if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
             if (integer > 1) {
-                return AuthDBManager.msgMngr.getString("Core.time.days");
+                return AuthDBManager.msgMgr.getString("Core.time.days");
             } else {
-                return AuthDBManager.msgMngr.getString("Core.time.day");
+                return AuthDBManager.msgMgr.getString("Core.time.day");
             }
         } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
                    time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
             if (integer > 1) {
-                return AuthDBManager.msgMngr.getString("Core.time.hours");
+                return AuthDBManager.msgMgr.getString("Core.time.hours");
             } else {
-                return AuthDBManager.msgMngr.getString("Core.time.hour");
+                return AuthDBManager.msgMgr.getString("Core.time.hour");
             }
         } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
                    time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
             if (integer > 1) {
-                return AuthDBManager.msgMngr.getString("Core.time.minutes");
+                return AuthDBManager.msgMgr.getString("Core.time.minutes");
             } else {
-                return AuthDBManager.msgMngr.getString("Core.time.minute");
+                return AuthDBManager.msgMgr.getString("Core.time.minute");
             }
         } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
                    time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
             if (integer > 1) {
-                return AuthDBManager.msgMngr.getString("Core.time.seconds");
+                return AuthDBManager.msgMgr.getString("Core.time.seconds");
             } else {
-                return AuthDBManager.msgMngr.getString("Core.time.second");
+                return AuthDBManager.msgMgr.getString("Core.time.second");
             }
         } else if (time.equalsIgnoreCase("milliseconds") || time.equalsIgnoreCase("millisecond") ||
                    time.equalsIgnoreCase("milli") || time.equalsIgnoreCase("ms")) {
             if (integer > 1) {
-                return AuthDBManager.msgMngr.getString("Core.time.milliseconds");
+                return AuthDBManager.msgMgr.getString("Core.time.milliseconds");
             } else {
-                return AuthDBManager.msgMngr.getString("Core.time.millisecond");
+                return AuthDBManager.msgMgr.getString("Core.time.millisecond");
             }
         }
         return time;
@@ -140,7 +141,7 @@ public class Util {
         File allLanguages = new File(dir);
         if(! allLanguages.exists()) {
             if (allLanguages.mkdir()) {
-                //TODO Util.logging.Debug("Sucesfully created directory: " + allLanguages);
+               AuthDBManager.logMgr.debug("Sucesfully created directory: " + allLanguages);
             }
         }
         boolean set = false;
@@ -157,22 +158,23 @@ public class Util {
                 ZipEntry ze = null;
                 while ((ze = zip.getNextEntry()) != null) {
                     String directory = ze.getName();
-                    if (directory.startsWith("files/translations/") && directory.endsWith(".yml") == false)  {
+                    if (directory.startsWith("files/translations/") && ! directory.endsWith(".yml"))  {
                         directory = directory.replace("files/translations/", "");
                         directory = directory.replace("/", "");
-                        if (directory.equals("") == false) {
-                            //TODO Util.logging.Debug("Directory: "+directory);
+                        if (! directory.equals("")) {
+                            AuthDBManager.logMgr.debug("Directory: "+directory);
                             File f = new File(dir + "/" + directory + "/" + type + ".yml");
                             if (!f.exists()) {
-                                //TODO Util.logging.Info(type + ".yml" + " could not be found in " + dir + "/" + directory + "/! Creating " + type + ".yml");
+                                AuthDBManager.logMgr.debug(type + ".yml" + " could not be found in " + dir + "/" +
+                                                            directory + "/! Creating " + type + ".yml");
                                 defaultFile(dir ,"translations/" + directory, type + ".yml");
                             }
                             if (type.equals("commands") &&
-                                (AuthDBManager.cfgMngr.getString("language.commands").equalsIgnoreCase(directory))) {
+                                AuthDBManager.cfgMgr.getString("plugin.language.commands").equalsIgnoreCase(directory)) {
                                 set = true;
                                 language = directory;
                             } else if (type.equals("messages") &&
-                                (AuthDBManager.cfgMngr.getString("language.messages").equalsIgnoreCase(directory)))  {
+                                AuthDBManager.cfgMgr.getString("plugin.language.messages").equalsIgnoreCase(directory)) {
                                 set = true;
                                 language = directory;
                             }
@@ -181,55 +183,63 @@ public class Util {
                 }
                 zip.close();
             } catch (IOException e) {
-                //TODO: CATCH
+                LoggingHandler.stackTrace(e, Thread.currentThread());
             }
         }
 
         File[] files = allLanguages.listFiles(fileFilter);
         if (files.length > 0) {
-            //TODO Util.logging.Debug("Found " + directories.length + " directories for " + type);
+            AuthDBManager.logMgr.debug("Found " + files.length + " directories for " + type);
         } else {
-            //TODO Util.logging.error("Error! Could not find any directories for " + type);
+            AuthDBManager.logMgr.error("Error! Could not find any directories for " + type);
         }
         if (! set) {
             for (File file : files) {
                 if (type.equalsIgnoreCase("commands") &&
-                    AuthDBManager.cfgMngr.getString("language.commands").equalsIgnoreCase(file.getName()))  {
+                    AuthDBManager.cfgMgr.getString("plugin.language.commands").equalsIgnoreCase(file.getName()))  {
                     set = true;
                     language = file.getName();
                 } else if (type.equalsIgnoreCase("messages") &&
-                    AuthDBManager.cfgMngr.getString("language.messages").equalsIgnoreCase(file.getName()))  {
+                    AuthDBManager.cfgMgr.getString("plugin.language.messages").equalsIgnoreCase(file.getName()))  {
                     set = true;
                     language = file.getName();
                 }
             }
         }
         if (!set && type.equalsIgnoreCase("commands")) {
-            //TODO Util.logging.Info("Could not find translation files for " + Config.language_commands + ", defaulting to " + language);
+            AuthDBManager.logMgr.info(
+                            "Could not find translation files for " +
+                            AuthDBManager.cfgMgr.getString("plugin.language.commands") + ", defaulting to " + language);
         } else if (!set && type.equalsIgnoreCase("messages")) {
-            //TODO Util.logging.Info("Could not find translation files for " + Config.language_messages + ", defaulting to " + language);
+            AuthDBManager.logMgr.info(
+                            "Could not find translation files for " +
+                            AuthDBManager.cfgMgr.getString("plugin.language.messages") + ", defaulting to " + language);
         } else if (type.equalsIgnoreCase("commands")) {
-            //TODO Util.logging.Info(type + " language set to " + Config.language_commands);
+            AuthDBManager.logMgr.info(type + " language set to " +
+                                      AuthDBManager.cfgMgr.getString("plugin.language.commands"));
         } else if (type.equalsIgnoreCase("messages")) {
-            //TODO Util.logging.Info(type + " language set to " + Config.language_messages);
+            AuthDBManager.logMgr.info(type + " language set to " +
+                                      AuthDBManager.cfgMgr.getString("plugin.language.messages"));
         }
         if (type.equalsIgnoreCase("commands")) {
-            AuthDBManager.cfgMngr.load(
-                                CraftCommons.loadYaml(new File(dir + "/translations/" + language + "/", type + ".yml")),
+            AuthDBManager.cfgMgr.load(
+                                CraftCommons.loadYaml(
+                                        new File("plugins/" + dir + "/translations/" + language + "/", type + ".yml")),
                                 AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
         } else if (type.equalsIgnoreCase("messages")) {
-            AuthDBManager.msgMngr.load(
-                                CraftCommons.loadYaml(new File(dir + "/translations/" + language + "/", type + ".yml")),
+            AuthDBManager.msgMgr.load(
+                                CraftCommons.loadYaml(
+                                        new File("plugins/" + dir + "/translations/" + language + "/", type + ".yml")),
                                 AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
         }
     }
 
     public void defaultFile(String directory, String subdirectory, String file) {
         File actual = new File(directory + "/" + subdirectory + "/", file);
-        File direct = new File(directory + "/" + subdirectory + "/", "");
-        if (! direct.exists()) {
-            if (direct.mkdir()) {
-                //TODO Util.logging.Debug("Sucesfully created directory: "+direc);
+        File dir = new File(directory + "/" + subdirectory + "/", "");
+        if (! dir.exists()) {
+            if (dir.mkdir()) {
+                AuthDBManager.logMgr.debug("Sucesfully created directory: " + dir);
             }
         }
         if (!actual.exists()) {
@@ -243,9 +253,9 @@ public class Util {
                     while ((length = input.read(buf)) > 0) {
                         output.write(buf, 0, length);
                     }
-                    //TODO System.out.println("[" + pluginName + "] Written default setup for " + name);
+                    AuthDBManager.logMgr.info("Written default setup for " + file);
                 } catch (Exception e) {
-                    //TODO: CATCH
+                    LoggingHandler.stackTrace(e, Thread.currentThread());
                 } finally {
                     try {
                         if (input != null) {
@@ -255,7 +265,7 @@ public class Util {
                             output.close();
                         }
                     } catch (Exception e) {
-                        //TODO: CATCH
+                        LoggingHandler.stackTrace(e, Thread.currentThread());
                     }
                 }
             }

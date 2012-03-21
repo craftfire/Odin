@@ -92,8 +92,7 @@ public class AuthDBManager {
         } catch (UnsupportedScript u) {
             LoggingHandler.stackTrace(u, Thread.currentThread());
         } catch (UnsupportedVersion u) {
-            /* TODO */
-            u.printStackTrace();
+            LoggingHandler.stackTrace(u, Thread.currentThread());
         }
     }
 
@@ -103,14 +102,16 @@ public class AuthDBManager {
                     AuthDBManager.craftCommons.loadLocalYaml("files/config/basic.yml"));
             AuthDBManager.cfgMgr.load(CraftCommons.loadYaml(new File(directory + "/config/advanced.yml")),
                     AuthDBManager.craftCommons.loadLocalYaml("files/config/advanced.yml"));
-            Util util = new Util();
-            util.loadLanguage(directory.getName(), "commands");
-            util.loadLanguage(directory.getName(), "messages");
             AuthDBManager.logMgr = new LoggingManager(
                                                     "Minecraft.AuthDB",
                                                     directory + "/logs/",
                                                     "[AuthDB]",
                                                     AuthDBManager.cfgMgr.getString("plugin.logformat"));
+            AuthDBManager.logMgr.setDebug(AuthDBManager.cfgMgr.getBoolean("plugin.debugmode"));
+            AuthDBManager.logMgr.setLogging(AuthDBManager.cfgMgr.getBoolean("plugin.logging"));
+            Util util = new Util();
+            util.loadLanguage(directory.getName(), "commands");
+            util.loadLanguage(directory.getName(), "messages");
         } catch (IOException e) {
             /* TODO */
             e.printStackTrace();
