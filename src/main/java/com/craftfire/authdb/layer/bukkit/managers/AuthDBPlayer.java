@@ -81,9 +81,18 @@ public class AuthDBPlayer extends AuthDBUser {
             AuthDB.inventoryManager.storeInventory(this.player,
                                                          this.player.getInventory().getContents(),
                                                          this.player.getInventory().getArmorContents());
+            clearInventory();
         } catch (IOException e) {
             LoggingHandler.stackTrace(e, Thread.currentThread());
         }
+    }
+
+    public void clearInventory() {
+        this.player.getInventory().setHelmet(null);
+        this.player.getInventory().setChestplate(null);
+        this.player.getInventory().setLeggings(null);
+        this.player.getInventory().setBoots(null);
+        this.player.getInventory().clear();
     }
 
     public void restoreInventory() {

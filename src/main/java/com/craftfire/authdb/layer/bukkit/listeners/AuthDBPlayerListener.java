@@ -132,7 +132,7 @@ public class AuthDBPlayerListener implements Listener {
                                "PLEASE BE ADWARE THAT THIS SERVER STORES THE PASSWORDS IN PLAINTEXT.");
         }
 
-        if (AuthDBManager.cfgMgr.getBoolean("session.enabled") /* TODO */) {
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled") /* TODO: Reload time*/) {
             allow = true;
         }
 
@@ -143,6 +143,28 @@ public class AuthDBPlayerListener implements Listener {
         if (allow) {
             player.setAuthenticated(true);
             /* TODO */
+        } else if (player.isRegistered()) {
+            player.storeInventory();
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                @Override public void run() {
+                    if (! player.isAuthenticated()) {
+                        player.clearInventory();
+                    }
+                }
+            } , 20);
+            if (AuthDBManager.cfgMgr.getString("login.method").equalsIgnoreCase("prompt")) {
+                player.sendMessage("login.prompt");
+            } else {
+                player.sendMessage("login.normal");
+            }
+        } else if (AuthDBManager.cfgMgr.getBoolean("register.force")) {
+            player.storeInventory();
+            player.sendMessage("register.welcome");
+        } else if (! AuthDBManager.cfgMgr.getBoolean("register.force") &&
+                   AuthDBManager.cfgMgr.getBoolean("register.enabled")) {
+            player.sendMessage("register.welcome");
+        } else {
+            //Authenticate?
         }
     }
 
