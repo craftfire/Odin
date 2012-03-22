@@ -81,7 +81,9 @@ public class AuthDBPlayerListener implements Listener {
         player.setJoinTime();
 
         if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
-            /* TODO */
+            String message = event.getJoinMessage();
+            message = message.replaceAll(player.getUsername(), player.getDisplayName());
+            event.setJoinMessage(message);
         }
 
         player.clearPasswordAttempts();
@@ -90,6 +92,15 @@ public class AuthDBPlayerListener implements Listener {
                 AuthDBManager.cfgMgr.getInteger("session.length") != 0) {
             if (player.hasSession()) {
                 /* TODO */
+                AuthDBManager.logMgr.debug("Found session for " + player.getName() + ", timestamp: " + storedtime);
+                long timedifference = timestamp - storedtime;
+                AuthDBManager.logMgr.deebug("Difference: " + timedifference);
+                AuthDBManager.logMgr.deebug("Session in config: " + Config.session_length);
+                if (timedifference > Config.session_length) {
+                    sessionallow = false;
+                } else {
+                    sessionallow = true;
+                }
             }
         }
 

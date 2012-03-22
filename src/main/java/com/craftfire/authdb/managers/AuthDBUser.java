@@ -55,6 +55,10 @@ public class AuthDBUser {
     public String getUsername() {
         return this.username;
     }
+
+    public String getName() {
+        return this.username;
+    }
     
     public ScriptUser getUser() {
         return this.user;
