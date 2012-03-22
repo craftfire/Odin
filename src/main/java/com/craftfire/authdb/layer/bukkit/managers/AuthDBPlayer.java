@@ -90,19 +90,56 @@ public class AuthDBPlayer extends AuthDBUser {
         AuthDB.inventoryManager.setInventoryFromStorage(this.player);
     }
     
-    public void kickPlayer(String message) {
-        this.player.kickPlayer(message);
+    public void kickPlayer(String node) {
+        if (isNode(node)) {
+            this.player.kickPlayer(AuthDBManager.msgMgr.getMessage(node, this));
+        } else {
+            this.player.kickPlayer(AuthDBManager.msgMgr.replace(node, this));
+        }
     }
     
     public void sendMessage(String node) {
-        this.player.sendMessage(AuthDBManager.msgMgr.getMessage(node, this));
+        if (isNode(node)) {
+            this.player.sendMessage(AuthDBManager.msgMgr.getMessage(node, this));
+        } else {
+            this.player.sendMessage(AuthDBManager.msgMgr.replace(node, this));
+        }
     }
 
     public void sendMessage(String node, PlayerLoginEvent event) {
-        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.getMessage(node, this));
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(
+        if (isNode(node)) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.getMessage(node, this));
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(
                                                                         event.getPlayer(),
                                                                         true,
                                                                         AuthDBManager.msgMgr.getMessage(node, this)));
+        } else {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.replace(node, this));
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(
+                    event.getPlayer(),
+                    true,
+                    AuthDBManager.msgMgr.replace(node, this)));
+        }
+    }
+
+    public void checkTimeout() {
+        if (! isAuthenticated() && AuthDBManager.userTimeouts.contains(this.username)) {
+            if (isRegistered()) {
+                kickPlayer("login.timeout");
+            } else {
+                kickPlayer("register.timeout");
+            }
+        } else if (AuthDBManager.userTimeouts.contains(this.username)) {
+            AuthDBManager.userTimeouts.remove(this.username);
+        }
+    }
+    
+    private boolean isNode(String string) {
+        for (int i=0; i < string.length(); i++) {
+            if (Character.isWhitespace(string.charAt(i))) {
+                return false;
+            }
+        }
+        return string.contains(".");
     }
 }

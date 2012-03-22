@@ -17,7 +17,10 @@
 package com.craftfire.authdb.managers;
 
 import com.craftfire.authapi.classes.ScriptUser;
-import com.craftfire.authdb.util.Util;
+import com.craftfire.authdb.util.MainUtils;
+import com.craftfire.commons.CraftCommons;
+
+import java.util.Date;
 
 public class AuthDBUser {
     protected String username;
@@ -33,7 +36,7 @@ public class AuthDBUser {
      */
     public AuthDBUser(final String username) {
         this.username = username;
-        this.badcharacters = Util.hasBadCharacters(username, AuthDBManager.cfgMgr.getString("filter.username"));
+        this.badcharacters = MainUtils.hasBadCharacters(username, AuthDBManager.cfgMgr.getString("filter.username"));
         load();
     }
     
@@ -88,6 +91,9 @@ public class AuthDBUser {
 
     public void setAuthenticated(boolean authenticated) {
         AuthDBManager.userAuthenticated.add(this.username);
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled")) {
+            setSession();
+        }
     }
 
     public boolean logout() {
@@ -109,12 +115,29 @@ public class AuthDBUser {
     }
 
     public String getIP() {
-        /* TODO */
-        return null;
+        return ip;
+    }
+    
+    public void setIP(String ip) {
+        this.ip = ip;
     }
 
     public boolean hasSession() {
-        return AuthDBManager.userSessions.contains(this.username);
+        //TODO: Check storage for session.
+        return AuthDBManager.userSessions.containsKey(CraftCommons.md5(this.username + this.ip));
+    }
+    
+    public long getSessionTime() {
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled") && hasSession()) {
+            return AuthDBManager.userSessions.get(CraftCommons.md5(this.username + this.ip));
+        }
+        return 0;
+    }
+    
+    public void setSession() {
+        if (AuthDBManager.cfgMgr.getBoolean("session.enabled")) {
+            AuthDBManager.userSessions.put(CraftCommons.md5(this.username + this.ip), new Date().getTime() / 1000);
+        }
     }
 
     public boolean isRegistered() {
@@ -209,5 +232,9 @@ public class AuthDBUser {
     
     public boolean isFilterWhitelisted() {
         return AuthDBManager.cfgMgr.getString("filter.whitelist").contains(this.username);
+    }
+
+    public void setTimeout() {
+        AuthDBManager.userTimeouts.add(this.username);
     }
 }

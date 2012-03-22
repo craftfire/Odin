@@ -16,7 +16,7 @@
  */
 package com.craftfire.authdb.managers;
 
-import com.craftfire.authdb.util.Util;
+import com.craftfire.authdb.util.MainUtils;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -56,7 +56,7 @@ public class MessageManager {
         return this.defaults.containsKey(node.toLowerCase());
     }
     
-    private String replace(String string, AuthDBUser user) {
+    public String replace(String string, AuthDBUser user) {
         //TODO string = string.replaceAll("\\{IP\\}", );
         string = string.replaceAll("\\{PLAYER\\}", user.getUsername());
         //TODO string = string.replaceAll("\\{NEWPLAYER\\}", "");
@@ -75,11 +75,11 @@ public class MessageManager {
         string = string.replaceAll("\\{PLUGIN\\}", AuthDBManager.pluginName);
         string = string.replaceAll("\\{VERSION\\}", AuthDBManager.pluginVersion);
         string = string.replaceAll("\\{LOGINTIMEOUT\\}",
-                                        AuthDBManager.cfgMgr.getString("login.timeout").split(" ")[0] + " " +
-                                        Util.stringToTimeLanguage(AuthDBManager.cfgMgr.getString("login.timeout")));
+                            AuthDBManager.cfgMgr.getString("login.timeout").split(" ")[0] + " " +
+                                    MainUtils.stringToTimeLanguage(AuthDBManager.cfgMgr.getString("login.timeout")));
         string = string.replaceAll("\\{REGISTERTIMEOUT\\}",
-                                        AuthDBManager.cfgMgr.getString("register.timeout").split(" ")[0] + " " +
-                                        Util.stringToTimeLanguage(AuthDBManager.cfgMgr.getString("register.timeout")));
+                            AuthDBManager.cfgMgr.getString("register.timeout").split(" ")[0] + " " +
+                                    MainUtils.stringToTimeLanguage(AuthDBManager.cfgMgr.getString("register.timeout")));
         string = string.replaceAll("\\{USERBADCHARACTERS\\}", Matcher.quoteReplacement(
                                                               AuthDBManager.cfgMgr.getString("filter.username")));
         string = string.replaceAll("\\{PASSBADCHARACTERS\\}", Matcher.quoteReplacement(

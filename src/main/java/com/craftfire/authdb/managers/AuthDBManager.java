@@ -20,7 +20,7 @@ import com.craftfire.authapi.AuthAPI;
 import com.craftfire.authapi.exceptions.UnsupportedScript;
 import com.craftfire.authapi.exceptions.UnsupportedVersion;
 import com.craftfire.authdb.managers.permissions.PermissionsManager;
-import com.craftfire.authdb.util.Util;
+import com.craftfire.authdb.util.MainUtils;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.DataManager;
 import com.craftfire.commons.LoggingManager;
@@ -43,8 +43,9 @@ public class AuthDBManager {
     
     public static String pluginName, pluginVersion;
     
-    public static HashSet<String> userSessions = new HashSet<String>();
+    public static HashMap<String, Long> userSessions = new HashMap<String, Long>();
     public static HashSet<String> userAuthenticated = new HashSet<String>();
+    public static HashSet<String> userTimeouts = new HashSet<String>();
     public static HashMap<String, AuthDBUser> userStorage = new HashMap<String, AuthDBUser>();
     public static HashMap<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
 
@@ -56,8 +57,11 @@ public class AuthDBManager {
         userSessions.clear();
         userAuthenticated.clear();
         userStorage.clear();
+        userTimeouts.clear();
+        userPasswordAttempts.clear();
         playerInventory.clear();
         playerArmor.clear();
+        playerJoin.clear();
     }
 
     public void load(File directory) {
@@ -109,7 +113,7 @@ public class AuthDBManager {
                                                     AuthDBManager.cfgMgr.getString("plugin.logformat"));
             AuthDBManager.logMgr.setDebug(AuthDBManager.cfgMgr.getBoolean("plugin.debugmode"));
             AuthDBManager.logMgr.setLogging(AuthDBManager.cfgMgr.getBoolean("plugin.logging"));
-            Util util = new Util();
+            MainUtils util = new MainUtils();
             util.loadLanguage(directory.toString() + "\\translations\\", "commands");
             util.loadLanguage(directory.toString() + "\\translations\\", "messages");
         } catch (IOException e) {

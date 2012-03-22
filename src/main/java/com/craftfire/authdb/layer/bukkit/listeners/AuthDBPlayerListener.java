@@ -21,6 +21,7 @@ import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import com.craftfire.authdb.layer.bukkit.util.Util;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.permissions.Permissions;
+import com.craftfire.authdb.util.MainUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -77,7 +78,7 @@ public class AuthDBPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         boolean allow = false;
-        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
+        final AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
         player.setJoinTime();
 
         if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
@@ -91,26 +92,44 @@ public class AuthDBPlayerListener implements Listener {
         if (AuthDBManager.cfgMgr.getBoolean("session.enabled") &&
                 AuthDBManager.cfgMgr.getInteger("session.length") != 0) {
             if (player.hasSession()) {
-                /* TODO */
-                AuthDBManager.logMgr.debug("Found session for " + player.getName() + ", timestamp: " + storedtime);
-                long timedifference = timestamp - storedtime;
-                AuthDBManager.logMgr.deebug("Difference: " + timedifference);
-                AuthDBManager.logMgr.deebug("Session in config: " + Config.session_length);
-                if (timedifference > Config.session_length) {
-                    sessionallow = false;
-                } else {
-                    sessionallow = true;
+                AuthDBManager.logMgr.debug("Found session for " + player.getName() + ", timestamp: " +
+                        player.getSessionTime());
+                long diff = System.currentTimeMillis() / 1000 - player.getSessionTime();
+                AuthDBManager.logMgr.debug("Difference: " + diff);
+                AuthDBManager.logMgr.debug("Session in config: " +
+                                        MainUtils.stringToSeconds(AuthDBManager.cfgMgr.getString("session.length")));
+                if (diff < MainUtils.stringToSeconds(AuthDBManager.cfgMgr.getString("session.length"))) {
+                    allow = true;
                 }
             }
         }
 
         if (! allow) {
-            /* TODO */
+            int time = 0;
+            if (MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("login.timeout")) > 0 && player.isRegistered()) {
+                time =  MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("login.timeout"));
+                AuthDBManager.logMgr.debug("Login timeout time is: " + time + " ticks.");
+            } else if (MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("register.timeout")) > 0 &&
+                       ! player.isRegistered()) {
+                time =  MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("register.timeout"));
+                AuthDBManager.logMgr.debug("Register timeout time is: " + time + " ticks.");
+            }
+            if (time > 0) {
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        player.checkTimeout();
+                    }
+                }, time);
+                player.setTimeout();
+                AuthDBManager.logMgr.debug("Added timeout for " + player.getName() + ".");
+            }
         }
 
         if (AuthDBManager.cfgMgr.getBoolean("customdb.enabled") &&
                 AuthDBManager.cfgMgr.getString("customdb.encryption").isEmpty()) {
-            /* TODO */
+            player.sendMessage("§4YOUR PASSWORD WILL NOT BE ENCRYPTED," +
+                               "PLEASE BE ADWARE THAT THIS SERVER STORES THE PASSWORDS IN PLAINTEXT.");
         }
 
         if (AuthDBManager.cfgMgr.getBoolean("session.enabled") /* TODO */) {

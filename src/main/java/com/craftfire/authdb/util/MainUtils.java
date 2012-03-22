@@ -27,7 +27,7 @@ import java.security.CodeSource;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class Util {
+public class MainUtils {
     public static AuthDBUser getUser(String username) {
         return new AuthDBUser(username);
     }
