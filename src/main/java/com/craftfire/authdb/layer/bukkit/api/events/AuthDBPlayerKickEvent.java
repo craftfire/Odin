@@ -27,7 +27,7 @@ public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     protected String reason;
     protected boolean successful;
 
-    protected AuthDBPlayerKickEvent(Player player, boolean successful, String reason) {
+    public AuthDBPlayerKickEvent(Player player, boolean successful, String reason) {
         this.player = player;
         this.authDBPlayer = Util.getPlayer(player);
         this.reason = reason;

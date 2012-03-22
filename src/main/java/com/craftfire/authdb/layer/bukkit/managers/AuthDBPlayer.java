@@ -17,10 +17,15 @@
 package com.craftfire.authdb.layer.bukkit.managers;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBPlayerKickEvent;
+import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.AuthDBUser;
+import com.craftfire.authdb.managers.LoggingHandler;
 import com.craftfire.authdb.managers.permissions.Permissions;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
@@ -77,11 +82,27 @@ public class AuthDBPlayer extends AuthDBUser {
                                                          this.player.getInventory().getContents(),
                                                          this.player.getInventory().getArmorContents());
         } catch (IOException e) {
-            e.printStackTrace();
+            LoggingHandler.stackTrace(e, Thread.currentThread());
         }
     }
 
     public void restoreInventory() {
         AuthDB.inventoryManager.setInventoryFromStorage(this.player);
+    }
+    
+    public void kickPlayer(String message) {
+        this.player.kickPlayer(message);
+    }
+    
+    public void sendMessage(String node) {
+        this.player.sendMessage(AuthDBManager.msgMgr.getMessage(node, this));
+    }
+
+    public void sendMessage(String node, PlayerLoginEvent event) {
+        event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.getMessage(node, this));
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(
+                                                                        event.getPlayer(),
+                                                                        true,
+                                                                        AuthDBManager.msgMgr.getMessage(node, this)));
     }
 }

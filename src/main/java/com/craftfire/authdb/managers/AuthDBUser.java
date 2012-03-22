@@ -130,10 +130,7 @@ public class AuthDBUser {
 
     public boolean isGuest() {
         if (this.status != null) {
-            if (this.status.equals(Status.Guest)) {
-                return true;
-            }
-            return false;
+            return this.status.equals(Status.Guest);
         } else {
             if (! AuthDBManager.authAPI.getScript().isRegistered(this.username)) {
                 this.status = Status.Guest;
@@ -204,5 +201,9 @@ public class AuthDBUser {
     
     public boolean hasBadCharacters() {
         return this.badcharacters;
+    }
+    
+    public boolean isFilterWhitelisted() {
+        return AuthDBManager.cfgMgr.getString("filter.whitelist").contains(this.username);
     }
 }

@@ -44,28 +44,34 @@ public class AuthDBPlayerListener implements Listener {
         }
 
         if (AuthDBManager.cfgMgr.getBoolean("session.protect") && player.hasSession()) {
-            /* TODO */
+            player.sendMessage("session.protected", event);
+            return;
         }
 
         if (AuthDBManager.cfgMgr.getBoolean("join.restrict") && ! player.isRegistered()) {
-            /* TODO */
+            player.sendMessage("join.restricted", event);
+            return;
         }
 
-        if (AuthDBManager.cfgMgr.getString("filter.action").equalsIgnoreCase("kick") ||
-                AuthDBManager.cfgMgr.getString("filter.action").equalsIgnoreCase("rename")) {
-            /* TODO */
+        if (AuthDBManager.cfgMgr.getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
+            ! player.isFilterWhitelisted()) {
+            AuthDBManager.logMgr.debug(player.getUsername() +
+                                           " is not in the filter whitelist and has bad characters in his/her name.");
+            player.sendMessage("filter.username", event);
+            return;
         }
 
         if (! player.hasMinLength()) {
-            /* TODO */
+            player.sendMessage("username.minimum", event);
+            return;
         } else if (! player.hasMaxLength()) {
-            /* TODO */
+            player.sendMessage("username.maximum", event);
+            return;
         }
 
         if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
             player.setLinkedName();
         }
-
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
