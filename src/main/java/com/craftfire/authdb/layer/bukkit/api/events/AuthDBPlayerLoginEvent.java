@@ -26,7 +26,7 @@ public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
     protected AuthDBPlayer authDBPlayer;
     protected boolean successful;
 
-    protected AuthDBPlayerLoginEvent(Player player, boolean successful) {
+    public AuthDBPlayerLoginEvent(Player player, boolean successful) {
         this.player = player;
         this.authDBPlayer = Util.getPlayer(player);
         this.successful = successful;

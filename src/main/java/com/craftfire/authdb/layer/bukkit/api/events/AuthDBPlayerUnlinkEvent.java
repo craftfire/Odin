@@ -27,7 +27,7 @@ public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
     protected String linkedname;
     protected boolean successful;
 
-    protected AuthDBPlayerUnlinkEvent(Player player, boolean successful, String linkedname) {
+    public AuthDBPlayerUnlinkEvent(Player player, boolean successful, String linkedname) {
         this.player = player;
         this.authDBPlayer = Util.getPlayer(player);
         this.linkedname = linkedname;

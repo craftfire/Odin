@@ -21,39 +21,39 @@ import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerLogoutEvent extends AuthDBPlayerEvent {
+public class AuthDBPlayerQuitEvent extends AuthDBPlayerEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
     protected boolean successful;
 
-    public AuthDBPlayerLogoutEvent(Player player, boolean successful) {
+    public AuthDBPlayerQuitEvent(Player player, boolean successful) {
         this.player = player;
         this.authDBPlayer = Util.getPlayer(player);
         this.successful = successful;
     }
 
     /**
-     * Get the player who tried to logout.
+     * Get the player who got kicked
      *
-     * @return player who tried to logout
+     * @return player who got kicked
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Get the AuthDB player who tried to logout.
+     * Get the AuthDB player who got kicked
      *
-     * @return AuthDB player who tried to logout
+     * @return AuthDB player who got kicked
      */
     public AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
     }
 
     /**
-     * Returns a true if the logout was successful.
+     * Returns a true if the kick was successful.
      *
-     * @return true if logout was successful, false if not.
+     * @return true if kick was successful, false if not.
      */
     public boolean isSuccessful() {
         return this.successful;

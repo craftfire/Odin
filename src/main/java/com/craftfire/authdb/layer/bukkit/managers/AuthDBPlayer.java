@@ -17,7 +17,7 @@
 package com.craftfire.authdb.layer.bukkit.managers;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
-import com.craftfire.authdb.layer.bukkit.api.events.AuthDBPlayerKickEvent;
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBPlayerQuitEvent;
 import com.craftfire.authdb.layer.bukkit.util.Event;
 import com.craftfire.authdb.layer.bukkit.util.Events;
 import com.craftfire.authdb.managers.AuthDBManager;
@@ -120,13 +120,13 @@ public class AuthDBPlayer extends AuthDBUser {
     public void sendMessage(String node, PlayerLoginEvent event) {
         if (isNode(node)) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.getMessage(node, this));
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(
                                                                         event.getPlayer(),
                                                                         true,
                                                                         AuthDBManager.msgMgr.getMessage(node, this)));
         } else {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.replace(node, this));
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(
                     event.getPlayer(),
                     true,
                     AuthDBManager.msgMgr.replace(node, this)));
@@ -142,6 +142,23 @@ public class AuthDBPlayer extends AuthDBUser {
             }
         } else if (AuthDBManager.userTimeouts.contains(this.username)) {
             AuthDBManager.userTimeouts.remove(this.username);
+        }
+    }
+
+    public void callEvent(Event event, String message) {
+        switch (event) {
+            case KICK:      Events.kick(this, message);
+                break;
+            case LINK:      Events.link(this, getLinkedName());
+                break;
+            case LOGIN:     Events.login(this);
+                break;
+            case LOGOUT:    Events.logout(this, false);
+                break;
+            case UNLINK:    Events.unlink(this);
+                break;
+            case QUIT:      Events.quit(this);
+                break;
         }
     }
 
