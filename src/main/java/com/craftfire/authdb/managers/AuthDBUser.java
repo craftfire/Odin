@@ -72,17 +72,14 @@ public class AuthDBUser {
     }
 
     public boolean isLinked() {
-        /* TODO */
-        return false;
+        return AuthDBManager.userLinkedNames.containsKey(this.username);
     }
 
     public String getLinkedName() {
-        /* TODO */
+        if (AuthDBManager.userLinkedNames.containsKey(this.username)) {
+            return AuthDBManager.userLinkedNames.get(this.username);
+        }
         return null;
-    }
-    
-    public void setLinkedName() {
-        /* TODO */
     }
 
     public boolean isAuthenticated() {
@@ -90,15 +87,25 @@ public class AuthDBUser {
     }
 
     public void setAuthenticated(boolean authenticated) {
-        AuthDBManager.userAuthenticated.add(this.username);
-        if (AuthDBManager.cfgMgr.getBoolean("session.enabled")) {
-            setSession();
+        if (authenticated) {
+            AuthDBManager.userAuthenticated.add(this.username);
+            if (AuthDBManager.cfgMgr.getBoolean("session.enabled")) {
+                setSession();
+            }
+        } else {
+            logout();
         }
     }
 
     public boolean logout() {
         if (AuthDBManager.userAuthenticated.contains(this.username)) {
             AuthDBManager.userAuthenticated.remove(this.username);
+            if (AuthDBManager.userPasswordAttempts.containsKey(this.username)) {
+                AuthDBManager.userPasswordAttempts.remove(this.username);
+            }
+            if (AuthDBManager.userTimeouts.contains(this.username)) {
+                AuthDBManager.userTimeouts.remove(this.username);
+            }
             return true;
         }
         return false;
@@ -106,10 +113,31 @@ public class AuthDBUser {
 
     public boolean login(String password) {
         if (! AuthDBManager.userAuthenticated.contains(this.username)) {
-            if (AuthDBManager.authAPI.authenticate(this.username, password)) {
-                AuthDBManager.userAuthenticated.add(this.username);
-                return true;
+            if (isLinked()) {
+                if (AuthDBManager.authAPI.authenticate(getLinkedName(), password)) {
+                    AuthDBManager.userAuthenticated.add(this.username);
+                    return true;
+                }
+            } else {
+                if (AuthDBManager.authAPI.authenticate(this.username, password)) {
+                    AuthDBManager.userAuthenticated.add(this.username);
+                    return true;
+                }
             }
+        }
+        return false;
+    }
+
+    public void login() {
+        if (! AuthDBManager.userAuthenticated.contains(this.username)) {
+            AuthDBManager.userAuthenticated.add(this.username);
+        }
+    }
+
+    public boolean unlink() {
+        if (AuthDBManager.userLinkedNames.containsKey(this.username)) {
+            AuthDBManager.userLinkedNames.remove(this.username);
+            return true;
         }
         return false;
     }

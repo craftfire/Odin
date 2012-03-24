@@ -46,6 +46,7 @@ public class AuthDBManager {
     public static HashMap<String, Long> userSessions = new HashMap<String, Long>();
     public static HashSet<String> userAuthenticated = new HashSet<String>();
     public static HashSet<String> userTimeouts = new HashSet<String>();
+    public static HashMap<String, String> userLinkedNames = new HashMap<String, String>();
     public static HashMap<String, AuthDBUser> userStorage = new HashMap<String, AuthDBUser>();
     public static HashMap<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
 

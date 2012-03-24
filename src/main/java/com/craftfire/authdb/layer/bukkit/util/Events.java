@@ -1,0 +1,79 @@
+/*
+ * This file is part of AuthDB <http://www.authdb.com/>.
+ *
+ * AuthDB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AuthDB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.craftfire.authdb.layer.bukkit.util;
+
+import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
+import com.craftfire.authdb.managers.AuthDBManager;
+
+public class Events {
+
+    public static void quit(AuthDBPlayer player) {
+        //TODO: Call event
+        player.restoreInventory();
+        logout(player, false);
+    }
+
+    public static void kick(AuthDBPlayer player) {
+        //TODO: Call event
+    }
+
+    public static boolean login(AuthDBPlayer player) {
+        //TODO: Call event
+        if (! player.isAuthenticated()) {
+            player.login();
+            player.restoreInventory();
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean logout(AuthDBPlayer player, boolean storeInventory) {
+        //TODO: Call event
+        if (player.isAuthenticated()) {
+            player.logout();
+            if (storeInventory) {
+                player.storeInventory();
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public static void link(AuthDBPlayer player, String name) {
+        //TODO: Call event
+        if (! player.isAuthenticated() && AuthDBManager.cfgMgr.getBoolean("link.enabled")) {
+            player.login();
+            if (! AuthDBManager.userLinkedNames.containsKey(player.getUsername())) {
+                AuthDBManager.userLinkedNames.put(player.getUsername(), name);
+            }
+            if (AuthDBManager.cfgMgr.getBoolean("link.rename")) {
+                player.setDisplayName(name);
+            }
+        }
+    }
+
+    public static void unlink(AuthDBPlayer player) {
+        //TODO: Call event
+        if (player.isAuthenticated() && AuthDBManager.cfgMgr.getBoolean("link.enabled")) {
+            player.unlink();
+            logout(player, true);
+            if (AuthDBManager.cfgMgr.getBoolean("link.rename")) {
+                player.setDisplayName(player.getName());
+            }
+        }
+    }
+}

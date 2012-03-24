@@ -18,6 +18,7 @@ package com.craftfire.authdb.layer.bukkit.listeners;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
+import com.craftfire.authdb.layer.bukkit.util.Event;
 import com.craftfire.authdb.layer.bukkit.util.Util;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.permissions.Permissions;
@@ -82,9 +83,7 @@ public class AuthDBPlayerListener implements Listener {
         player.setJoinTime();
 
         if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
-            String message = event.getJoinMessage();
-            message = message.replaceAll(player.getUsername(), player.getDisplayName());
-            event.setJoinMessage(message);
+            event.setJoinMessage(event.getJoinMessage().replaceAll(player.getName(), player.getDisplayName()));
         }
 
         player.clearPasswordAttempts();
@@ -146,7 +145,8 @@ public class AuthDBPlayerListener implements Listener {
         } else if (player.isRegistered()) {
             player.storeInventory();
             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     if (! player.isAuthenticated()) {
                         player.clearInventory();
                     }
@@ -173,20 +173,24 @@ public class AuthDBPlayerListener implements Listener {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
         if (AuthDBManager.cfgMgr.getBoolean("link.rename") && player.isLinked()) {
-            /* TODO */
+            event.setQuitMessage(event.getQuitMessage().replaceAll(player.getName(), player.getDisplayName()));
         }
 
         if (AuthDBManager.cfgMgr.getBoolean("session.enabled") &&
                 AuthDBManager.cfgMgr.getString("session.start").equalsIgnoreCase("logoff") &&
                 player.isAuthenticated()) {
             /* TODO */
+            //this.plugin.AuthDB_Sessions.put(Encryption.md5(player.getName() + Util.craftFirePlayer.getIP(player)), thetimestamp);
+            //EBean EBeanClass = EBean.checkPlayer(player, true);
+           // EBeanClass.setSessiontime(thetimestamp);
+            //this.plugin.AuthDB_AuthTime.put(player.getName(), thetimestamp);
         }
 
         if (! AuthDBManager.cfgMgr.getBoolean("guest.inventory") && ! player.isRegistered()) {
             player.getInventory().setContents(new ItemStack[36]);
         }
 
-        /* TODO */
+        player.callEvent(Event.QUIT);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
