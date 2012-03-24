@@ -38,8 +38,12 @@ public class Events {
         kick(player, null);
     }
 
-    public static void message(AuthDBPlayer player, String sender, String message) {
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerMessageEvent(player.getPlayer(), true, message));
+    public static void message(AuthDBPlayer player, String message) {
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerMessageEvent(player.getPlayer(), message));
+    }
+
+    public static void message(AuthDBPlayer player) {
+        message(player, null);
     }
 
     public static void login(AuthDBPlayer player) {

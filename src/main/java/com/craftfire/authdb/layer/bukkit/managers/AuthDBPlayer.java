@@ -153,6 +153,8 @@ public class AuthDBPlayer extends AuthDBUser {
                 break;
             case QUIT:      Events.quit(this);
                 break;
+            case MESSAGE:   Events.message(this, message);
+                            break;
         }
     }
 
@@ -169,6 +171,8 @@ public class AuthDBPlayer extends AuthDBUser {
             case UNLINK:    Events.unlink(this);
                             break;
             case QUIT:      Events.quit(this);
+                            break;
+            case MESSAGE:   Events.message(this);
                             break;
         }
     }

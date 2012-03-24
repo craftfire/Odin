@@ -33,7 +33,7 @@ public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Returns the player who sent/received the message
+     * Returns the player who received the message
      *
      * @return player who sent/received the message
      */
