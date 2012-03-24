@@ -24,13 +24,12 @@ import org.bukkit.event.HandlerList;
 public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
-    protected String sender, message;
+    protected String message;
 
-    public AuthDBPlayerMessageEvent(Player receiver, String sender, String message) {
+    public AuthDBPlayerMessageEvent(Player receiver, String message) {
         this.player = receiver;
         this.authDBPlayer = Util.getPlayer(receiver);
         this.message = message;
-        this.sender = sender;
     }
 
     /**
@@ -49,16 +48,6 @@ public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent {
      */
     public AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
-    }
-
-    /**
-     * Returns the name of the player who sent the message.
-     * This can be the server as well.
-     *
-     * @return name of the player who sent the message
-     */
-    public String getSender() {
-        return this.sender;
     }
 
     /**
