@@ -17,5 +17,5 @@
 package com.craftfire.authdb.layer.bukkit.util;
 
 public enum Event {
-    KICK, LINK, LOGIN, LOGOUT, UNLINK, QUIT
+    KICK, LINK, LOGIN, LOGOUT, UNLINK, QUIT, MESSAGE
 }

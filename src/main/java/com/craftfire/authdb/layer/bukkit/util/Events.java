@@ -38,28 +38,24 @@ public class Events {
         kick(player, null);
     }
 
-    public static boolean login(AuthDBPlayer player) {
+    public static void login(AuthDBPlayer player) {
         if (! player.isAuthenticated()) {
             player.login();
             player.restoreInventory();
             Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer(), true));
-            return true;
         }
         Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer(), false));
-        return false;
     }
 
-    public static boolean logout(AuthDBPlayer player, boolean storeInventory) {
+    public static void logout(AuthDBPlayer player, boolean storeInventory) {
         if (player.isAuthenticated()) {
             player.logout();
             if (storeInventory) {
                 player.storeInventory();
             }
             Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer(), true));
-            return true;
         }
         Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer(), false));
-        return false;
     }
     
     public static void link(AuthDBPlayer player, String name) {
