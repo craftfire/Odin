@@ -21,42 +21,53 @@ import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerQuitEvent extends AuthDBPlayerEvent {
+public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
-    protected boolean successful;
+    protected String sender, message;
 
-    public AuthDBPlayerQuitEvent(Player player, boolean successful) {
-        this.player = player;
-        this.authDBPlayer = Util.getPlayer(player);
-        this.successful = successful;
+    public AuthDBPlayerMessageEvent(Player receiver, String sender, String message) {
+        this.player = receiver;
+        this.authDBPlayer = Util.getPlayer(receiver);
+        this.message = message;
+        this.sender = sender;
     }
 
     /**
-     * Returns the player who got kicked
+     * Returns the player who sent/received the message
      *
-     * @return player who got kicked
+     * @return player who sent/received the message
      */
     public Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Returns the AuthDB player who got kicked
+     * Returns the AuthDB player who received the message
      *
-     * @return AuthDB player who got kicked
+     * @return AuthDB player who received the message
      */
     public AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
     }
 
     /**
-     * Returns true if the kick was successful.
+     * Returns the name of the player who sent the message.
+     * This can be the server as well.
      *
-     * @return true if kick was successful, false if not.
+     * @return name of the player who sent the message
      */
-    public boolean isSuccessful() {
-        return this.successful;
+    public String getSender() {
+        return this.sender;
+    }
+
+    /**
+     * Returns the message
+     *
+     * @return message message of the event
+     */
+    public String getMessage() {
+        return this.message;
     }
 
     private static final HandlerList handlers = new HandlerList();

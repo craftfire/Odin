@@ -35,7 +35,7 @@ public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the player who got kicked
+     * Returns the player who got kicked
      *
      * @return player who got kicked
      */
@@ -44,7 +44,7 @@ public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the AuthDB player who got kicked
+     * Returns the AuthDB player who got kicked
      *
      * @return AuthDB player who got kicked
      */
@@ -53,7 +53,7 @@ public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the reason for the kick
+     * Returns the reason for the kick
      *
      * @return reason for the kick
      */
@@ -62,7 +62,7 @@ public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Returns a true if the kick was successful.
+     * Returns true if the kick was successful.
      *
      * @return true if kick was successful, false if not.
      */

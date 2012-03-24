@@ -35,7 +35,7 @@ public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the player who unlinked
+     * Returns the player who unlinked
      *
      * @return player who unlinked
      */
@@ -44,7 +44,7 @@ public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the AuthDB player who unlinked
+     * Returns the AuthDB player who unlinked
      *
      * @return AuthDB player who unlinked
      */
@@ -53,7 +53,7 @@ public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the name of the linked user
+     * Returns the name of the linked user
      *
      * @return username of the linked name
      */
@@ -62,7 +62,7 @@ public class AuthDBPlayerUnlinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Returns a true if the unlink was successful.
+     * Returns true if the unlink was successful.
      *
      * @return true if unlink was successful, false if not.
      */

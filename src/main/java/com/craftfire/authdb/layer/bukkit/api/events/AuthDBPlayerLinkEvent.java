@@ -35,7 +35,7 @@ public class AuthDBPlayerLinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the player who linked
+     * Returns the player who linked
      *
      * @return player who linked
      */
@@ -44,7 +44,7 @@ public class AuthDBPlayerLinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the AuthDB player who linked
+     * Returns the AuthDB player who linked
      *
      * @return AuthDB player who linked
      */
@@ -53,7 +53,7 @@ public class AuthDBPlayerLinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the name of the linked user
+     * Returns the name of the linked user
      *
      * @return username of the linked name
      */
@@ -62,7 +62,7 @@ public class AuthDBPlayerLinkEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Returns a true if the logout was successful.
+     * Returns true if the logout was successful.
      *
      * @return true if logout was successful, false if not.
      */

@@ -17,14 +17,12 @@
 package com.craftfire.authdb.layer.bukkit.managers;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
-import com.craftfire.authdb.layer.bukkit.api.events.AuthDBPlayerQuitEvent;
 import com.craftfire.authdb.layer.bukkit.util.Event;
 import com.craftfire.authdb.layer.bukkit.util.Events;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.AuthDBUser;
 import com.craftfire.authdb.managers.LoggingHandler;
 import com.craftfire.authdb.managers.permissions.Permissions;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -104,8 +102,10 @@ public class AuthDBPlayer extends AuthDBUser {
     public void kickPlayer(String node) {
         if (isNode(node)) {
             this.player.kickPlayer(AuthDBManager.msgMgr.getMessage(node, this));
+            callEvent(Event.KICK, AuthDBManager.msgMgr.getMessage(node, this));
         } else {
             this.player.kickPlayer(AuthDBManager.msgMgr.replace(node, this));
+            callEvent(Event.KICK, AuthDBManager.msgMgr.replace(node, this));
         }
     }
     
@@ -120,16 +120,10 @@ public class AuthDBPlayer extends AuthDBUser {
     public void sendMessage(String node, PlayerLoginEvent event) {
         if (isNode(node)) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.getMessage(node, this));
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(
-                                                                        event.getPlayer(),
-                                                                        true,
-                                                                        AuthDBManager.msgMgr.getMessage(node, this)));
+            callEvent(Event.KICK, AuthDBManager.msgMgr.getMessage(node, this));
         } else {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.replace(node, this));
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(
-                    event.getPlayer(),
-                    true,
-                    AuthDBManager.msgMgr.replace(node, this)));
+            callEvent(Event.KICK, AuthDBManager.msgMgr.replace(node, this));
         }
     }
 

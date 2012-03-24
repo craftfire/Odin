@@ -33,7 +33,7 @@ public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the player who tried to login.
+     * Returns the player who tried to login.
      *
      * @return player who tried to login
      */
@@ -42,7 +42,7 @@ public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Get the AuthDB player who tried to login.
+     * Returns the AuthDB player who tried to login.
      *
      * @return AuthDB player who tried to login
      */
@@ -51,7 +51,7 @@ public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Returns a true if the logout was successful.
+     * Returns true if the logout was successful.
      *
      * @return true if logout was successful, false if not.
      */
