@@ -41,6 +41,13 @@ public class CommandManager {
         }
         return null;
     }
+    
+    public boolean equals(String command, String node) {
+        if (command.equalsIgnoreCase(getCommand(node)) || command.equalsIgnoreCase(getAlias(node))) {
+            return true;
+        }
+        return false;
+    }
 
     public void load(HashMap<String, Object> config, HashMap<String, Object> defaults) {
         this.config.putAll(config);
