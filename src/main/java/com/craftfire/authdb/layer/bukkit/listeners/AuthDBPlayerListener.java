@@ -273,7 +273,7 @@ public class AuthDBPlayerListener implements Listener {
             return;
         }
 
-        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
+        AuthDBPlayer player = Util.getPlayer(event.getPlayer());
 
         if (!player.isAuthenticated()) {
             if (AuthDBManager.cfgMgr.getString("login.method").equalsIgnoreCase("prompt")) {
