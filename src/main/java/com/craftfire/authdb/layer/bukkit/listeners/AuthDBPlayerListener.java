@@ -20,6 +20,7 @@ import com.craftfire.authdb.layer.bukkit.AuthDB;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import com.craftfire.authdb.layer.bukkit.util.event.Event;
 import com.craftfire.authdb.layer.bukkit.util.Util;
+import com.craftfire.authdb.layer.bukkit.util.event.Events;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.permissions.Permissions;
 import com.craftfire.authdb.util.MainUtils;
@@ -103,13 +104,13 @@ public class AuthDBPlayerListener implements Listener {
             }
         }
 
-        if (! allow) {
+        if (!allow) {
             int time = 0;
             if (MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("login.timeout")) > 0 && player.isRegistered()) {
                 time =  MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("login.timeout"));
                 AuthDBManager.logMgr.debug("Login timeout time is: " + time + " ticks.");
             } else if (MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("register.timeout")) > 0 &&
-                       ! player.isRegistered()) {
+                       !player.isRegistered()) {
                 time =  MainUtils.stringToTicks(AuthDBManager.cfgMgr.getString("register.timeout"));
                 AuthDBManager.logMgr.debug("Register timeout time is: " + time + " ticks.");
             }
@@ -205,11 +206,8 @@ public class AuthDBPlayerListener implements Listener {
         }
 
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
-
-        /* TODO */
-        if (! player.isAuthenticated() &&
-                player.getJoinTime() != 0 &&
-                ! AuthDBManager.cfgMgr.getBoolean("guest.movement")) {
+        if (!player.isAuthenticated() && player.getJoinTime() != 0 &&
+            !AuthDBManager.cfgMgr.getBoolean("guest.movement")) {
             if (AuthDBManager.cfgMgr.getBoolean("protection.freeze.enabled") &&
                     (player.getJoinTime() + AuthDBManager.cfgMgr.getInteger("protection.freeze.delay")) <
                             System.currentTimeMillis() / 1000) {
@@ -227,25 +225,38 @@ public class AuthDBPlayerListener implements Listener {
 
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
 
-        if (! player.isAuthenticated()) {
+        if (!player.isAuthenticated()) {
             if (AuthDBManager.cfgMgr.getString("login.method").equalsIgnoreCase("prompt")) {
                 if (player.isRegistered() && player.hasPermissions(Permissions.command_login)) {
-                    /* TODO */
+                    String[] split = event.getMessage().split(" ");
+                    player.sendMessage("login.processing");
+                    if (split.length > 1) {
+                        player.sendMessage("login.prompt");
+                    } else if (player.login(split[0])) {
+                        if(Events.login(player)) {
+                            player.sendMessage("login.success");
+                        }  else {
+                            player.sendMessage("login.failure");
+                        }
+                    } else {
+                        player.sendMessage("login.failure");
+                    }
+                    AuthDBManager.logMgr.debug(player.getName() + " login ********");
+                    event.setMessage(" has logged in!");
+                    event.setCancelled(true);
                 }
             }
 
-            if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.chat")) {
+            if (player.isGuest() && !AuthDBManager.cfgMgr.getBoolean("guest.chat")) {
                 event.setCancelled(true);
             }
         }
-
-        /* TODO */
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
-        if (! player.isAuthenticated()) {
+        if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
             } else if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.interactions")) {
@@ -257,7 +268,7 @@ public class AuthDBPlayerListener implements Listener {
     @EventHandler
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
-        if (! player.isAuthenticated()) {
+        if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
             } else if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.pickup")) {
@@ -270,7 +281,7 @@ public class AuthDBPlayerListener implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
-        if (! player.isAuthenticated()) {
+        if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
             } else if (player.isGuest() && ! AuthDBManager.cfgMgr.getBoolean("guest.drop")) {
