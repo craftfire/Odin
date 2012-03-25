@@ -220,7 +220,7 @@ public class MainUtils {
                                       AuthDBManager.cfgMgr.getString("plugin.language.messages"));
         }
         if (type.equalsIgnoreCase("commands")) {
-            AuthDBManager.cfgMgr.load(
+            AuthDBManager.cmdMgr.load(
                                 CraftCommons.loadYaml(
                                         new File(dir + language + "/", type + ".yml")),
                                 AuthDBManager.craftCommons.loadLocalYaml("files/translations/advanced.yml"));
