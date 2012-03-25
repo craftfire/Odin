@@ -101,29 +101,26 @@ public class AuthDBPlayer extends AuthDBUser {
     
     public void kickPlayer(String node) {
         if (isNode(node)) {
-            this.player.kickPlayer(AuthDBManager.msgMgr.getMessage(node, this));
             callEvent(Event.KICK, AuthDBManager.msgMgr.getMessage(node, this));
         } else {
-            this.player.kickPlayer(AuthDBManager.msgMgr.replace(node, this));
             callEvent(Event.KICK, AuthDBManager.msgMgr.replace(node, this));
         }
     }
     
     public void sendMessage(String node) {
         if (isNode(node)) {
-            this.player.sendMessage(AuthDBManager.msgMgr.getMessage(node, this));
+            callEvent(Event.MESSAGE, AuthDBManager.msgMgr.getMessage(node, this));
         } else {
-            this.player.sendMessage(AuthDBManager.msgMgr.replace(node, this));
+            callEvent(Event.MESSAGE, AuthDBManager.msgMgr.replace(node, this));
         }
     }
 
     public void sendMessage(String node, PlayerLoginEvent event) {
+        //TODO: Call event?
         if (isNode(node)) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.getMessage(node, this));
-            callEvent(Event.KICK, AuthDBManager.msgMgr.getMessage(node, this));
         } else {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, AuthDBManager.msgMgr.replace(node, this));
-            callEvent(Event.KICK, AuthDBManager.msgMgr.replace(node, this));
         }
     }
 
@@ -142,17 +139,17 @@ public class AuthDBPlayer extends AuthDBUser {
     public void callEvent(Event event, String message) {
         switch (event) {
             case KICK:      Events.kick(this, message);
-                break;
+                            break;
             case LINK:      Events.link(this, getLinkedName());
-                break;
+                            break;
             case LOGIN:     Events.login(this);
-                break;
+                            break;
             case LOGOUT:    Events.logout(this, false);
-                break;
+                            break;
             case UNLINK:    Events.unlink(this);
-                break;
+                            break;
             case QUIT:      Events.quit(this);
-                break;
+                            break;
             case MESSAGE:   Events.message(this, message);
                             break;
         }

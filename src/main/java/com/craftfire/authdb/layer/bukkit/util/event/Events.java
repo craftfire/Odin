@@ -33,7 +33,7 @@ public class Events {
         AuthDBPlayerKickEvent event = new AuthDBPlayerKickEvent(player.getPlayer(), message);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            //TODO
+            event.getPlayer().kickPlayer(event.getReason());
         }
     }
 
