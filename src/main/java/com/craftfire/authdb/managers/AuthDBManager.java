@@ -95,9 +95,11 @@ public class AuthDBManager {
                     AuthDBManager.cfgMgr.getString("script.version"),
                     AuthDBManager.dataManager);
         } catch (UnsupportedScript u) {
-            LoggingHandler.stackTrace(u, Thread.currentThread());
+            final Thread t = Thread.currentThread();
+            LoggingHandler.stackTrace(u, t);
         } catch (UnsupportedVersion u) {
-            LoggingHandler.stackTrace(u, Thread.currentThread());
+            final Thread t = Thread.currentThread();
+            LoggingHandler.stackTrace(u, t);
         }
     }
 
