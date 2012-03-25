@@ -195,6 +195,57 @@ public class AuthDBPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        String[] split = event.getMessage().split(" ");
+        AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
+        String command = split[0];
+        if (AuthDBManager.cmdMgr.equals(command, "user.link")) {
+            if (player.hasPermissions(Permissions.command_login)) {
+                player.sendMessage("login.processing");
+                if (player.isAuthenticated()) {
+                    player.sendMessage("login.authorized");
+                } else if (!player.isRegistered()) {
+                    player.sendMessage("login.notregistered");
+                } else if (split.length < 2) {
+                    player.sendMessage("login.usage");
+                } else if (player.login(split[1])) {
+                    if(player.callEventResults(Event.LOGIN)) {
+                        player.sendMessage("login.success");
+                    }  else {
+                        player.sendMessage("login.failure");
+                    }
+                } else {
+                    //TODO
+                }
+                AuthDBManager.logMgr.debug(player.getName() + " login ********");
+                event.setMessage(command + " ******");
+                event.setCancelled(true);
+            } else {
+                player.sendMessage("protection_denied");
+            }
+        } else if (AuthDBManager.cmdMgr.equals(command, "user.link") &&
+                  !AuthDBManager.cfgMgr.getBoolean("join.restrict") &&
+                   AuthDBManager.cfgMgr.getBoolean("link.enabled")) {
+            if (player.hasPermissions(Permissions.command_link)) {
+                if (split.length == 3) {
+                    if (!player.getName().equals(split[1])) {
+                        if (!player.isRegistered()) {
+                            //TODO: Link the player.
+                        } else {
+                            player.sendMessage("login.registered");
+                        }
+                    } else {
+                        player.sendMessage("login.invaliduser");
+                    }
+                } else {
+                    player.sendMessage("link.usage");
+                }
+                AuthDBManager.logMgr.debug(player.getName() + " link ******** ********");
+                event.setMessage(command + " ****** ********");
+                event.setCancelled(true);
+            } else {
+                player.sendMessage("protection_denied");
+            }
+        }
         /* TODO */
     }
 
