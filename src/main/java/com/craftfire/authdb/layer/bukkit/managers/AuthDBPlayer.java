@@ -182,6 +182,25 @@ public class AuthDBPlayer extends AuthDBUser {
                             break;
         }
     }
+
+    public void callEvent(Event event) {
+        switch (event) {
+            case KICK:      Events.kick(this, null);
+                break;
+            case LINK:      Events.link(this, getLinkedName());
+                break;
+            case LOGIN:     Events.login(this);
+                break;
+            case LOGOUT:    Events.logout(this, false);
+                break;
+            case UNLINK:    Events.unlink(this);
+                break;
+            case QUIT:      Events.quit(this);
+                break;
+            case MESSAGE:   Events.message(this, null);
+                break;
+        }
+    }
     
     private boolean isNode(String string) {
         for (int i=0; i < string.length(); i++) {
