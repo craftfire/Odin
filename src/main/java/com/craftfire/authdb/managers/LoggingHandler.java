@@ -55,9 +55,16 @@ public class LoggingHandler {
                 AuthDBManager.logMgr.error("Failed while getting MySQL table schema.");
             }
         } else {
-            set.add("Script chosen: " + AuthDBManager.authAPI.getScript().getScriptName());
-            set.add("Script version: " + AuthDBManager.authAPI.getScript().getVersion());
-            set.add("Table prefix: " + AuthDBManager.cfgMgr.getString("script.tableprefix"));
+            if (AuthDBManager.authAPI != null) {
+                set.add("Script chosen: " + AuthDBManager.authAPI.getScript().getScriptName());
+                set.add("Script version: " + AuthDBManager.authAPI.getScript().getVersion());
+                set.add("Table prefix: " + AuthDBManager.cfgMgr.getString("script.tableprefix"));
+            } else {
+                set.add("Something went wrong when picking a script..");
+                set.add("Script in config: " + AuthDBManager.cfgMgr.getString("script.name"));
+                set.add("Script version in config: " +  AuthDBManager.cfgMgr.getString("script.version"));
+                set.add("Table prefix in config: " +  AuthDBManager.cfgMgr.getString("script.tableprefix"));
+            }
         }
         AuthDBManager.logMgr.stackTrace(e, t, set);    
     }
