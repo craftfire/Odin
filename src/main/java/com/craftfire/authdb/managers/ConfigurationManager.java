@@ -62,6 +62,14 @@ public class ConfigurationManager {
         return null;
     }
     
+    public HashMap<String, Object> getNodes() {
+        return this.config;
+    }
+    
+    public HashMap<String, Object> getDefaults() {
+        return this.defaults;
+    }
+    
     public void load(HashMap<String, Object> config, HashMap<String, Object> defaults) {
         this.config.putAll(config);
         this.defaults.putAll(defaults);

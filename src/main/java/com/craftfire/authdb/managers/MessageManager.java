@@ -43,6 +43,14 @@ public class MessageManager {
         return null;
     }
 
+    public HashMap<String, Object> getNodes() {
+        return this.messages;
+    }
+
+    public HashMap<String, Object> getDefaults() {
+        return this.defaults;
+    }
+
     public void load(HashMap<String, Object> defaults, HashMap<String, Object> messages) {
         this.defaults.putAll(defaults);
         this.messages.putAll(messages);
