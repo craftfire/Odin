@@ -14,59 +14,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api.events;
+package com.craftfire.authdb.layer.bukkit.api.events.player;
 
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBEvent;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerQuitEvent extends AuthDBPlayerEvent {
+public abstract class AuthDBPlayerEvent extends AuthDBEvent {
     protected Player player;
     protected AuthDBPlayer authDBPlayer;
-    protected boolean successful;
-
-    public AuthDBPlayerQuitEvent(Player player, boolean successful) {
+    
+    public AuthDBPlayerEvent(final Player player) {
         this.player = player;
         this.authDBPlayer = Util.getPlayer(player);
-        this.successful = successful;
     }
 
     /**
-     * Returns the player who got kicked
+     * Returns the player involved in this event
      *
-     * @return player who got kicked
+     * @return Player who is involved in this event
      */
-    public Player getPlayer() {
-        return this.player;
+    public final Player getPlayer() {
+        return player;
     }
 
     /**
-     * Returns the AuthDB player who got kicked
+     * Returns the AuthDB involved in this event
      *
-     * @return AuthDB player who got kicked
+     * @return AuthDB player involved in this event
      */
-    public AuthDBPlayer getAuthDBPlayer() {
+    public final AuthDBPlayer getAuthDBPlayer() {
         return this.authDBPlayer;
-    }
-
-    /**
-     * Returns true if the kick was successful.
-     *
-     * @return true if kick was successful, false if not.
-     */
-    public boolean isSuccessful() {
-        return this.successful;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

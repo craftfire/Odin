@@ -17,8 +17,8 @@
 package com.craftfire.authdb.layer.bukkit.managers;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
-import com.craftfire.authdb.layer.bukkit.util.Event;
-import com.craftfire.authdb.layer.bukkit.util.Events;
+import com.craftfire.authdb.layer.bukkit.util.event.Event;
+import com.craftfire.authdb.layer.bukkit.util.event.Events;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.AuthDBUser;
 import com.craftfire.authdb.managers.LoggingHandler;

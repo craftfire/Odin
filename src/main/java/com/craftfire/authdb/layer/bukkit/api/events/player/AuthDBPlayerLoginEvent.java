@@ -14,12 +14,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api.events;
+package com.craftfire.authdb.layer.bukkit.api.events.player;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBReloadEvent extends AuthDBEvent {
+public class AuthDBPlayerLoginEvent extends AuthDBPlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
+    private boolean cancel;
+
+    public AuthDBPlayerLoginEvent(Player player) {
+        super(player);
+        this.cancel = false;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
+    }
 
     @Override
     public HandlerList getHandlers() {

@@ -14,42 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api.events;
+package com.craftfire.authdb.layer.bukkit.api.events.player;
 
-import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
-    protected Player player;
-    protected AuthDBPlayer authDBPlayer;
-    protected String reason;
-    protected boolean successful;
+public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent implements Cancellable {
+    private static final HandlerList handlers = new HandlerList();
+    private String reason;
+    private boolean cancel;
 
-    public AuthDBPlayerKickEvent(Player player, boolean successful, String reason) {
-        this.player = player;
-        this.authDBPlayer = Util.getPlayer(player);
+    public AuthDBPlayerKickEvent(final Player player, String reason) {
+        super(player);
         this.reason = reason;
-        this.successful = successful;
-    }
-
-    /**
-     * Returns the player who got kicked
-     *
-     * @return player who got kicked
-     */
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
-     * Returns the AuthDB player who got kicked
-     *
-     * @return AuthDB player who got kicked
-     */
-    public AuthDBPlayer getAuthDBPlayer() {
-        return this.authDBPlayer;
+        this.cancel = false;
     }
 
     /**
@@ -62,15 +41,23 @@ public class AuthDBPlayerKickEvent extends AuthDBPlayerEvent {
     }
 
     /**
-     * Returns true if the kick was successful.
+     * Sets the reason for the kick
      *
-     * @return true if kick was successful, false if not.
+     * @param reason reason for the kick
      */
-    public boolean isSuccessful() {
-        return this.successful;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    private static final HandlerList handlers = new HandlerList();
+    @Override
+    public boolean isCancelled() {
+        return this.cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
+    }
 
     @Override
     public HandlerList getHandlers() {

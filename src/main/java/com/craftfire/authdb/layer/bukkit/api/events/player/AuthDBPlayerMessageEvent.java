@@ -14,52 +14,50 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api.events;
+package com.craftfire.authdb.layer.bukkit.api.events.player;
 
-import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent {
-    protected Player player;
-    protected AuthDBPlayer authDBPlayer;
-    protected String message;
+public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent implements Cancellable {
+    private static final HandlerList handlers = new HandlerList();
+    private String message;
+    private boolean cancel;
 
     public AuthDBPlayerMessageEvent(Player receiver, String message) {
-        this.player = receiver;
-        this.authDBPlayer = Util.getPlayer(receiver);
+        super(receiver);
         this.message = message;
-    }
-
-    /**
-     * Returns the player who received the message
-     *
-     * @return player who sent/received the message
-     */
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
-     * Returns the AuthDB player who received the message
-     *
-     * @return AuthDB player who received the message
-     */
-    public AuthDBPlayer getAuthDBPlayer() {
-        return this.authDBPlayer;
+        this.cancel = false;
     }
 
     /**
      * Returns the message
      *
-     * @return message message of the event
+     * @return message of the event
      */
     public String getMessage() {
         return this.message;
     }
 
-    private static final HandlerList handlers = new HandlerList();
+    /**
+     * Sets the message
+     *
+     * @param message the message
+     */
+    public void getMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
+    }
 
     @Override
     public HandlerList getHandlers() {

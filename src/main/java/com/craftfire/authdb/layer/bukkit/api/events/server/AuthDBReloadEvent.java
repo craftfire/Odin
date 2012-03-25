@@ -14,8 +14,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.util;
+package com.craftfire.authdb.layer.bukkit.api.events.server;
 
-public enum Event {
-    KICK, LINK, LOGIN, LOGOUT, UNLINK, QUIT, MESSAGE
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBEvent;
+import org.bukkit.event.HandlerList;
+
+public class AuthDBReloadEvent extends AuthDBEvent {
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }

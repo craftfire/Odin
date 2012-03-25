@@ -18,7 +18,7 @@ package com.craftfire.authdb.layer.bukkit.listeners;
 
 import com.craftfire.authdb.layer.bukkit.AuthDB;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
-import com.craftfire.authdb.layer.bukkit.util.Event;
+import com.craftfire.authdb.layer.bukkit.util.event.Event;
 import com.craftfire.authdb.layer.bukkit.util.Util;
 import com.craftfire.authdb.managers.AuthDBManager;
 import com.craftfire.authdb.managers.permissions.Permissions;

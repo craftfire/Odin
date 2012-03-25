@@ -16,8 +16,8 @@
  */
 package com.craftfire.authdb.layer.bukkit;
 
-import com.craftfire.authdb.layer.bukkit.api.events.AuthDBDisableEvent;
-import com.craftfire.authdb.layer.bukkit.api.events.AuthDBEnableEvent;
+import com.craftfire.authdb.layer.bukkit.api.events.plugin.AuthDBDisableEvent;
+import com.craftfire.authdb.layer.bukkit.api.events.plugin.AuthDBEnableEvent;
 import com.craftfire.authdb.layer.bukkit.listeners.AuthDBPlayerListener;
 import com.craftfire.authdb.layer.bukkit.managers.InventoryManager;
 import com.craftfire.authdb.managers.AuthDBManager;

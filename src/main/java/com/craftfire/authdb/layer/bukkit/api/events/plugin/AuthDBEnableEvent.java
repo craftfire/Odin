@@ -14,13 +14,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api.events;
+package com.craftfire.authdb.layer.bukkit.api.events.plugin;
 
-import org.bukkit.event.Event;
+import com.craftfire.authdb.layer.bukkit.api.events.AuthDBEvent;
 import org.bukkit.event.HandlerList;
 
-public abstract class AuthDBEvent extends Event {
+public class AuthDBEnableEvent extends AuthDBEvent {
+    private static final HandlerList handlers = new HandlerList();
 
     @Override
-    public abstract HandlerList getHandlers();
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }

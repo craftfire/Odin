@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.util;
+package com.craftfire.authdb.layer.bukkit.util.event;
 
-import com.craftfire.authdb.layer.bukkit.api.events.*;
+import com.craftfire.authdb.layer.bukkit.api.events.player.*;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import com.craftfire.authdb.managers.AuthDBManager;
 import org.bukkit.Bukkit;
@@ -24,14 +24,13 @@ import org.bukkit.Bukkit;
 public class Events {
 
     public static void quit(AuthDBPlayer player) {
-        //TODO: Call event
         player.restoreInventory();
         logout(player, false);
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(player.getPlayer(), true));
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(player.getPlayer()));
     }
 
     public static void kick(AuthDBPlayer player, String message) {
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(player.getPlayer(), true, message));
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(player.getPlayer(), message));
     }
 
     public static void kick(AuthDBPlayer player) {
@@ -50,9 +49,9 @@ public class Events {
         if (! player.isAuthenticated()) {
             player.login();
             player.restoreInventory();
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer(), true));
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer()));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer(), false));
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer()));
     }
 
     public static void logout(AuthDBPlayer player, boolean storeInventory) {
@@ -61,9 +60,9 @@ public class Events {
             if (storeInventory) {
                 player.storeInventory();
             }
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer(), true));
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer()));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer(), false));
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer()));
     }
     
     public static void link(AuthDBPlayer player, String name) {
@@ -75,9 +74,9 @@ public class Events {
             if (AuthDBManager.cfgMgr.getBoolean("link.rename")) {
                 player.setDisplayName(name);
             }
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLinkEvent(player.getPlayer(), true, name));
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLinkEvent(player.getPlayer(), name));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLinkEvent(player.getPlayer(), true, name));
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLinkEvent(player.getPlayer(), name));
     }
 
     public static void unlink(AuthDBPlayer player) {
@@ -88,17 +87,8 @@ public class Events {
             if (AuthDBManager.cfgMgr.getBoolean("link.rename")) {
                 player.setDisplayName(player.getName());
             }
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerUnlinkEvent(player.getPlayer(), true, name));
+            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerUnlinkEvent(player.getPlayer(), name));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerUnlinkEvent(player.getPlayer(), false, null));
-    }
-
-    private boolean isNode(String string) {
-        for (int i=0; i < string.length(); i++) {
-            if (Character.isWhitespace(string.charAt(i))) {
-                return false;
-            }
-        }
-        return string.contains(".");
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerUnlinkEvent(player.getPlayer(), null));
     }
 }
