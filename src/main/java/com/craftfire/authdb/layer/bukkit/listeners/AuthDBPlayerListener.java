@@ -233,7 +233,7 @@ public class AuthDBPlayerListener implements Listener {
                     if (split.length > 1) {
                         player.sendMessage("login.prompt");
                     } else if (player.login(split[0])) {
-                        if(Events.login(player)) {
+                        if(player.callEventResults(Event.LOGIN)) {
                             player.sendMessage("login.success");
                         }  else {
                             player.sendMessage("login.failure");
