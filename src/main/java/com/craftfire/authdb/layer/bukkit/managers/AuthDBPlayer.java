@@ -160,7 +160,7 @@ public class AuthDBPlayer extends AuthDBUser {
 
     public void callEvent(Event event) {
         switch (event) {
-            case KICK:      Events.kick(this);
+            case KICK:      Events.kick(this, null);
                             break;
             case LINK:      Events.link(this, getLinkedName());
                             break;
@@ -172,7 +172,7 @@ public class AuthDBPlayer extends AuthDBUser {
                             break;
             case QUIT:      Events.quit(this);
                             break;
-            case MESSAGE:   Events.message(this);
+            case MESSAGE:   Events.message(this, null);
                             break;
         }
     }

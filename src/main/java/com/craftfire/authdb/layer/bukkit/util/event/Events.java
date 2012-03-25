@@ -17,56 +17,58 @@
 package com.craftfire.authdb.layer.bukkit.util.event;
 
 import com.craftfire.authdb.layer.bukkit.api.events.player.*;
+import com.craftfire.authdb.layer.bukkit.api.events.plugin.AuthDBMessageEvent;
 import com.craftfire.authdb.layer.bukkit.managers.AuthDBPlayer;
 import com.craftfire.authdb.managers.AuthDBManager;
 import org.bukkit.Bukkit;
 
 public class Events {
-
     public static void quit(AuthDBPlayer player) {
+        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(player.getPlayer()));
         player.restoreInventory();
         logout(player, false);
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerQuitEvent(player.getPlayer()));
     }
 
     public static void kick(AuthDBPlayer player, String message) {
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerKickEvent(player.getPlayer(), message));
-    }
-
-    public static void kick(AuthDBPlayer player) {
-        kick(player, null);
+        AuthDBPlayerKickEvent event = new AuthDBPlayerKickEvent(player.getPlayer(), message);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            //TODO
+        }
     }
 
     public static void message(AuthDBPlayer player, String message) {
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerMessageEvent(player.getPlayer(), message));
-    }
-
-    public static void message(AuthDBPlayer player) {
-        message(player, null);
+        AuthDBMessageEvent event = new AuthDBMessageEvent(player.getPlayer(), message);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            event.getPlayer().sendMessage(event.getMessage());
+        }
     }
 
     public static void login(AuthDBPlayer player) {
-        if (! player.isAuthenticated()) {
+        AuthDBPlayerLoginEvent event = new AuthDBPlayerLoginEvent(player.getPlayer());
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled() && !player.isAuthenticated()) {
             player.login();
             player.restoreInventory();
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer()));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLoginEvent(player.getPlayer()));
     }
 
     public static void logout(AuthDBPlayer player, boolean storeInventory) {
-        if (player.isAuthenticated()) {
+        AuthDBPlayerLogoutEvent event = new AuthDBPlayerLogoutEvent(player.getPlayer());
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled() && player.isAuthenticated()) {
             player.logout();
             if (storeInventory) {
                 player.storeInventory();
             }
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer()));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLogoutEvent(player.getPlayer()));
     }
-    
+
     public static void link(AuthDBPlayer player, String name) {
-        if (! player.isAuthenticated() && ! player.isLinked() && AuthDBManager.cfgMgr.getBoolean("link.enabled")) {
+        AuthDBPlayerLinkEvent event = new AuthDBPlayerLinkEvent(player.getPlayer(), name);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled() && !player.isAuthenticated() && !player.isLinked()) {
             player.login();
             if (! AuthDBManager.userLinkedNames.containsKey(player.getUsername())) {
                 AuthDBManager.userLinkedNames.put(player.getUsername(), name);
@@ -74,21 +76,19 @@ public class Events {
             if (AuthDBManager.cfgMgr.getBoolean("link.rename")) {
                 player.setDisplayName(name);
             }
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLinkEvent(player.getPlayer(), name));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerLinkEvent(player.getPlayer(), name));
     }
 
     public static void unlink(AuthDBPlayer player) {
-        if (player.isAuthenticated() && player.isLinked() && AuthDBManager.cfgMgr.getBoolean("link.enabled")) {
+        AuthDBPlayerLinkEvent event = new AuthDBPlayerLinkEvent(player.getPlayer(), player.getLinkedName());
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled() && player.isAuthenticated() && player.isLinked()) {
             String name = player.getLinkedName();
             player.unlink();
             logout(player, true);
             if (AuthDBManager.cfgMgr.getBoolean("link.rename")) {
                 player.setDisplayName(player.getName());
             }
-            Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerUnlinkEvent(player.getPlayer(), name));
         }
-        Bukkit.getServer().getPluginManager().callEvent(new AuthDBPlayerUnlinkEvent(player.getPlayer(), null));
     }
 }

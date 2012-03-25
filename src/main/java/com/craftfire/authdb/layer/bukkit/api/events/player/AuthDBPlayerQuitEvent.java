@@ -17,26 +17,15 @@
 package com.craftfire.authdb.layer.bukkit.api.events.player;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerQuitEvent extends AuthDBPlayerEvent implements Cancellable {
+public class AuthDBPlayerQuitEvent extends AuthDBPlayerEvent {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
 
     public AuthDBPlayerQuitEvent(Player player) {
         super(player);
         this.cancel = false;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return this.cancel;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancel = cancel;
     }
 
     @Override

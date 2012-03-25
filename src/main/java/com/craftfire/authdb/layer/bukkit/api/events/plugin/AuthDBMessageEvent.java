@@ -14,18 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.authdb.layer.bukkit.api.events.player;
+package com.craftfire.authdb.layer.bukkit.api.events.plugin;
 
+import com.craftfire.authdb.layer.bukkit.api.events.player.AuthDBPlayerEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent implements Cancellable {
+public class AuthDBMessageEvent extends AuthDBPlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private String message;
     private boolean cancel;
 
-    public AuthDBPlayerMessageEvent(Player receiver, String message) {
+    public AuthDBMessageEvent(Player receiver, String message) {
         super(receiver);
         this.message = message;
         this.cancel = false;
@@ -45,7 +46,7 @@ public class AuthDBPlayerMessageEvent extends AuthDBPlayerEvent implements Cance
      *
      * @param message the message
      */
-    public void getMessage(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
