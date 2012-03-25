@@ -19,35 +19,36 @@ package com.craftfire.authdb.managers;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class LoggingHandler {
 
-    public static void stackTrace(Exception e, Thread t) {
-        HashSet<String> set = new HashSet<String>();
-        set.add("AuthDB version: " + AuthDBManager.pluginVersion);
-        set.add("MySQL keep alive: " + AuthDBManager.dataManager.isKeepAlive());
-        set.add("MySQL connection: " + AuthDBManager.dataManager.isConnected());
-        set.add("MySQL last query: " + AuthDBManager.dataManager.getLastQuery());
+    public static void stackTrace(final Exception e, final Thread t) {
+        HashMap<Integer, String> map = new HashMap<Integer, String>();
+        map.put(0, "AuthDB version: " + AuthDBManager.pluginVersion);
+        map.put(1, "MySQL keep alive: " + AuthDBManager.dataManager.isKeepAlive());
+        map.put(2, "MySQL connection: " + AuthDBManager.dataManager.isConnected());
+        map.put(3, "MySQL last query: " + AuthDBManager.dataManager.getLastQuery());
         if (AuthDBManager.cfgMgr.getBoolean("customdb.enabled")) {
-            set.add("Script: Custom");
-            set.add("Custom table: " + AuthDBManager.cfgMgr.getString("customdb.table"));
+            map.put(4, "Script: Custom");
+            map.put(5, "Custom table: " + AuthDBManager.cfgMgr.getString("customdb.table"));
             if (AuthDBManager.cfgMgr.getBoolean("customdb.emailrequired")) {
-                set.add("Custom email field: " + AuthDBManager.cfgMgr.getString("customdb.emailfield"));
+                map.put(6, "Custom email field: " + AuthDBManager.cfgMgr.getString("customdb.emailfield"));
             }
-            set.add("Custom password field: " + AuthDBManager.cfgMgr.getString("customdb.passfield"));
-            set.add("Custom username field: " + AuthDBManager.cfgMgr.getString("customdb.userfield"));
-            set.add("Custom encryption: " + AuthDBManager.cfgMgr.getString("customdb.encryption"));
-            set.add("Custom table schema:");
+            map.put(7, "Custom password field: " + AuthDBManager.cfgMgr.getString("customdb.passfield"));
+            map.put(8, "Custom username field: " + AuthDBManager.cfgMgr.getString("customdb.userfield"));
+            map.put(9, "Custom encryption: " + AuthDBManager.cfgMgr.getString("customdb.encryption"));
+            map.put(10, "Custom table schema:");
             try {
                 ResultSet rs = AuthDBManager.dataManager.getResultSet(
                                     "SELECT * FROM `" + AuthDBManager.cfgMgr.getString("customdb.table") + "` LIMIT 1");
                 ResultSetMetaData metaData = rs.getMetaData();
                 int rowCount = metaData.getColumnCount();
-                set.add("Table Name : " + metaData.getTableName(2));
-                set.add("Column\tType(size)");
+                map.put(11, "Table Name : " + metaData.getTableName(2));
+                map.put(12, "Column\tType(size)");
                 for (int i = 0; i < rowCount; i++) {
-                    set.add(metaData.getColumnName(i + 1) + "\t" +
+                    map.put(13,
+                            metaData.getColumnName(i + 1) + "\t" +
                             metaData.getColumnTypeName(i + 1) + "(" +
                             metaData.getColumnDisplaySize(i + 1) + ")");
                 }
@@ -56,16 +57,17 @@ public class LoggingHandler {
             }
         } else {
             if (AuthDBManager.authAPI != null) {
-                set.add("Script chosen: " + AuthDBManager.authAPI.getScript().getScriptName());
-                set.add("Script version: " + AuthDBManager.authAPI.getScript().getVersion());
-                set.add("Table prefix: " + AuthDBManager.cfgMgr.getString("script.tableprefix"));
+                map.put(14, "Script chosen: " + AuthDBManager.authAPI.getScript().getScriptName());
+                map.put(15, "Script version: " + AuthDBManager.authAPI.getScript().getVersion());
+                map.put(16, "Table prefix: " + AuthDBManager.cfgMgr.getString("script.tableprefix"));
             } else {
-                set.add("Something went wrong when picking a script..");
-                set.add("Script in config: " + AuthDBManager.cfgMgr.getString("script.name"));
-                set.add("Script version in config: " +  AuthDBManager.cfgMgr.getString("script.version"));
-                set.add("Table prefix in config: " +  AuthDBManager.cfgMgr.getString("script.tableprefix"));
+                map.put(17, "AuthDB will not work because you've set the wrong script name in basic.yml, " +
+                        "please correct this node (script.name).");
+                map.put(18, "Script in config: " + AuthDBManager.cfgMgr.getString("script.name"));
+                map.put(19, "Script version in config: " +  AuthDBManager.cfgMgr.getString("script.version"));
+                map.put(20, "Table prefix in config: " +  AuthDBManager.cfgMgr.getString("script.tableprefix"));
             }
         }
-        AuthDBManager.logMgr.stackTrace(e, t, set);    
+        AuthDBManager.logMgr.stackTrace(e, t, map);
     }
 }
