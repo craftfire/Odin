@@ -39,7 +39,7 @@ public class AuthDBPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         AuthDBPlayer player =  Util.getPlayer(event.getPlayer());
-        if (! AuthDBManager.dataManager.isConnected()) {
+        if (! AuthDBManager.scriptDataManager.isConnected()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
                     "You cannot join when the server has no database connection.");
             return;
