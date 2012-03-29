@@ -26,9 +26,9 @@ public class LoggingHandler {
     public static void stackTrace(final Exception e, final Thread t) {
         HashMap<Integer, String> map = new HashMap<Integer, String>();
         map.put(0, "AuthDB version: " + AuthDBManager.pluginVersion);
-        map.put(1, "MySQL keep alive: " + AuthDBManager.dataManager.isKeepAlive());
-        map.put(2, "MySQL connection: " + AuthDBManager.dataManager.isConnected());
-        map.put(3, "MySQL last query: " + AuthDBManager.dataManager.getLastQuery());
+        map.put(1, "MySQL keep alive: " + AuthDBManager.scriptDataManager.isKeepAlive());
+        map.put(2, "MySQL connection: " + AuthDBManager.scriptDataManager.isConnected());
+        map.put(3, "MySQL last query: " + AuthDBManager.scriptDataManager.getLastQuery());
         if (AuthDBManager.cfgMgr.getBoolean("customdb.enabled")) {
             map.put(4, "Script: Custom");
             map.put(5, "Custom table: " + AuthDBManager.cfgMgr.getString("customdb.table"));
@@ -40,7 +40,7 @@ public class LoggingHandler {
             map.put(9, "Custom encryption: " + AuthDBManager.cfgMgr.getString("customdb.encryption"));
             map.put(10, "Custom table schema:");
             try {
-                ResultSet rs = AuthDBManager.dataManager.getResultSet(
+                ResultSet rs = AuthDBManager.scriptDataManager.getResultSet(
                                     "SELECT * FROM `" + AuthDBManager.cfgMgr.getString("customdb.table") + "` LIMIT 1");
                 ResultSetMetaData metaData = rs.getMetaData();
                 int rowCount = metaData.getColumnCount();
