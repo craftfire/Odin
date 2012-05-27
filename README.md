@@ -11,7 +11,7 @@ Who is CraftFire?
 -----------------
 CraftFire is the team behind AuthAPI, AuthDB, AuthDB Legacy, Babel, BabelCraft, BabelCraft Legacy, CraftCommons, and TextWrap.  
 [![Wulfspider](https://secure.gravatar.com/avatar/6f2a0dcb60cd1ebee57875f9326bc98c?d=mm&r=pg&s=48)](http://forums.spout.org/members/wulfspider.1/) 
-[![Contex](https://secure.gravatar.com/avatar/166ba849fcd905c8842cb062b879bc09?d=mm&r=pg&s=48)](forums.bukkit.org/members/contex.17559/) 
+[![Contex](https://secure.gravatar.com/avatar/166ba849fcd905c8842cb062b879bc09?d=mm&r=pg&s=48)](http://forums.bukkit.org/members/contex.17559/) 
 
 Visit our [website][Website] or get support on our [forum thread][Forums].  
 Track and submit issues and bugs on our [issue tracker][Issues].
