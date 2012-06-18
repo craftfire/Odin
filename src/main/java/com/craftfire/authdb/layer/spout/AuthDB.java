@@ -37,10 +37,10 @@ public class AuthDB extends CommonPlugin implements Named {
     }
 
     public void onDisable() {
-        getGame().getScheduler().cancelTasks(this);
+        getEngine().getScheduler().cancelTasks(this);
     }
 
     protected void registerEvents() {
-        getGame().getEventManager().registerEvents(new AuthDBPlayerListener(this), this);
+        getEngine().getEventManager().registerEvents(new AuthDBPlayerListener(this), this);
     }
 }
