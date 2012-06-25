@@ -74,8 +74,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>Vault</artifactId>
+            <groupId>net.milkbowl</groupId>
+            <artifactId>vault</artifactId>
             <version>1.2.17-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
