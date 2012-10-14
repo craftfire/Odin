@@ -16,6 +16,7 @@
  */
 package com.craftfire.odin.layer.bukkit.listeners;
 
+import com.craftfire.bifrost.exceptions.UnsupportedMethod;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.Util;
@@ -50,20 +51,20 @@ public class OdinPlayerListener implements Listener {
             return;
         }
 
-        if (OdinManager.cfgMgr.getBoolean("join.restrict") && ! player.isRegistered()) {
+        if (OdinManager.cfgMgr.getBoolean("join.restrict") && !player.isRegistered()) {
             player.sendMessage("join.restricted", event);
             return;
         }
 
         if (OdinManager.cfgMgr.getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
-            ! player.isFilterWhitelisted()) {
+            !player.isFilterWhitelisted()) {
             OdinManager.logMgr.debug(player.getUsername() +
                                            " is not in the filter whitelist and has bad characters in his/her name.");
             player.sendMessage("filter.username", event);
             return;
         }
 
-        if (! player.hasMinLength()) {
+        if (!player.hasMinLength()) {
             player.sendMessage("username.minimum", event);
             return;
         } else if (! player.hasMaxLength()) {
@@ -89,7 +90,7 @@ public class OdinPlayerListener implements Listener {
         player.clearPasswordAttempts();
 
         if (OdinManager.cfgMgr.getBoolean("session.enabled") &&
-                OdinManager.cfgMgr.getInteger("session.length") != 0) {
+                OdinManager.cfgMgr.getInt("session.length") != 0) {
             if (player.hasSession()) {
                 OdinManager.logMgr.debug("Found session for " + player.getName() + ", timestamp: " +
                         player.getSessionTime());
@@ -259,7 +260,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated() && player.getJoinTime() != 0 &&
             !OdinManager.cfgMgr.getBoolean("guest.movement")) {
             if (OdinManager.cfgMgr.getBoolean("protection.freeze.enabled") &&
-                    (player.getJoinTime() + OdinManager.cfgMgr.getInteger("protection.freeze.delay")) <
+                    (player.getJoinTime() + OdinManager.cfgMgr.getInt("protection.freeze.delay")) <
                             System.currentTimeMillis() / 1000) {
                 player.setJoinTime(0);
             }

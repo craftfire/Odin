@@ -127,14 +127,10 @@ public class OdinPlayer extends OdinUser {
 
     public void checkTimeout() {
         if (!isAuthenticated() && OdinManager.userTimeouts.contains(this.username)) {
-            try {
-                if (isRegistered()) {
-                    kickPlayer("login.timeout");
-                } else {
-                    kickPlayer("register.timeout");
-                }
-            } catch (UnsupportedMethod e) {
-                OdinManager.logMgr.stackTrace(e);
+            if (isRegistered()) {
+                kickPlayer("login.timeout");
+            } else {
+                kickPlayer("register.timeout");
             }
         } else if (OdinManager.userTimeouts.contains(this.username)) {
             OdinManager.userTimeouts.remove(this.username);

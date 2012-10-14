@@ -120,25 +120,29 @@ public class OdinUser {
         return false;
     }
 
-    public boolean login(String password) throws UnsupportedMethod {
-        if (!OdinManager.userAuthenticated.contains(this.username)) {
-            if (isLinked()) {
-                if (OdinManager.scriptHandle.authenticate(getLinkedName(), password)) {
-                    OdinManager.userAuthenticated.add(this.username);
-                    return true;
-                }
-            } else {
-                if (OdinManager.scriptHandle.authenticate(this.username, password)) {
-                    OdinManager.userAuthenticated.add(this.username);
-                    return true;
+    public boolean login(String password) {
+        try {
+            if (!OdinManager.userAuthenticated.contains(this.username)) {
+                if (isLinked()) {
+                    if (OdinManager.scriptHandle.authenticate(getLinkedName(), password)) {
+                        OdinManager.userAuthenticated.add(this.username);
+                        return true;
+                    }
+                } else {
+                    if (OdinManager.scriptHandle.authenticate(this.username, password)) {
+                        OdinManager.userAuthenticated.add(this.username);
+                        return true;
+                    }
                 }
             }
+        } catch (UnsupportedMethod e) {
+            OdinManager.logMgr.stackTrace(e);
         }
         return false;
     }
 
     public void login() {
-        if (! OdinManager.userAuthenticated.contains(this.username)) {
+        if (!OdinManager.userAuthenticated.contains(this.username)) {
             OdinManager.userAuthenticated.add(this.username);
         }
     }
@@ -177,26 +181,31 @@ public class OdinUser {
         }
     }
 
-    public boolean isRegistered() throws UnsupportedMethod {
+    public boolean isRegistered() {
         if (this.status != null) {
             switch (this.status) {
                 case Authenticated: return true;
                 case Registered: return true;
                 case Guest: return false;
             }
-        } else if (OdinManager.scriptHandle.getScript().isRegistered(this.username)) {
-            this.status = Status.Registered;
-            return true;
+        } else try {
+            if (OdinManager.scriptHandle.getScript().isRegistered(this.username)) {
+                this.status = Status.Registered;
+                return true;
+            }
+        } catch (UnsupportedMethod e) {
+            OdinManager.logMgr.stackTrace(e);
+            return false;
         }
         this.status = Status.Guest;
         return false;
     }
 
-    public boolean isGuest() throws UnsupportedMethod {
+    public boolean isGuest() {
         if (this.status != null) {
             return this.status.equals(Status.Guest);
         } else {
-            if (!OdinManager.scriptHandle.getScript().isRegistered(this.username)) {
+            if (isRegistered()) {
                 this.status = Status.Guest;
                 return true;
             } else {
