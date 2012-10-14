@@ -34,28 +34,36 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class Odin extends JavaPlugin {
-    private static final Logger logger = Logger.getLogger("Minecraft.Odin");
-
     public static Permission permission = null;
     public static Economy economy = null;
     public static Chat chat = null;
-    public static InventoryManager inventoryManager = new InventoryManager();
+    private InventoryManager inventoryManager = new InventoryManager();
+    private OdinManager odinManager;
+    private static Odin instance;
 
-    public static Odin instance;
-    {
-        instance = this;
+    public static Odin getInstance() {
+        return instance;
+    }
+
+    public OdinManager getOdinManager() {
+        return this.odinManager;
+    }
+
+    public InventoryManager getInventoryManager() {
+        return this.inventoryManager;
     }
 
     @Override
     public void onEnable() {
+        instance = this;
         getDataFolder().mkdirs();
 
         getServer().getPluginManager().registerEvents(new OdinPlayerListener(this), this);
         setupPermissions();
         setupChat();
         setupEconomy();
-        loadOdin();
-        logger.info("Odin " + getDescription().getVersion() + " enabled.");
+        this.odinManager = new OdinManager(getDataFolder());
+        getOdinManager().getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
         Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
     }
 
@@ -71,11 +79,6 @@ public class Odin extends JavaPlugin {
             player = (Player) sender;
         }
         return true;
-    }
-    
-    protected void loadOdin() {
-        OdinManager odin = new OdinManager();
-        odin.load(getDataFolder());
     }
 
     private Boolean setupPermissions() {

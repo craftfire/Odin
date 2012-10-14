@@ -46,7 +46,7 @@ public class OdinManager {
     private InventoryManager inventoryManager;
     private PermissionsManager permissionsManager;
     private MessageManager messageManager;
-    private LoggingManager loggingManager;
+    private LoggingHandler loggingHandler;
 
     public static String pluginName, pluginVersion;
 
@@ -57,8 +57,6 @@ public class OdinManager {
     private Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
     private Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
 
-    private Map<String, String> playerInventory = new HashMap<String, String>();
-    private Map<String, String> playerArmor = new HashMap<String, String>();
     private Map<String, Long> playerJoin = new HashMap<String, Long>();
 
     public OdinManager(File directory) {
@@ -66,6 +64,7 @@ public class OdinManager {
         this.configurationManager = new ConfigurationManager();
         this.permissionsManager = new PermissionsManager();
         this.commandManager = new CommandManager();
+        this.inventoryManager = new InventoryManager();
         this.messageManager = new MessageManager();
         loadConfiguration(directory);
         loadAuthAPI(directory);
@@ -80,7 +79,15 @@ public class OdinManager {
     }
 
     public ScriptAPI getScriptAPI() {
-        return this.bifrost.getScriptAPI();
+        return getBifrost().getScriptAPI();
+    }
+
+    public ScriptHandle getScript() {
+        return getScriptAPI().getHandle();
+    }
+
+    public DataManager getDataManager() {
+        return getScript().getDataManager();
     }
 
     public StorageManager getStorage() {
@@ -91,11 +98,11 @@ public class OdinManager {
         return this.configurationManager;
     }
 
-    public CommandManager getCommand() {
+    public CommandManager getCommands() {
         return this.commandManager;
     }
 
-    public InventoryManager getInventory() {
+    public InventoryManager getInventories() {
         return this.inventoryManager;
     }
 
@@ -103,12 +110,40 @@ public class OdinManager {
         return this.permissionsManager;
     }
 
-    public MessageManager getMessage() {
+    public MessageManager getMessages() {
         return this.messageManager;
     }
 
     public LoggingManager getLogging() {
-        return this.loggingManager;
+        return this.loggingHandler;
+    }
+
+    public Map<String, Long> getUserSessions() {
+        return this.userSessions;
+    }
+
+    public HashSet<String> getAuthenticatedUsers() {
+        return this.userAuthenticated;
+    }
+
+    public HashSet<String> getUserTimeouts() {
+        return this.userTimeouts;
+    }
+
+    public Map<String, String> getLinkedUsernames() {
+        return this.userLinkedNames;
+    }
+
+    public Map<String, OdinUser> getUserStorage() {
+        return this.userStorage;
+    }
+
+    public Map<String, Integer> getUserPasswordAttempts() {
+        return this.userPasswordAttempts;
+    }
+
+    public Map<String, Long> getPlayerJoins() {
+        return this.playerJoin;
     }
 
     public void clean() {
@@ -117,8 +152,7 @@ public class OdinManager {
         userStorage.clear();
         userTimeouts.clear();
         userPasswordAttempts.clear();
-        playerInventory.clear();
-        playerArmor.clear();
+        getInventories().clear();
         playerJoin.clear();
     }
 
@@ -144,9 +178,9 @@ public class OdinManager {
                                                             scriptDataManager);
             getLogging().debug("Bifrost has been loaded.");
         } catch (UnsupportedScript e) {
-            LoggingHandler.stackTrace(e);
+            getLogging().stackTrace(e);
         } catch (UnsupportedVersion e) {
-            LoggingHandler.stackTrace(e);
+            getLogging().stackTrace(e);
         }
         this.storageManager = new StorageManager(storageDataManager);
     }
@@ -157,11 +191,11 @@ public class OdinManager {
                                     new YamlManager("files/config/basic.yml"));
             getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
                                     new YamlManager("files/config/advanced.yml"));
-            this.loggingManager = new LoggingManager("Minecraft.Odin", "[Odin]");
-            this.loggingManager.setDirectory(directory + "/logs/");
-            this.loggingManager.setFormat(getConfig().getString("plugin.logformat"));
-            this.loggingManager.setDebug(getConfig().getBoolean("plugin.debugmode"));
-            this.loggingManager.setLogging(getConfig().getBoolean("plugin.logging"));
+            this.loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
+            this.loggingHandler.setDirectory(directory + "/logs/");
+            this.loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
+            this.loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
+            this.loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
             MainUtils util = new MainUtils();
             util.loadLanguage(directory.toString() + "\\translations\\", "commands");
             util.loadLanguage(directory.toString() + "\\translations\\", "messages");

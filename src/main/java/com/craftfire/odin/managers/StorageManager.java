@@ -65,10 +65,10 @@ public class StorageManager {
                                           "INVENTORY TEXT," +
                                            "ARMOR TEXT)");
         } catch (SQLException e) {
-            OdinManager.logMgr.error("Failed while creating odin_inventories table for H2 database.");
-            LoggingHandler.stackTrace(e);
+            OdinManager.getInstance().getLogging().error("Failed while creating odin_inventories table for H2 database.");
+            OdinManager.getInstance().getLogging().stackTrace(e);
             return;
         }
-        OdinManager.logMgr.debug("Successfully created odin_inventories table for H2 database.");
+        OdinManager.getInstance().getLogging().debug("Successfully created odin_inventories table for H2 database.");
     }
 }

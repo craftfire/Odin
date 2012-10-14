@@ -88,20 +88,20 @@ public class MessageManager {
 
         string = string.replaceAll("\\{USERMIN\\}", OdinManager.getInstance().getConfig().getString("username.minimum"));
         string = string.replaceAll("\\{USERMAX\\}", OdinManager.getInstance().getConfig().getString("username.maximum"));
-        string = string.replaceAll("\\{PASSMIN\\}", OdinManager.cfgMgr.getString("password.minimum"));
-        string = string.replaceAll("\\{PASSMAX\\}", OdinManager.cfgMgr.getString("password.maximum"));
+        string = string.replaceAll("\\{PASSMIN\\}", OdinManager.getInstance().getConfig().getString("password.minimum"));
+        string = string.replaceAll("\\{PASSMAX\\}", OdinManager.getInstance().getConfig().getString("password.maximum"));
         string = string.replaceAll("\\{PLUGIN\\}", OdinManager.pluginName);
         string = string.replaceAll("\\{VERSION\\}", OdinManager.pluginVersion);
         string = string.replaceAll("\\{LOGINTIMEOUT\\}",
-                            OdinManager.cfgMgr.getString("login.timeout").split(" ")[0] + " " +
-                                    MainUtils.stringToTimeLanguage(OdinManager.cfgMgr.getString("login.timeout")));
+                            OdinManager.getInstance().getConfig().getString("login.timeout").split(" ")[0] + " " +
+                                    stringToTimeLanguage(OdinManager.getInstance().getConfig().getString("login.timeout")));
         string = string.replaceAll("\\{REGISTERTIMEOUT\\}",
-                            OdinManager.cfgMgr.getString("register.timeout").split(" ")[0] + " " +
-                                    MainUtils.stringToTimeLanguage(OdinManager.cfgMgr.getString("register.timeout")));
+                            OdinManager.getInstance().getConfig().getString("register.timeout").split(" ")[0] + " " +
+                                    stringToTimeLanguage(OdinManager.getInstance().getConfig().getString("register.timeout")));
         string = string.replaceAll("\\{USERBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                              OdinManager.cfgMgr.getString("filter.username")));
+                                                              OdinManager.getInstance().getConfig().getString("filter.username")));
         string = string.replaceAll("\\{PASSBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                              OdinManager.cfgMgr.getString("filter.password")));
+                                                              OdinManager.getInstance().getConfig().getString("filter.password")));
         string = string.replaceAll("\\{EMAILREQUIRED\\}", email);
         string = string.replaceAll("\\{NEWLINE\\}", System.getProperty("line.separator"));
         string = string.replaceAll("\\{newline\\}", System.getProperty("line.separator"));
@@ -110,14 +110,14 @@ public class MessageManager {
         string = string.replaceAll("\\{NL\\}", System.getProperty("line.separator"));
         string = string.replaceAll("\\{nl\\}", System.getProperty("line.separator"));
 
-        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.cmdMgr.getCommand("user.register") +
-                                                        " (" + OdinManager.cmdMgr.getAlias("user.register") + ")");
-        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.cmdMgr.getCommand("user.link") +
-                                                        " (" + OdinManager.cmdMgr.getAlias("user.link") + ")");
-        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.cmdMgr.getCommand("user.unlink") +
-                                                        " (" + OdinManager.cmdMgr.getAlias("user.unlink") + ")");
-        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.cmdMgr.getCommand("user.login") +
-                                                        " (" + OdinManager.cmdMgr.getAlias("user.login") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getInstance().getCommands().getCommand("user.register") +
+                                                        " (" + OdinManager.getInstance().getCommands().getAlias("user.register") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getInstance().getCommands().getCommand("user.link") +
+                                                        " (" + OdinManager.getInstance().getCommands().getAlias("user.link") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getInstance().getCommands().getCommand("user.unlink") +
+                                                        " (" + OdinManager.getInstance().getCommands().getAlias("user.unlink") + ")");
+        string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getInstance().getCommands().getCommand("user.login") +
+                                                        " (" + OdinManager.getInstance().getCommands().getAlias("user.login") + ")");
 
         string = string.replaceAll("\\{BLACK\\}", "Â§0");
         string = string.replaceAll("\\{DARKBLUE\\}", "Â§1");

@@ -16,32 +16,39 @@
  */
 package com.craftfire.odin.managers;
 
+import com.craftfire.commons.managers.LoggingManager;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class LoggingHandler {
+public class LoggingHandler extends LoggingManager {
 
-    public static void stackTrace(final Exception e) {
+    public LoggingHandler(String logger, String prefix) {
+        super(logger, prefix);
+    }
+
+    @Override
+    public void stackTrace(final Exception e) {
         HashMap<Integer, String> map = new HashMap<Integer, String>();
         map.put(0, "Odin version: " + OdinManager.pluginVersion);
-        map.put(1, "MySQL keep alive: " + OdinManager.scriptDataManager.isKeepAlive());
-        map.put(2, "MySQL connection: " + OdinManager.scriptDataManager.isConnected());
-        map.put(3, "MySQL last query: " + OdinManager.scriptDataManager.getLastQuery());
-        if (OdinManager.cfgMgr.getBoolean("customdb.enabled")) {
+        map.put(1, "MySQL keep alive: " + OdinManager.getInstance().getScript().getDataManager().isKeepAlive());
+        map.put(2, "MySQL connection: " + OdinManager.getInstance().getScript().getDataManager().isConnected());
+        map.put(3, "MySQL last query: " + OdinManager.getInstance().getScript().getDataManager().getLastQuery());
+        if (OdinManager.getInstance().getConfig().getBoolean("customdb.enabled")) {
             map.put(4, "Script: Custom");
-            map.put(5, "Custom table: " + OdinManager.cfgMgr.getString("customdb.table"));
-            if (OdinManager.cfgMgr.getBoolean("customdb.emailrequired")) {
-                map.put(6, "Custom email field: " + OdinManager.cfgMgr.getString("customdb.emailfield"));
+            map.put(5, "Custom table: " + OdinManager.getInstance().getConfig().getString("customdb.table"));
+            if (OdinManager.getInstance().getConfig().getBoolean("customdb.emailrequired")) {
+                map.put(6, "Custom email field: " + OdinManager.getInstance().getConfig().getString("customdb.emailfield"));
             }
-            map.put(7, "Custom password field: " + OdinManager.cfgMgr.getString("customdb.passfield"));
-            map.put(8, "Custom username field: " + OdinManager.cfgMgr.getString("customdb.userfield"));
-            map.put(9, "Custom encryption: " + OdinManager.cfgMgr.getString("customdb.encryption"));
+            map.put(7, "Custom password field: " + OdinManager.getInstance().getConfig().getString("customdb.passfield"));
+            map.put(8, "Custom username field: " + OdinManager.getInstance().getConfig().getString("customdb.userfield"));
+            map.put(9, "Custom encryption: " + OdinManager.getInstance().getConfig().getString("customdb.encryption"));
             map.put(10, "Custom table schema:");
             try {
-                ResultSet rs = OdinManager.scriptDataManager.getResultSet(
-                                    "SELECT * FROM `" + OdinManager.cfgMgr.getString("customdb.table") + "` LIMIT 1");
+                ResultSet rs = OdinManager.getInstance().getScript().getDataManager().getResultSet(
+                                    "SELECT * FROM `" + OdinManager.getInstance().getConfig().getString("customdb.table") + "` LIMIT 1");
                 ResultSetMetaData metaData = rs.getMetaData();
                 int rowCount = metaData.getColumnCount();
                 map.put(11, "Table Name : " + metaData.getTableName(2));
@@ -53,21 +60,21 @@ public class LoggingHandler {
                             metaData.getColumnDisplaySize(i + 1) + ")");
                 }
             } catch (SQLException a) {
-                OdinManager.logMgr.error("Failed while getting MySQL table schema.");
+                error("Failed while getting MySQL table schema.");
             }
         } else {
-            if (OdinManager.bifrost != null) {
-                map.put(14, "Script chosen: " + OdinManager.scriptHandle.getScriptName());
-                map.put(15, "Script version: " + OdinManager.scriptHandle.getVersion());
-                map.put(16, "Table prefix: " + OdinManager.cfgMgr.getString("script.tableprefix"));
+            if (OdinManager.getInstance().getScript() != null) {
+                map.put(14, "Script chosen: " + OdinManager.getInstance().getScript().getScriptName());
+                map.put(15, "Script version: " + OdinManager.getInstance().getScript().getVersion());
+                map.put(16, "Table prefix: " + OdinManager.getInstance().getConfig().getString("script.tableprefix"));
             } else {
                 map.put(17, "Odin will not work because you've set the wrong script name in basic.yml, " +
                             "please correct this node (script.name).");
-                map.put(18, "Script in config: " + OdinManager.cfgMgr.getString("script.name"));
-                map.put(19, "Script version in config: " +  OdinManager.cfgMgr.getString("script.version"));
-                map.put(20, "Table prefix in config: " +  OdinManager.cfgMgr.getString("script.tableprefix"));
+                map.put(18, "Script in config: " + OdinManager.getInstance().getConfig().getString("script.name"));
+                map.put(19, "Script version in config: " +  OdinManager.getInstance().getConfig().getString("script.version"));
+                map.put(20, "Table prefix in config: " +  OdinManager.getInstance().getConfig().getString("script.tableprefix"));
             }
         }
-        OdinManager.logMgr.stackTrace(e, map);
+        stackTrace(e, map);
     }
 }

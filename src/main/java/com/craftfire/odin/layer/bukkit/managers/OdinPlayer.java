@@ -79,12 +79,12 @@ public class OdinPlayer extends OdinUser {
 
     public void storeInventory() {
         try {
-            Odin.inventoryManager.storeInventory(this.player,
-                                                         this.player.getInventory().getContents(),
-                                                         this.player.getInventory().getArmorContents());
+            Odin.getInstance().getInventoryManager().storeInventory(this.player,
+                                                               this.player.getInventory().getContents(),
+                                                               this.player.getInventory().getArmorContents());
             clearInventory();
         } catch (IOException e) {
-            LoggingHandler.stackTrace(e);
+            Odin.getInstance().getOdinManager().getLogging().stackTrace(e);
         }
     }
 
@@ -97,43 +97,43 @@ public class OdinPlayer extends OdinUser {
     }
 
     public void restoreInventory() {
-        Odin.inventoryManager.setInventoryFromStorage(this.player);
+        Odin.getInstance().getInventoryManager().setInventoryFromStorage(this.player);
     }
     
     public void kickPlayer(String node) {
         if (isNode(node)) {
-            callEvent(Event.KICK, OdinManager.msgMgr.getMessage(node, this));
+            callEvent(Event.KICK, OdinManager.getInstance().getMessages().getMessage(node, this));
         } else {
-            callEvent(Event.KICK, OdinManager.msgMgr.replace(node, this));
+            callEvent(Event.KICK, OdinManager.getInstance().getMessages().replace(node, this));
         }
     }
     
     public void sendMessage(String node) {
         if (isNode(node)) {
-            callEvent(Event.MESSAGE, OdinManager.msgMgr.getMessage(node, this));
+            callEvent(Event.MESSAGE, OdinManager.getInstance().getMessages().getMessage(node, this));
         } else {
-            callEvent(Event.MESSAGE, OdinManager.msgMgr.replace(node, this));
+            callEvent(Event.MESSAGE, OdinManager.getInstance().getMessages().replace(node, this));
         }
     }
 
     public void sendMessage(String node, PlayerLoginEvent event) {
         //TODO: Call event?
         if (isNode(node)) {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.msgMgr.getMessage(node, this));
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getInstance().getMessages().getMessage(node, this));
         } else {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.msgMgr.replace(node, this));
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getInstance().getMessages().replace(node, this));
         }
     }
 
     public void checkTimeout() {
-        if (!isAuthenticated() && OdinManager.userTimeouts.contains(this.username)) {
+        if (!isAuthenticated() && OdinManager.getInstance().getUserTimeouts().contains(this.username)) {
             if (isRegistered()) {
                 kickPlayer("login.timeout");
             } else {
                 kickPlayer("register.timeout");
             }
-        } else if (OdinManager.userTimeouts.contains(this.username)) {
-            OdinManager.userTimeouts.remove(this.username);
+        } else if (OdinManager.getInstance().getUserTimeouts().contains(this.username)) {
+            OdinManager.getInstance().getUserTimeouts().remove(this.username);
         }
     }
 

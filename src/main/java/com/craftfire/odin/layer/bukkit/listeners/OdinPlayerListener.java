@@ -40,25 +40,25 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
-        if (! OdinManager.scriptDataManager.isConnected()) {
+        if (!OdinManager.getInstance().getDataManager().isConnected()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
                     "You cannot join when the server has no database connection.");
             return;
         }
 
-        if (OdinManager.cfgMgr.getBoolean("session.protect") && player.hasSession()) {
+        if (OdinManager.getInstance().getConfig().getBoolean("session.protect") && player.hasSession()) {
             player.sendMessage("session.protected", event);
             return;
         }
 
-        if (OdinManager.cfgMgr.getBoolean("join.restrict") && !player.isRegistered()) {
+        if (OdinManager.getInstance().getConfig().getBoolean("join.restrict") && !player.isRegistered()) {
             player.sendMessage("join.restricted", event);
             return;
         }
 
-        if (OdinManager.cfgMgr.getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
+        if (OdinManager.getInstance().getConfig().getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
             !player.isFilterWhitelisted()) {
-            OdinManager.logMgr.debug(player.getUsername() +
+            OdinManager.getInstance().getLogging().debug(player.getUsername() +
                                            " is not in the filter whitelist and has bad characters in his/her name.");
             player.sendMessage("filter.username", event);
             return;

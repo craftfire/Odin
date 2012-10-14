@@ -87,13 +87,13 @@ public class InventoryManager {
                 armorinv.append("0:0:0:0:0,");
             }
         }
-        OdinManager.playerInventory.put(player.getName(), inv.toString());
-        OdinManager.playerArmor.put(player.getName(), armorinv.toString());
+        OdinManager.getInstance().getInventories().setInventory(player.getName(), inv.toString());
+        OdinManager.getInstance().getInventories().setArmor(player.getName(), armorinv.toString());
     }
 
     public ItemStack[] getInventory(Player player) {
-        if (OdinManager.playerInventory.containsKey(player.getName())) {
-            String data = OdinManager.playerInventory.get(player.getName());
+        if (OdinManager.getInstance().getInventories().hasInventory(player.getName())) {
+            String data = OdinManager.getInstance().getInventories().getInventory(player.getName());
             if (data != null && ! data.isEmpty()) {
                 String[] inv = data.split(",");
                 ItemStack[] inventory;
@@ -138,8 +138,8 @@ public class InventoryManager {
     }
 
     public ItemStack[] getArmorInventory(Player player) {
-        if (OdinManager.playerArmor.containsKey(player.getName())) {
-            String data = OdinManager.playerArmor.get(player.getName());
+        if (OdinManager.getInstance().getInventories().hasArmor(player.getName())) {
+            String data = OdinManager.getInstance().getInventories().getArmor(player.getName());
             if (data != null && ! data.isEmpty()) {
                 String[] inv = data.split(",");
                 ItemStack[] inventory = new ItemStack[4];

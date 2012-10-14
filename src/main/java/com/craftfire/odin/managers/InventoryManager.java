@@ -16,26 +16,53 @@
  */
 package com.craftfire.odin.managers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class InventoryManager {
+    private Map<String, String> inventories = new HashMap<String, String>();
+    private Map<String, String> armor = new HashMap<String, String>();
+
+    public void clear() {
+        this.inventories.clear();
+        this.armor.clear();
+    }
+
+    public Map<String, String> getInventories() {
+        return this.inventories;
+    }
+
+    public Map<String, String> getArmor() {
+        return this.armor;
+    }
+
     public void setInventory(String player, String inventory) {
-        OdinManager.playerInventory.put(player, inventory);
+        this.inventories.put(player, inventory);
     }
 
     public String getInventory(String player) {
-        if (OdinManager.playerInventory.containsKey(player)) {
-            return OdinManager.playerInventory.get(player);
+        if (this.inventories.containsKey(player)) {
+            return this.inventories.get(player);
         }
         return null;
+    }
+
+    public boolean hasInventory(String player) {
+        return this.inventories.containsKey(player);
     }
 
     public void setArmor(String player, String armor) {
-        OdinManager.playerArmor.put(player, armor);
+        this.armor.put(player, armor);
     }
 
     public String getArmor(String player) {
-        if (OdinManager.playerArmor.containsKey(player)) {
-            return OdinManager.playerArmor.get(player);
+        if (this.armor.containsKey(player)) {
+            return this.armor.get(player);
         }
         return null;
+    }
+
+    public boolean hasArmor(String player) {
+        return this.armor.containsKey(player);
     }
 }
