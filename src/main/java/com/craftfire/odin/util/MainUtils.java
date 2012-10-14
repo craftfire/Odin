@@ -54,46 +54,6 @@ public class MainUtils {
         return stringToTimeLanguage(split[0], split[1]);
     }
 
-    public static String stringToTimeLanguage(String length, String time) {
-        int integer = Integer.parseInt(length);
-        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
-            if (integer > 1) {
-                return OdinManager.msgMgr.getString("Core.time.days");
-            } else {
-                return OdinManager.msgMgr.getString("Core.time.day");
-            }
-        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
-                   time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
-            if (integer > 1) {
-                return OdinManager.msgMgr.getString("Core.time.hours");
-            } else {
-                return OdinManager.msgMgr.getString("Core.time.hour");
-            }
-        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
-                   time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
-            if (integer > 1) {
-                return OdinManager.msgMgr.getString("Core.time.minutes");
-            } else {
-                return OdinManager.msgMgr.getString("Core.time.minute");
-            }
-        } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
-                   time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
-            if (integer > 1) {
-                return OdinManager.msgMgr.getString("Core.time.seconds");
-            } else {
-                return OdinManager.msgMgr.getString("Core.time.second");
-            }
-        } else if (time.equalsIgnoreCase("milliseconds") || time.equalsIgnoreCase("millisecond") ||
-                   time.equalsIgnoreCase("milli") || time.equalsIgnoreCase("ms")) {
-            if (integer > 1) {
-                return OdinManager.msgMgr.getString("Core.time.milliseconds");
-            } else {
-                return OdinManager.msgMgr.getString("Core.time.millisecond");
-            }
-        }
-        return time;
-    }
-
     public static int stringToTicks(String string) {
         String[] split = string.split(" ");
         String length = split[0];

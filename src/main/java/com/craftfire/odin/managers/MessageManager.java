@@ -82,12 +82,12 @@ public class MessageManager {
         string = string.replaceAll("&", "Â§");
             //TODO string = string.replaceAll("\\{DISPLAYNAME\\}", checkOtherName(player.getName()));
         String email = "";
-        if (OdinManager.cfgMgr.getBoolean("customdb.emailrequired")) {
+        if (OdinManager.getInstance().getConfig().getBoolean("customdb.emailrequired")) {
             email = "email";
         }
 
-        string = string.replaceAll("\\{USERMIN\\}", OdinManager.cfgMgr.getString("username.minimum"));
-        string = string.replaceAll("\\{USERMAX\\}", OdinManager.cfgMgr.getString("username.maximum"));
+        string = string.replaceAll("\\{USERMIN\\}", OdinManager.getInstance().getConfig().getString("username.minimum"));
+        string = string.replaceAll("\\{USERMAX\\}", OdinManager.getInstance().getConfig().getString("username.maximum"));
         string = string.replaceAll("\\{PASSMIN\\}", OdinManager.cfgMgr.getString("password.minimum"));
         string = string.replaceAll("\\{PASSMAX\\}", OdinManager.cfgMgr.getString("password.maximum"));
         string = string.replaceAll("\\{PLUGIN\\}", OdinManager.pluginName);
@@ -188,5 +188,50 @@ public class MessageManager {
         string = string.replaceAll("\\{white\\}", "Â§f");
 
         return string;
+    }
+
+    public String stringToTimeLanguage(String timeString) {
+        String[] split = timeString.split(" ");
+        return stringToTimeLanguage(split[0], split[1]);
+    }
+
+    public String stringToTimeLanguage(String length, String time) {
+        int integer = Integer.parseInt(length);
+        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
+            if (integer > 1) {
+                return getString("Core.time.days");
+            } else {
+                return getString("Core.time.day");
+            }
+        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
+                time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
+            if (integer > 1) {
+                return getString("Core.time.hours");
+            } else {
+                return getString("Core.time.hour");
+            }
+        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
+                time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
+            if (integer > 1) {
+                return getString("Core.time.minutes");
+            } else {
+                return getString("Core.time.minute");
+            }
+        } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
+                time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
+            if (integer > 1) {
+                return getString("Core.time.seconds");
+            } else {
+                return getString("Core.time.second");
+            }
+        } else if (time.equalsIgnoreCase("milliseconds") || time.equalsIgnoreCase("millisecond") ||
+                time.equalsIgnoreCase("milli") || time.equalsIgnoreCase("ms")) {
+            if (integer > 1) {
+                return getString("Core.time.milliseconds");
+            } else {
+                return getString("Core.time.millisecond");
+            }
+        }
+        return time;
     }
 }

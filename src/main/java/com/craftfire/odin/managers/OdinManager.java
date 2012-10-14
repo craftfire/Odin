@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class OdinManager {
+    private static OdinManager instance;
     private Bifrost bifrost;
     private StorageManager storageManager;
     private ConfigurationManager configurationManager;
@@ -61,12 +62,17 @@ public class OdinManager {
     private Map<String, Long> playerJoin = new HashMap<String, Long>();
 
     public OdinManager(File directory) {
+        instance = this;
         this.configurationManager = new ConfigurationManager();
         this.permissionsManager = new PermissionsManager();
         this.commandManager = new CommandManager();
         this.messageManager = new MessageManager();
         loadConfiguration(directory);
         loadAuthAPI(directory);
+    }
+
+    public static OdinManager getInstance() {
+        return instance;
     }
 
     public Bifrost getBifrost() {
@@ -118,7 +124,7 @@ public class OdinManager {
 
     protected void loadAuthAPI(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
-                                                        getConfig().getString("database.username").,
+                                                        getConfig().getString("database.username"),
                                                         getConfig().getString("database.password"));
         scriptDataManager.setHost(getConfig().getString("database.host"));
         scriptDataManager.setPort(getConfig().getInt("database.port"));
@@ -147,15 +153,15 @@ public class OdinManager {
 
     protected void loadConfiguration(File directory) {
         try {
-            OdinManager.cfgMgr.load(new YamlManager(new File(directory + "/config/basic.yml")),
+            getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
                                     new YamlManager("files/config/basic.yml"));
-            OdinManager.cfgMgr.load(new YamlManager(new File(directory + "/config/advanced.yml")),
+            getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
                                     new YamlManager("files/config/advanced.yml"));
-            OdinManager.logMgr = new LoggingManager("Minecraft.Odin", "[Odin]");
-            OdinManager.logMgr.setDirectory(directory + "/logs/");
-            OdinManager.logMgr.setFormat(OdinManager.cfgMgr.getString("plugin.logformat"));
-            OdinManager.logMgr.setDebug(OdinManager.cfgMgr.getBoolean("plugin.debugmode"));
-            OdinManager.logMgr.setLogging(OdinManager.cfgMgr.getBoolean("plugin.logging"));
+            this.loggingManager = new LoggingManager("Minecraft.Odin", "[Odin]");
+            this.loggingManager.setDirectory(directory + "/logs/");
+            this.loggingManager.setFormat(getConfig().getString("plugin.logformat"));
+            this.loggingManager.setDebug(getConfig().getBoolean("plugin.debugmode"));
+            this.loggingManager.setLogging(getConfig().getBoolean("plugin.logging"));
             MainUtils util = new MainUtils();
             util.loadLanguage(directory.toString() + "\\translations\\", "commands");
             util.loadLanguage(directory.toString() + "\\translations\\", "messages");
