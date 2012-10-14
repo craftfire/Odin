@@ -13,8 +13,8 @@ Core:
     database:
         failure: "{RED}Database connection failed! Access is denied! Contact the server admin."
     reload:
-        success: "AuthDB has successfully reloaded!"
-        failure: "AuthDB could not be reloaded!"
+        success: "Odin has successfully reloaded!"
+        failure: "Odin could not be reloaded!"
     join:
         restricted: "{RED}You are not registered, visit {ORANGE}www.craftfire.com {RED}to register."
     register:

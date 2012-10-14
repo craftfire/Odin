@@ -5,7 +5,7 @@ plugin:
     debugmode: false                                 # Enable/disable debugging mode and additional console output.
     usagestats: true                                 # Enable/disable usage stats reporting to CraftFire devs.
     logging: true                                    # Enable/disable logging to files.
-    logformat: yyyy-MM-dd                            # Filename format of the AuthDB debug and error log files.
+    logformat: yyyy-MM-dd                            # Filename format of the Odin debug and error log files.
 database:
     type: mysql                                      # Database type/driver to use. Current options are MySQL and eBean (Bukkit persistence).
     host: localhost                                  # MySQL server hostname, domain, IP, or localhost for local connections. MySQL only.

@@ -7,9 +7,9 @@ Core:
             login: "/login"
             logout: "/logout"
         admin:
-            login: "/authdb login"
-            logout: "/authdb logout"
-            reload: "/authdb reload"
+            login: "/odin login"
+            logout: "/odin logout"
+            reload: "/odin reload"
     aliases:
         user:
             register: "/reg"

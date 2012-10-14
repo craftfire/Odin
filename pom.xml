@@ -2,9 +2,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Project information -->
-    <name>AuthDB</name>
+    <name>Odin</name>
     <groupId>com.craftfire</groupId>
-    <artifactId>authdb</artifactId>
+    <artifactId>odin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <url>http://www.craftfire.com</url>
     <inceptionYear>2011</inceptionYear>
@@ -12,7 +12,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <authapiVersion>dev-SNAPSHOT</authapiVersion>
+        <bifrostVersion>0.0.1-SNAPSHOT</bifrostVersion>
+        <bukkitVersion>1.3.1-R2.1-SNAPSHOT</bukkitVersion>
         <spoutVersion>dev-SNAPSHOT</spoutVersion>
         <buildNumber>0</buildNumber>
     </properties>
@@ -34,15 +35,15 @@
 
     <!-- Source code -->
     <scm>
-        <developerConnection>scm:git:git@github.com:CraftFire/AuthDB.git</developerConnection>
-        <connection>scm:git:git://github.com/CraftFire/AuthDB.git</connection>
-        <url>https://github.com/CraftFire/AuthDB</url>
+        <developerConnection>scm:git:git@github.com:CraftFire/Odin.git</developerConnection>
+        <connection>scm:git:git://github.com/CraftFire/Odin.git</connection>
+        <url>https://github.com/CraftFire/Odin</url>
     </scm>
 
     <!-- Continuous integration -->
     <ciManagement>
         <system>jenkins</system>
-        <url>http://build.craftfire.com/job/AuthDB</url>
+        <url>http://build.craftfire.com/job/Odin</url>
     </ciManagement>
 
     <!-- Repository locations -->
@@ -63,9 +64,14 @@
     <dependencies>
         <dependency>
             <groupId>com.craftfire</groupId>
-            <artifactId>authapi</artifactId>
-            <version>${authapiVersion}</version>
+            <artifactId>bifrost</artifactId>
+            <version>${bifrostVersion}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${bukkitVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.spout</groupId>
