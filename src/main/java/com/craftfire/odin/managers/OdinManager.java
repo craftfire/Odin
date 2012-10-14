@@ -38,32 +38,72 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class OdinManager {
-    public static Bifrost bifrost;
-    public static ScriptAPI scriptAPI;
-    public static ScriptHandle scriptHandle;
-    public static DataManager scriptDataManager;
-    public static DataManager storageDataManager;
-    public static StorageManager storageManager;
-    public static ConfigurationManager cfgMgr;
-    public static CommandManager cmdMgr;
-    public static InventoryManager invMgr;
-    public static PermissionsManager prmMgr;
-    public static MessageManager msgMgr;
-    public static LoggingManager logMgr;
-    public static CraftCommons craftCommons;
-    
-    public static String pluginName, pluginVersion;
-    
-    public static Map<String, Long> userSessions = new HashMap<String, Long>();
-    public static HashSet<String> userAuthenticated = new HashSet<String>();
-    public static HashSet<String> userTimeouts = new HashSet<String>();
-    public static Map<String, String> userLinkedNames = new HashMap<String, String>();
-    public static Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
-    public static Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
+    private Bifrost bifrost;
+    private StorageManager storageManager;
+    private ConfigurationManager configurationManager;
+    private CommandManager commandManager;
+    private InventoryManager inventoryManager;
+    private PermissionsManager permissionsManager;
+    private MessageManager messageManager;
+    private LoggingManager loggingManager;
 
-    public static Map<String, String> playerInventory = new HashMap<String, String>();
-    public static Map<String, String> playerArmor = new HashMap<String, String>();
-    public static Map<String, Long> playerJoin = new HashMap<String, Long>();
+    public static String pluginName, pluginVersion;
+
+    private Map<String, Long> userSessions = new HashMap<String, Long>();
+    private HashSet<String> userAuthenticated = new HashSet<String>();
+    private HashSet<String> userTimeouts = new HashSet<String>();
+    private Map<String, String> userLinkedNames = new HashMap<String, String>();
+    private Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
+    private Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
+
+    private Map<String, String> playerInventory = new HashMap<String, String>();
+    private Map<String, String> playerArmor = new HashMap<String, String>();
+    private Map<String, Long> playerJoin = new HashMap<String, Long>();
+
+    public OdinManager(File directory) {
+        this.configurationManager = new ConfigurationManager();
+        this.permissionsManager = new PermissionsManager();
+        this.commandManager = new CommandManager();
+        this.messageManager = new MessageManager();
+        loadConfiguration(directory);
+        loadAuthAPI(directory);
+    }
+
+    public Bifrost getBifrost() {
+        return this.bifrost;
+    }
+
+    public ScriptAPI getScriptAPI() {
+        return this.bifrost.getScriptAPI();
+    }
+
+    public StorageManager getStorage() {
+        return this.storageManager;
+    }
+
+    public ConfigurationManager getConfig() {
+        return this.configurationManager;
+    }
+
+    public CommandManager getCommand() {
+        return this.commandManager;
+    }
+
+    public InventoryManager getInventory() {
+        return this.inventoryManager;
+    }
+
+    public PermissionsManager getPermissions() {
+        return this.permissionsManager;
+    }
+
+    public MessageManager getMessage() {
+        return this.messageManager;
+    }
+
+    public LoggingManager getLogging() {
+        return this.loggingManager;
+    }
 
     public void clean() {
         userSessions.clear();
@@ -76,49 +116,33 @@ public class OdinManager {
         playerJoin.clear();
     }
 
-    public void load(File directory) {
-        setClasses();
-        loadConfiguration(directory);
-        loadAuthAPI(directory);
-    }
-
-    protected void setClasses() {
-        OdinManager.cfgMgr = new ConfigurationManager();
-        OdinManager.prmMgr = new PermissionsManager();
-        OdinManager.cmdMgr = new CommandManager();
-        OdinManager.msgMgr = new MessageManager();
-        OdinManager.craftCommons = new CraftCommons();
-    }
-
     protected void loadAuthAPI(File directory) {
-        OdinManager.scriptDataManager = new DataManager(DataType.MYSQL,
-                                                          OdinManager.cfgMgr.getString("database.username"),
-                                                          OdinManager.cfgMgr.getString("database.password"));
-        OdinManager.scriptDataManager.setHost(OdinManager.cfgMgr.getString("database.host"));
-        OdinManager.scriptDataManager.setPort(OdinManager.cfgMgr.getInt("database.port"));
-        OdinManager.scriptDataManager.setDatabase(OdinManager.cfgMgr.getString("database.name"));
-        OdinManager.scriptDataManager.setPrefix(OdinManager.cfgMgr.getString("script.tableprefix"));
-        OdinManager.scriptDataManager.setTimeout(OdinManager.cfgMgr.getInt("database.timeout"));
-        OdinManager.scriptDataManager.setKeepAlive(OdinManager.cfgMgr.getBoolean("database.keepalive"));
-        OdinManager.storageDataManager = new DataManager(DataType.H2,
-                                                          OdinManager.cfgMgr.getString("database.username"),
-                                                          OdinManager.cfgMgr.getString("database.password"));
-        OdinManager.storageDataManager.setDirectory(directory + "/data/Odin");
-        OdinManager.logMgr.debug("Storage data manager has been loaded.");
+        DataManager scriptDataManager = new DataManager(DataType.MYSQL,
+                                                        getConfig().getString("database.username").,
+                                                        getConfig().getString("database.password"));
+        scriptDataManager.setHost(getConfig().getString("database.host"));
+        scriptDataManager.setPort(getConfig().getInt("database.port"));
+        scriptDataManager.setDatabase(getConfig().getString("database.name"));
+        scriptDataManager.setPrefix(getConfig().getString("script.tableprefix"));
+        scriptDataManager.setTimeout(getConfig().getInt("database.timeout"));
+        scriptDataManager.setKeepAlive(getConfig().getBoolean("database.keepalive"));
+        DataManager storageDataManager = new DataManager(DataType.H2,
+                                                         getConfig().getString("database.username"),
+                                                         getConfig().getString("database.password"));
+        storageDataManager.setDirectory(directory + "/data/Odin");
+        getLogging().debug("Storage data manager has been loaded.");
         try {
-            OdinManager.bifrost = new Bifrost();
-            OdinManager.scriptAPI = OdinManager.bifrost.getScriptAPI();
-            OdinManager.scriptAPI.addHandle(Scripts.stringToScript(OdinManager.cfgMgr.getString("script.name")),
-                                            OdinManager.cfgMgr.getString("script.version"),
-                                            OdinManager.scriptDataManager);
-            OdinManager.scriptHandle = OdinManager.scriptAPI.getHandle();
-            OdinManager.logMgr.debug("Bifrost has been loaded.");
+            this.bifrost = new Bifrost();
+            getScriptAPI().addHandle(Scripts.stringToScript(getConfig().getString("script.name")),
+                                                            getConfig().getString("script.version"),
+                                                            scriptDataManager);
+            getLogging().debug("Bifrost has been loaded.");
         } catch (UnsupportedScript e) {
             LoggingHandler.stackTrace(e);
         } catch (UnsupportedVersion e) {
             LoggingHandler.stackTrace(e);
         }
-        OdinManager.storageManager = new StorageManager();
+        this.storageManager = new StorageManager(storageDataManager);
     }
 
     protected void loadConfiguration(File directory) {

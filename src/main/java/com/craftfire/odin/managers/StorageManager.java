@@ -16,29 +16,37 @@
  */
 package com.craftfire.odin.managers;
 
+import com.craftfire.commons.managers.DataManager;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StorageManager {
+    private final DataManager dataManager;
     private Map<Table, String> primaries = new HashMap<Table, String>();
+
+    public StorageManager(DataManager dataManager) {
+        this.dataManager = dataManager;
+        checkDatabases();
+        setupPrimaries();
+    }
 
     public enum Table {
         INVENTORY("ODIN_INVENTORIES");
-        
+
         private String name;
         Table(String name) {
             this.name = name;
         }
     }
 
-    public StorageManager() {
-        checkDatabases();
-        setupPrimaries();
+    public DataManager getDataManager() {
+        return this.dataManager;
     }
     
     public boolean exists(Table table, String value) {
-        return OdinManager.storageDataManager.exist(table.name, this.primaries.get(table), value);
+        return getDataManager().exist(table.name, this.primaries.get(table), value);
     }
 
     public void checkDatabases() {
@@ -51,11 +59,11 @@ public class StorageManager {
 
     private void checkInventoryDatabase() {
         try {
-            OdinManager.storageDataManager.executeQuery("CREATE TABLE IF NOT EXISTS ODIN_INVENTORIES(" +
-                                                            "ID INT PRIMARY KEY, " +
-                                                            "PLAYERNAME VARCHAR(50), " +
-                                                            "INVENTORY TEXT," +
-                                                            "ARMOR TEXT)");
+            getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS ODIN_INVENTORIES(" +
+                                          "ID INT PRIMARY KEY, " +
+                                          "PLAYERNAME VARCHAR(50), " +
+                                          "INVENTORY TEXT," +
+                                           "ARMOR TEXT)");
         } catch (SQLException e) {
             OdinManager.logMgr.error("Failed while creating odin_inventories table for H2 database.");
             LoggingHandler.stackTrace(e);
