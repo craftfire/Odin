@@ -39,18 +39,18 @@ public class OdinUser {
      */
     public OdinUser(final String username) {
         this.username = username;
-        this.badcharacters = MainUtils.hasBadCharacters(username, OdinManager.getInstance().getConfig().getString("filter.username"));
+        this.badcharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
         load();
     }
     
     public void save() {
-        OdinManager.getInstance().getUserStorage().put(this.username, this);
+        OdinManager.getUserStorage().put(this.username, this);
     }
 
     public void load() {
-        if (OdinManager.getInstance().getUserStorage().containsKey(this.username)) {
+        if (OdinManager.getUserStorage().containsKey(this.username)) {
             /* TODO */
-            OdinUser temp = OdinManager.getInstance().getUserStorage().get(this.username);
+            OdinUser temp = OdinManager.getUserStorage().get(this.username);
             this.username = temp.getUsername();
             this.user = temp.getUser();
             this.status = temp.getStatus();
@@ -72,33 +72,33 @@ public class OdinUser {
     
     public void setUser() {
         try {
-            this.user = OdinManager.getInstance().getScript().getUser(this.username);
+            this.user = OdinManager.getScript().getUser(this.username);
         } catch (UnsupportedMethod e) {
-            OdinManager.getInstance().getLogging().stackTrace(e);
+            OdinManager.getLogging().stackTrace(e);
         } catch (SQLException e) {
-            OdinManager.getInstance().getLogging().stackTrace(e);
+            OdinManager.getLogging().stackTrace(e);
         }
     }
 
     public boolean isLinked() {
-        return OdinManager.getInstance().getLinkedUsernames().containsKey(this.username);
+        return OdinManager.getLinkedUsernames().containsKey(this.username);
     }
 
     public String getLinkedName() {
-        if (OdinManager.getInstance().getLinkedUsernames().containsKey(this.username)) {
-            return OdinManager.getInstance().getLinkedUsernames().get(this.username);
+        if (OdinManager.getLinkedUsernames().containsKey(this.username)) {
+            return OdinManager.getLinkedUsernames().get(this.username);
         }
         return null;
     }
 
     public boolean isAuthenticated() {
-        return OdinManager.getInstance().getAuthenticatedUsers().contains(this.username);
+        return OdinManager.getAuthenticatedUsers().contains(this.username);
     }
 
     public void setAuthenticated(boolean authenticated) {
         if (authenticated) {
-            OdinManager.getInstance().getAuthenticatedUsers().add(this.username);
-            if (OdinManager.getInstance().getConfig().getBoolean("session.enabled")) {
+            OdinManager.getAuthenticatedUsers().add(this.username);
+            if (OdinManager.getConfig().getBoolean("session.enabled")) {
                 setSession();
             }
         } else {
@@ -107,13 +107,13 @@ public class OdinUser {
     }
 
     public boolean logout() {
-        if (OdinManager.getInstance().getAuthenticatedUsers().contains(this.username)) {
-            OdinManager.getInstance().getAuthenticatedUsers().remove(this.username);
-            if (OdinManager.getInstance().getUserPasswordAttempts().containsKey(this.username)) {
-                OdinManager.getInstance().getUserPasswordAttempts().remove(this.username);
+        if (OdinManager.getAuthenticatedUsers().contains(this.username)) {
+            OdinManager.getAuthenticatedUsers().remove(this.username);
+            if (OdinManager.getUserPasswordAttempts().containsKey(this.username)) {
+                OdinManager.getUserPasswordAttempts().remove(this.username);
             }
-            if (OdinManager.getInstance().getUserTimeouts().contains(this.username)) {
-                OdinManager.getInstance().getUserTimeouts().remove(this.username);
+            if (OdinManager.getUserTimeouts().contains(this.username)) {
+                OdinManager.getUserTimeouts().remove(this.username);
             }
             return true;
         }
@@ -122,34 +122,34 @@ public class OdinUser {
 
     public boolean login(String password) {
         try {
-            if (!OdinManager.getInstance().getAuthenticatedUsers().contains(this.username)) {
+            if (!OdinManager.getAuthenticatedUsers().contains(this.username)) {
                 if (isLinked()) {
-                    if (OdinManager.getInstance().getScript().authenticate(getLinkedName(), password)) {
-                        OdinManager.getInstance().getAuthenticatedUsers().add(this.username);
+                    if (OdinManager.getScript().authenticate(getLinkedName(), password)) {
+                        OdinManager.getAuthenticatedUsers().add(this.username);
                         return true;
                     }
                 } else {
-                    if (OdinManager.getInstance().getScript().authenticate(this.username, password)) {
-                        OdinManager.getInstance().getAuthenticatedUsers().add(this.username);
+                    if (OdinManager.getScript().authenticate(this.username, password)) {
+                        OdinManager.getAuthenticatedUsers().add(this.username);
                         return true;
                     }
                 }
             }
         } catch (UnsupportedMethod e) {
-            OdinManager.getInstance().getLogging().stackTrace(e);
+            OdinManager.getLogging().stackTrace(e);
         }
         return false;
     }
 
     public void login() {
-        if (!OdinManager.getInstance().getAuthenticatedUsers().contains(this.username)) {
-            OdinManager.getInstance().getAuthenticatedUsers().add(this.username);
+        if (!OdinManager.getAuthenticatedUsers().contains(this.username)) {
+            OdinManager.getAuthenticatedUsers().add(this.username);
         }
     }
 
     public boolean unlink() {
-        if (OdinManager.getInstance().getLinkedUsernames().containsKey(this.username)) {
-            OdinManager.getInstance().getLinkedUsernames().remove(this.username);
+        if (OdinManager.getLinkedUsernames().containsKey(this.username)) {
+            OdinManager.getLinkedUsernames().remove(this.username);
             return true;
         }
         return false;
@@ -165,19 +165,19 @@ public class OdinUser {
 
     public boolean hasSession() {
         //TODO: Check storage for session.
-        return OdinManager.getInstance().getUserSessions().containsKey(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip));
+        return OdinManager.getUserSessions().containsKey(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip));
     }
     
     public long getSessionTime() {
-        if (OdinManager.getInstance().getConfig().getBoolean("session.enabled") && hasSession()) {
-            return OdinManager.getInstance().getUserSessions().get(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip));
+        if (OdinManager.getConfig().getBoolean("session.enabled") && hasSession()) {
+            return OdinManager.getUserSessions().get(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip));
         }
         return 0;
     }
     
     public void setSession() {
-        if (OdinManager.getInstance().getConfig().getBoolean("session.enabled")) {
-            OdinManager.getInstance().getUserSessions().put(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip), new Date().getTime() / 1000);
+        if (OdinManager.getConfig().getBoolean("session.enabled")) {
+            OdinManager.getUserSessions().put(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip), new Date().getTime() / 1000);
         }
     }
 
@@ -189,12 +189,12 @@ public class OdinUser {
                 case Guest: return false;
             }
         } else try {
-            if (OdinManager.getInstance().getScript().getScript().isRegistered(this.username)) {
+            if (OdinManager.getScript().getScript().isRegistered(this.username)) {
                 this.status = Status.Registered;
                 return true;
             }
         } catch (UnsupportedMethod e) {
-            OdinManager.getInstance().getLogging().stackTrace(e);
+            OdinManager.getLogging().stackTrace(e);
             return false;
         }
         this.status = Status.Guest;
@@ -226,49 +226,49 @@ public class OdinUser {
     }
 
     public boolean hasMinLength() {
-        return this.username.length() < OdinManager.getInstance().getConfig().getInt("username.minimum");
+        return this.username.length() < OdinManager.getConfig().getInt("username.minimum");
     }
 
     public boolean hasMaxLength() {
-        return this.username.length() > OdinManager.getInstance().getConfig().getInt("username.maximum");
+        return this.username.length() > OdinManager.getConfig().getInt("username.maximum");
     }
     
     public long getJoinTime() {
-        if (OdinManager.getInstance().getPlayerJoins().containsKey(this.username)) {
-            return OdinManager.getInstance().getPlayerJoins().get(this.username);
+        if (OdinManager.getPlayerJoins().containsKey(this.username)) {
+            return OdinManager.getPlayerJoins().get(this.username);
         }
         return 0;
     }
     
     public void setJoinTime() {
-        OdinManager.getInstance().getPlayerJoins().put(this.username, System.currentTimeMillis());
+        OdinManager.getPlayerJoins().put(this.username, System.currentTimeMillis());
     }
 
     public void setJoinTime(long time) {
-        OdinManager.getInstance().getPlayerJoins().put(this.username, time);
+        OdinManager.getPlayerJoins().put(this.username, time);
     }
     
     public int getPasswordAttempts() {
-        if (OdinManager.getInstance().getUserPasswordAttempts().containsKey(this.username)) {
-            return OdinManager.getInstance().getUserPasswordAttempts().get(this.username);
+        if (OdinManager.getUserPasswordAttempts().containsKey(this.username)) {
+            return OdinManager.getUserPasswordAttempts().get(this.username);
         }
         return 0;
     }
 
     public void setPasswordAttempts(int attempts) {
-        OdinManager.getInstance().getUserPasswordAttempts().put(this.username, attempts);
+        OdinManager.getUserPasswordAttempts().put(this.username, attempts);
     }
 
     public void clearPasswordAttempts() {
-        OdinManager.getInstance().getUserPasswordAttempts().put(this.username, 0);
+        OdinManager.getUserPasswordAttempts().put(this.username, 0);
     }
 
     public void increasePasswordAttempts() {
-        if (OdinManager.getInstance().getUserPasswordAttempts().containsKey(this.username)) {
-            OdinManager.getInstance().getUserPasswordAttempts().put(this.username,
-                                                   OdinManager.getInstance().getUserPasswordAttempts().get(this.username) + 1);
+        if (OdinManager.getUserPasswordAttempts().containsKey(this.username)) {
+            OdinManager.getUserPasswordAttempts().put(this.username,
+                                                   OdinManager.getUserPasswordAttempts().get(this.username) + 1);
         } else {
-            OdinManager.getInstance().getUserPasswordAttempts().put(this.username, 1);
+            OdinManager.getUserPasswordAttempts().put(this.username, 1);
         }
     }
     
@@ -277,10 +277,10 @@ public class OdinUser {
     }
     
     public boolean isFilterWhitelisted() {
-        return OdinManager.getInstance().getConfig().getString("filter.whitelist").contains(this.username);
+        return OdinManager.getConfig().getString("filter.whitelist").contains(this.username);
     }
 
     public void setTimeout() {
-        OdinManager.getInstance().getUserTimeouts().add(this.username);
+        OdinManager.getUserTimeouts().add(this.username);
     }
 }

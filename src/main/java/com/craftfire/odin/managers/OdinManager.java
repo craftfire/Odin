@@ -39,111 +39,107 @@ import java.util.Map;
 
 public class OdinManager {
     private static OdinManager instance;
-    private Bifrost bifrost;
-    private StorageManager storageManager;
-    private ConfigurationManager configurationManager;
-    private CommandManager commandManager;
-    private InventoryManager inventoryManager;
-    private PermissionsManager permissionsManager;
-    private MessageManager messageManager;
-    private LoggingHandler loggingHandler;
+    private static Bifrost bifrost;
+    private static StorageManager storageManager;
+    private static ConfigurationManager configurationManager;
+    private static CommandManager commandManager;
+    private static InventoryManager inventoryManager;
+    private static PermissionsManager permissionsManager;
+    private static MessageManager messageManager;
+    private static LoggingHandler loggingHandler;
 
     public static String pluginName, pluginVersion;
 
-    private Map<String, Long> userSessions = new HashMap<String, Long>();
-    private HashSet<String> userAuthenticated = new HashSet<String>();
-    private HashSet<String> userTimeouts = new HashSet<String>();
-    private Map<String, String> userLinkedNames = new HashMap<String, String>();
-    private Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
-    private Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
+    private static Map<String, Long> userSessions = new HashMap<String, Long>();
+    private static HashSet<String> userAuthenticated = new HashSet<String>();
+    private static HashSet<String> userTimeouts = new HashSet<String>();
+    private static Map<String, String> userLinkedNames = new HashMap<String, String>();
+    private static Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
+    private static Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
 
-    private Map<String, Long> playerJoin = new HashMap<String, Long>();
+    private static Map<String, Long> playerJoin = new HashMap<String, Long>();
 
     public OdinManager(File directory) {
         instance = this;
-        this.configurationManager = new ConfigurationManager();
-        this.permissionsManager = new PermissionsManager();
-        this.commandManager = new CommandManager();
-        this.inventoryManager = new InventoryManager();
-        this.messageManager = new MessageManager();
+        configurationManager = new ConfigurationManager();
+        permissionsManager = new PermissionsManager();
+        commandManager = new CommandManager();
+        inventoryManager = new InventoryManager();
+        messageManager = new MessageManager();
         loadConfiguration(directory);
         loadAuthAPI(directory);
     }
 
-    public static OdinManager getInstance() {
-        return instance;
+    public static Bifrost getBifrost() {
+        return bifrost;
     }
 
-    public Bifrost getBifrost() {
-        return this.bifrost;
-    }
-
-    public ScriptAPI getScriptAPI() {
+    public static ScriptAPI getScriptAPI() {
         return getBifrost().getScriptAPI();
     }
 
-    public ScriptHandle getScript() {
+    public static ScriptHandle getScript() {
         return getScriptAPI().getHandle();
     }
 
-    public DataManager getDataManager() {
+    public static DataManager getDataManager() {
         return getScript().getDataManager();
     }
 
-    public StorageManager getStorage() {
-        return this.storageManager;
+    public static StorageManager getStorage() {
+        return storageManager;
     }
 
-    public ConfigurationManager getConfig() {
-        return this.configurationManager;
+    public static ConfigurationManager getConfig() {
+        return configurationManager;
     }
 
-    public CommandManager getCommands() {
-        return this.commandManager;
+    public static CommandManager getCommands() {
+        return commandManager;
     }
 
-    public InventoryManager getInventories() {
-        return this.inventoryManager;
+    public static InventoryManager getInventories() {
+        return inventoryManager;
     }
 
-    public PermissionsManager getPermissions() {
-        return this.permissionsManager;
+    public static PermissionsManager getPermissions() {
+        return permissionsManager;
     }
 
-    public MessageManager getMessages() {
-        return this.messageManager;
+    public static MessageManager getMessages() {
+        return messageManager;
     }
 
-    public LoggingManager getLogging() {
-        return this.loggingHandler;
+    public static LoggingManager getLogging() {
+        return loggingHandler;
     }
 
-    public Map<String, Long> getUserSessions() {
-        return this.userSessions;
+    public static Map<String, Long> getUserSessions() {
+        return userSessions;
     }
 
-    public HashSet<String> getAuthenticatedUsers() {
-        return this.userAuthenticated;
+    public static HashSet<String> getAuthenticatedUsers() {
+        return userAuthenticated;
     }
 
-    public HashSet<String> getUserTimeouts() {
-        return this.userTimeouts;
+    public static HashSet<String> getUserTimeouts() {
+        return userTimeouts;
     }
 
-    public Map<String, String> getLinkedUsernames() {
-        return this.userLinkedNames;
+    public static Map<String, String> getLinkedUsernames() {
+        return userLinkedNames;
     }
 
-    public Map<String, OdinUser> getUserStorage() {
-        return this.userStorage;
+    public static Map<String, OdinUser> getUserStorage() {
+        return userStorage;
     }
 
-    public Map<String, Integer> getUserPasswordAttempts() {
-        return this.userPasswordAttempts;
+    public static Map<String, Integer> getUserPasswordAttempts() {
+        return userPasswordAttempts;
     }
 
-    public Map<String, Long> getPlayerJoins() {
-        return this.playerJoin;
+    public static Map<String, Long> getPlayerJoins() {
+        return playerJoin;
     }
 
     public void clean() {
@@ -172,7 +168,7 @@ public class OdinManager {
         storageDataManager.setDirectory(directory + "/data/Odin");
         getLogging().debug("Storage data manager has been loaded.");
         try {
-            this.bifrost = new Bifrost();
+            bifrost = new Bifrost();
             getScriptAPI().addHandle(Scripts.stringToScript(getConfig().getString("script.name")),
                                                             getConfig().getString("script.version"),
                                                             scriptDataManager);
@@ -182,26 +178,25 @@ public class OdinManager {
         } catch (UnsupportedVersion e) {
             getLogging().stackTrace(e);
         }
-        this.storageManager = new StorageManager(storageDataManager);
+        storageManager = new StorageManager(storageDataManager);
     }
 
     protected void loadConfiguration(File directory) {
         try {
+            loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
             getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
                                     new YamlManager("files/config/basic.yml"));
             getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
                                     new YamlManager("files/config/advanced.yml"));
-            this.loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
-            this.loggingHandler.setDirectory(directory + "/logs/");
-            this.loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
-            this.loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
-            this.loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
+            loggingHandler.setDirectory(directory + "/logs/");
+            loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
+            loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
+            loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
             MainUtils util = new MainUtils();
             util.loadLanguage(directory.toString() + "\\translations\\", "commands");
             util.loadLanguage(directory.toString() + "\\translations\\", "messages");
         } catch (IOException e) {
-            /* TODO */
-            e.printStackTrace();
+            loggingHandler.stackTrace(e);
         }
     }
 }

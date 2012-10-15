@@ -78,10 +78,10 @@ public class Events {
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled() && !player.isAuthenticated() && !player.isLinked()) {
             player.login();
-            if (!OdinManager.getInstance().getLinkedUsernames().containsKey(player.getUsername())) {
-                OdinManager.getInstance().getLinkedUsernames().put(player.getUsername(), name);
+            if (!OdinManager.getLinkedUsernames().containsKey(player.getUsername())) {
+                OdinManager.getLinkedUsernames().put(player.getUsername(), name);
             }
-            if (OdinManager.getInstance().getConfig().getBoolean("link.rename")) {
+            if (OdinManager.getConfig().getBoolean("link.rename")) {
                 player.setDisplayName(name);
             }
             return true;
@@ -95,7 +95,7 @@ public class Events {
         if (!event.isCancelled() && player.isAuthenticated() && player.isLinked()) {
             if (logout(player, true)) {
                 player.unlink();
-                if (OdinManager.getInstance().getConfig().getBoolean("link.rename")) {
+                if (OdinManager.getConfig().getBoolean("link.rename")) {
                     player.setDisplayName(player.getName());
                 }
                 return true;

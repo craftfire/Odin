@@ -102,38 +102,38 @@ public class OdinPlayer extends OdinUser {
     
     public void kickPlayer(String node) {
         if (isNode(node)) {
-            callEvent(Event.KICK, OdinManager.getInstance().getMessages().getMessage(node, this));
+            callEvent(Event.KICK, OdinManager.getMessages().getMessage(node, this));
         } else {
-            callEvent(Event.KICK, OdinManager.getInstance().getMessages().replace(node, this));
+            callEvent(Event.KICK, OdinManager.getMessages().replace(node, this));
         }
     }
     
     public void sendMessage(String node) {
         if (isNode(node)) {
-            callEvent(Event.MESSAGE, OdinManager.getInstance().getMessages().getMessage(node, this));
+            callEvent(Event.MESSAGE, OdinManager.getMessages().getMessage(node, this));
         } else {
-            callEvent(Event.MESSAGE, OdinManager.getInstance().getMessages().replace(node, this));
+            callEvent(Event.MESSAGE, OdinManager.getMessages().replace(node, this));
         }
     }
 
     public void sendMessage(String node, PlayerLoginEvent event) {
         //TODO: Call event?
         if (isNode(node)) {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getInstance().getMessages().getMessage(node, this));
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().getMessage(node, this));
         } else {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getInstance().getMessages().replace(node, this));
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().replace(node, this));
         }
     }
 
     public void checkTimeout() {
-        if (!isAuthenticated() && OdinManager.getInstance().getUserTimeouts().contains(this.username)) {
+        if (!isAuthenticated() && OdinManager.getUserTimeouts().contains(this.username)) {
             if (isRegistered()) {
                 kickPlayer("login.timeout");
             } else {
                 kickPlayer("register.timeout");
             }
-        } else if (OdinManager.getInstance().getUserTimeouts().contains(this.username)) {
-            OdinManager.getInstance().getUserTimeouts().remove(this.username);
+        } else if (OdinManager.getUserTimeouts().contains(this.username)) {
+            OdinManager.getUserTimeouts().remove(this.username);
         }
     }
 

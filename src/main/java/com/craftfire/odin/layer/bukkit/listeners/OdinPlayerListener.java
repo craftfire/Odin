@@ -40,25 +40,25 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
-        if (!OdinManager.getInstance().getDataManager().isConnected()) {
+        if (!OdinManager.getDataManager().isConnected()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
                     "You cannot join when the server has no database connection.");
             return;
         }
 
-        if (OdinManager.getInstance().getConfig().getBoolean("session.protect") && player.hasSession()) {
+        if (OdinManager.getConfig().getBoolean("session.protect") && player.hasSession()) {
             player.sendMessage("session.protected", event);
             return;
         }
 
-        if (OdinManager.getInstance().getConfig().getBoolean("join.restrict") && !player.isRegistered()) {
+        if (OdinManager.getConfig().getBoolean("join.restrict") && !player.isRegistered()) {
             player.sendMessage("join.restricted", event);
             return;
         }
 
-        if (OdinManager.getInstance().getConfig().getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
+        if (OdinManager.getConfig().getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
             !player.isFilterWhitelisted()) {
-            OdinManager.getInstance().getLogging().debug(player.getUsername() +
+            OdinManager.getLogging().debug(player.getUsername() +
                                            " is not in the filter whitelist and has bad characters in his/her name.");
             player.sendMessage("filter.username", event);
             return;
@@ -72,7 +72,7 @@ public class OdinPlayerListener implements Listener {
             return;
         }
 
-        if (OdinManager.getInstance().getConfig().getBoolean("link.rename") && player.isLinked()) {
+        if (OdinManager.getConfig().getBoolean("link.rename") && player.isLinked()) {
             player.setLinkedName();
         }
     }
@@ -83,22 +83,22 @@ public class OdinPlayerListener implements Listener {
         final OdinPlayer player =  Util.getPlayer(event.getPlayer());
         player.setJoinTime();
 
-        if (OdinManager.getInstance().getConfig().getBoolean("link.rename") && player.isLinked()) {
+        if (OdinManager.getConfig().getBoolean("link.rename") && player.isLinked()) {
             event.setJoinMessage(event.getJoinMessage().replaceAll(player.getName(), player.getDisplayName()));
         }
 
         player.clearPasswordAttempts();
 
-        if (OdinManager.getInstance().getConfig().getBoolean("session.enabled") &&
-                OdinManager.getInstance().getConfig().getInt("session.length") != 0) {
+        if (OdinManager.getConfig().getBoolean("session.enabled") &&
+                OdinManager.getConfig().getInt("session.length") != 0) {
             if (player.hasSession()) {
-                OdinManager.getInstance().getLogging().debug("Found session for " + player.getName() + ", timestamp: " +
+                OdinManager.getLogging().debug("Found session for " + player.getName() + ", timestamp: " +
                         player.getSessionTime());
                 long diff = System.currentTimeMillis() / 1000 - player.getSessionTime();
-                OdinManager.getInstance().getLogging().debug("Difference: " + diff);
-                OdinManager.getInstance().getLogging().debug("Session in config: " +
-                                        MainUtils.stringToSeconds(OdinManager.getInstance().getConfig().getString("session.length")));
-                if (diff < MainUtils.stringToSeconds(OdinManager.getInstance().getConfig().getString("session.length"))) {
+                OdinManager.getLogging().debug("Difference: " + diff);
+                OdinManager.getLogging().debug("Session in config: " +
+                                        MainUtils.stringToSeconds(OdinManager.getConfig().getString("session.length")));
+                if (diff < MainUtils.stringToSeconds(OdinManager.getConfig().getString("session.length"))) {
                     allow = true;
                 }
             }
@@ -106,13 +106,13 @@ public class OdinPlayerListener implements Listener {
 
         if (!allow) {
             int time = 0;
-            if (MainUtils.stringToTicks(OdinManager.getInstance().getConfig().getString("login.timeout")) > 0 && player.isRegistered()) {
-                time =  MainUtils.stringToTicks(OdinManager.getInstance().getConfig().getString("login.timeout"));
-                OdinManager.getInstance().getLogging().debug("Login timeout time is: " + time + " ticks.");
-            } else if (MainUtils.stringToTicks(OdinManager.getInstance().getConfig().getString("register.timeout")) > 0 &&
+            if (MainUtils.stringToTicks(OdinManager.getConfig().getString("login.timeout")) > 0 && player.isRegistered()) {
+                time =  MainUtils.stringToTicks(OdinManager.getConfig().getString("login.timeout"));
+                OdinManager.getLogging().debug("Login timeout time is: " + time + " ticks.");
+            } else if (MainUtils.stringToTicks(OdinManager.getConfig().getString("register.timeout")) > 0 &&
                        !player.isRegistered()) {
-                time =  MainUtils.stringToTicks(OdinManager.getInstance().getConfig().getString("register.timeout"));
-                OdinManager.getInstance().getLogging().debug("Register timeout time is: " + time + " ticks.");
+                time =  MainUtils.stringToTicks(OdinManager.getConfig().getString("register.timeout"));
+                OdinManager.getLogging().debug("Register timeout time is: " + time + " ticks.");
             }
             if (time > 0) {
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -122,17 +122,17 @@ public class OdinPlayerListener implements Listener {
                     }
                 }, time);
                 player.setTimeout();
-                OdinManager.getInstance().getLogging().debug("Added timeout for " + player.getName() + ".");
+                OdinManager.getLogging().debug("Added timeout for " + player.getName() + ".");
             }
         }
 
-        if (OdinManager.getInstance().getConfig().getBoolean("customdb.enabled") &&
-                OdinManager.getInstance().getConfig().getString("customdb.encryption").isEmpty()) {
+        if (OdinManager.getConfig().getBoolean("customdb.enabled") &&
+                OdinManager.getConfig().getString("customdb.encryption").isEmpty()) {
             player.sendMessage("§4YOUR PASSWORD WILL NOT BE ENCRYPTED," +
                                "PLEASE BE ADWARE THAT THIS SERVER STORES THE PASSWORDS IN PLAINTEXT.");
         }
 
-        if (OdinManager.getInstance().getConfig().getBoolean("session.enabled") /* TODO: Reload time*/) {
+        if (OdinManager.getConfig().getBoolean("session.enabled") /* TODO: Reload time*/) {
             allow = true;
         }
 
@@ -153,16 +153,16 @@ public class OdinPlayerListener implements Listener {
                     }
                 }
             } , 20);
-            if (OdinManager.getInstance().getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
+            if (OdinManager.getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
                 player.sendMessage("login.prompt");
             } else {
                 player.sendMessage("login.normal");
             }
-        } else if (OdinManager.getInstance().getConfig().getBoolean("register.force")) {
+        } else if (OdinManager.getConfig().getBoolean("register.force")) {
             player.storeInventory();
             player.sendMessage("register.welcome");
-        } else if (!OdinManager.getInstance().getConfig().getBoolean("register.force") &&
-                   OdinManager.getInstance().getConfig().getBoolean("register.enabled")) {
+        } else if (!OdinManager.getConfig().getBoolean("register.force") &&
+                   OdinManager.getConfig().getBoolean("register.enabled")) {
             player.sendMessage("register.welcome");
         } else {
             //Authenticate?
@@ -173,12 +173,12 @@ public class OdinPlayerListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
 
-        if (OdinManager.getInstance().getConfig().getBoolean("link.rename") && player.isLinked()) {
+        if (OdinManager.getConfig().getBoolean("link.rename") && player.isLinked()) {
             event.setQuitMessage(event.getQuitMessage().replaceAll(player.getName(), player.getDisplayName()));
         }
 
-        if (OdinManager.getInstance().getConfig().getBoolean("session.enabled") &&
-                OdinManager.getInstance().getConfig().getString("session.start").equalsIgnoreCase("logoff") &&
+        if (OdinManager.getConfig().getBoolean("session.enabled") &&
+                OdinManager.getConfig().getString("session.start").equalsIgnoreCase("logoff") &&
                 player.isAuthenticated()) {
             /* TODO */
             //this.plugin.Odin_Sessions.put(Encryption.md5(player.getName() + Util.craftFirePlayer.getIP(player)), thetimestamp);
@@ -187,7 +187,7 @@ public class OdinPlayerListener implements Listener {
             //this.plugin.Odin_AuthTime.put(player.getName(), thetimestamp);
         }
 
-        if (!OdinManager.getInstance().getConfig().getBoolean("guest.inventory") && ! player.isRegistered()) {
+        if (!OdinManager.getConfig().getBoolean("guest.inventory") && ! player.isRegistered()) {
             player.getInventory().setContents(new ItemStack[36]);
         }
 
@@ -199,7 +199,7 @@ public class OdinPlayerListener implements Listener {
         String[] split = event.getMessage().split(" ");
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
         String command = split[0];
-        if (OdinManager.getInstance().getCommands().equals(command, "user.link")) {
+        if (OdinManager.getCommands().equals(command, "user.link")) {
             if (player.hasPermissions(Permissions.command_login)) {
                 player.sendMessage("login.processing");
                 if (player.isAuthenticated()) {
@@ -217,15 +217,15 @@ public class OdinPlayerListener implements Listener {
                 } else {
                     //TODO
                 }
-                OdinManager.getInstance().getLogging().debug(player.getName() + " login ********");
+                OdinManager.getLogging().debug(player.getName() + " login ********");
                 event.setMessage(command + " ******");
                 event.setCancelled(true);
             } else {
                 player.sendMessage("protection_denied");
             }
-        } else if (OdinManager.getInstance().getCommands().equals(command, "user.link") &&
-                  !OdinManager.getInstance().getConfig().getBoolean("join.restrict") &&
-                   OdinManager.getInstance().getConfig().getBoolean("link.enabled")) {
+        } else if (OdinManager.getCommands().equals(command, "user.link") &&
+                  !OdinManager.getConfig().getBoolean("join.restrict") &&
+                   OdinManager.getConfig().getBoolean("link.enabled")) {
             if (player.hasPermissions(Permissions.command_link)) {
                 if (split.length == 3) {
                     if (!player.getName().equals(split[1])) {
@@ -240,7 +240,7 @@ public class OdinPlayerListener implements Listener {
                 } else {
                     player.sendMessage("link.usage");
                 }
-                OdinManager.getInstance().getLogging().debug(player.getName() + " link ******** ********");
+                OdinManager.getLogging().debug(player.getName() + " link ******** ********");
                 event.setMessage(command + " ****** ********");
                 event.setCancelled(true);
             } else {
@@ -258,9 +258,9 @@ public class OdinPlayerListener implements Listener {
 
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
         if (!player.isAuthenticated() && player.getJoinTime() != 0 &&
-            !OdinManager.getInstance().getConfig().getBoolean("guest.movement")) {
-            if (OdinManager.getInstance().getConfig().getBoolean("protection.freeze.enabled") &&
-                    (player.getJoinTime() + OdinManager.getInstance().getConfig().getInt("protection.freeze.delay")) <
+            !OdinManager.getConfig().getBoolean("guest.movement")) {
+            if (OdinManager.getConfig().getBoolean("protection.freeze.enabled") &&
+                    (player.getJoinTime() + OdinManager.getConfig().getInt("protection.freeze.delay")) <
                             System.currentTimeMillis() / 1000) {
                 player.setJoinTime(0);
             }
@@ -277,7 +277,7 @@ public class OdinPlayerListener implements Listener {
         OdinPlayer player = Util.getPlayer(event.getPlayer());
 
         if (!player.isAuthenticated()) {
-            if (OdinManager.getInstance().getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
+            if (OdinManager.getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
                 if (player.isRegistered() && player.hasPermissions(Permissions.command_login)) {
                     String[] split = event.getMessage().split(" ");
                     player.sendMessage("login.processing");
@@ -292,13 +292,13 @@ public class OdinPlayerListener implements Listener {
                     } else {
                         player.sendMessage("login.failure");
                     }
-                    OdinManager.getInstance().getLogging().debug(player.getName() + " login ********");
+                    OdinManager.getLogging().debug(player.getName() + " login ********");
                     event.setMessage(" has logged in!");
                     event.setCancelled(true);
                 }
             }
 
-            if (player.isGuest() && !OdinManager.getInstance().getConfig().getBoolean("guest.chat")) {
+            if (player.isGuest() && !OdinManager.getConfig().getBoolean("guest.chat")) {
                 event.setCancelled(true);
             }
         }
@@ -310,7 +310,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! OdinManager.getInstance().getConfig().getBoolean("guest.interactions")) {
+            } else if (player.isGuest() && ! OdinManager.getConfig().getBoolean("guest.interactions")) {
                 event.setCancelled(true);
             }
         }
@@ -322,7 +322,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && !OdinManager.getInstance().getConfig().getBoolean("guest.pickup")) {
+            } else if (player.isGuest() && !OdinManager.getConfig().getBoolean("guest.pickup")) {
                 event.setCancelled(true);
             }
         }
@@ -335,7 +335,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && !OdinManager.getInstance().getConfig().getBoolean("guest.drop")) {
+            } else if (player.isGuest() && !OdinManager.getConfig().getBoolean("guest.drop")) {
                 event.setCancelled(true);
             }
         }
