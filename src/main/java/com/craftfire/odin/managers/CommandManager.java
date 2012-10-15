@@ -24,6 +24,10 @@ public class CommandManager {
     private YamlManager config = null;
     private YamlManager defaults = null;
 
+    public boolean isInitialized() {
+        return this.config != null && this.defaults != null;
+    }
+
     public String getCommand(String node) {
         String newNode = "Core.commands." + node.toLowerCase();
         if (exist(newNode)) {

@@ -38,7 +38,7 @@ public class LoggingHandler extends LoggingManager {
             map.put(2, "MySQL connection: " + OdinManager.getScript().getDataManager().isConnected());
             map.put(3, "MySQL last query: " + OdinManager.getScript().getDataManager().getLastQuery());
         }
-        if (OdinManager.getConfig() != null && OdinManager.getConfig().getBoolean("customdb.enabled")) {
+        if (OdinManager.getConfig().isInitialized() && OdinManager.getConfig().getBoolean("customdb.enabled")) {
             map.put(4, "Script: Custom");
             map.put(5, "Custom table: " + OdinManager.getConfig().getString("customdb.table"));
             if (OdinManager.getConfig().getBoolean("customdb.emailrequired")) {
@@ -69,7 +69,7 @@ public class LoggingHandler extends LoggingManager {
                 map.put(14, "Script chosen: " + OdinManager.getScript().getScriptName());
                 map.put(15, "Script version: " + OdinManager.getScript().getVersion());
                 map.put(16, "Table prefix: " + OdinManager.getConfig().getString("script.tableprefix"));
-            } else if (OdinManager.getConfig() != null) {
+            } else if (OdinManager.getConfig().isInitialized() ) {
                 map.put(17, "Odin will not work because you've set the wrong script name in basic.yml, " +
                             "please correct this node (script.name).");
                 map.put(18, "Script in config: " + OdinManager.getConfig().getString("script.name"));

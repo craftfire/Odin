@@ -57,10 +57,10 @@ public class OdinManager {
     private OdinManager() {}
 
     public static void init(File directory) {
-        configurationManager = new ConfigurationManager();
-        commandManager = new CommandManager();
-        inventoryManager = new InventoryManager();
         messageManager = new MessageManager();
+        commandManager = new CommandManager();
+        configurationManager = new ConfigurationManager();
+        inventoryManager = new InventoryManager();
         loadConfiguration(directory);
         loadAuthAPI(directory);
     }
@@ -184,9 +184,9 @@ public class OdinManager {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
             getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
-                                    new YamlManager("files/config/basic.yml"));
+                             new YamlManager("files/config/basic.yml"));
             getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
-                                    new YamlManager("files/config/advanced.yml"));
+                             new YamlManager("files/config/advanced.yml"));
             loggingHandler.setDirectory(directory + "/logs/");
             loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
             loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));

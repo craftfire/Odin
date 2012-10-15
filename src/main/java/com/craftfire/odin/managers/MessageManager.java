@@ -27,6 +27,10 @@ public class MessageManager {
     private YamlManager messages = null;
     private YamlManager defaults = null;
 
+    public boolean isInitialized() {
+        return this.messages != null && this.defaults != null;
+    }
+
     public String getMessage(String node, OdinUser user) {
         if (exist(node.toLowerCase())) {
             return replace(this.messages.getString(node), user);

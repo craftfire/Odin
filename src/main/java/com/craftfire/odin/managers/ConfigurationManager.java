@@ -25,6 +25,10 @@ public class ConfigurationManager {
     private YamlManager config = null;
     private YamlManager defaults = null;
 
+    public boolean isInitialized() {
+        return this.config != null && this.defaults != null;
+    }
+
     public boolean getBoolean(String node) {
         if (exist(node)) {
             return this.config.getBoolean(node);
