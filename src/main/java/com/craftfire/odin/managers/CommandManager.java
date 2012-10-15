@@ -25,21 +25,21 @@ public class CommandManager {
     private YamlManager defaults = null;
 
     public String getCommand(String node) {
-        node = "Core.commands." + node.toLowerCase();
-        if (exist(node)) {
-            return this.config.getString(node);
-        } else if (existDefault(node)) {
-            return this.defaults.getString(node);
+        String newNode = "Core.commands." + node.toLowerCase();
+        if (exist(newNode)) {
+            return this.config.getString(newNode);
+        } else if (existDefault(newNode)) {
+            return this.defaults.getString(newNode);
         }
         return null;
     }
 
     public String getAlias(String node) {
-        node = "Core.aliases." + node.toLowerCase();
-        if (exist(node)) {
-            return this.config.getString(node);
-        } else if (existDefault(node)) {
-            return this.defaults.getString(node);
+        String newNode = "Core.aliases." + node.toLowerCase();
+        if (exist(newNode)) {
+            return this.config.getString(newNode);
+        } else if (existDefault(newNode)) {
+            return this.defaults.getString(newNode);
         }
         return null;
     }

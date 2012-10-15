@@ -74,7 +74,8 @@ public class MessageManager {
         return this.defaults.exist(node.toLowerCase());
     }
     
-    public String replace(String string, OdinUser user) {
+    public String replace(String message, OdinUser user) {
+        String string = message;
         //TODO string = string.replaceAll("\\{IP\\}", );
         string = string.replaceAll("\\{PLAYER\\}", user.getUsername());
         //TODO string = string.replaceAll("\\{NEWPLAYER\\}", "");

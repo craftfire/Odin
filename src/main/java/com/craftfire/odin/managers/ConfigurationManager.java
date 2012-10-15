@@ -26,7 +26,6 @@ public class ConfigurationManager {
     private YamlManager defaults = null;
 
     public boolean getBoolean(String node) {
-        node = node.toLowerCase();
         if (exist(node)) {
             return this.config.getBoolean(node);
         } else if (existDefault(node)) {
@@ -36,7 +35,6 @@ public class ConfigurationManager {
     }
 
     public String getString(String node) {
-        node = node.toLowerCase();
         if (exist(node)) {
             return this.config.getString(node);
         } else if (existDefault(node)) {
@@ -46,7 +44,6 @@ public class ConfigurationManager {
     }
 
     public int getInt(String node) {
-        node = node.toLowerCase();
         if (exist(node)) {
             return this.config.getInt(node);
         } else if (existDefault(node)) {
@@ -56,7 +53,6 @@ public class ConfigurationManager {
     }
 
     public Long getLong(String node) {
-        node = node.toLowerCase();
         if (exist(node)) {
             return this.config.getLong(node);
         } else if (existDefault(node)) {
