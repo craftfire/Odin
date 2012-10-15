@@ -32,7 +32,7 @@ public class LoggingHandler extends LoggingManager {
     @Override
     public void stackTrace(final Exception e) {
         HashMap<Integer, String> map = new HashMap<Integer, String>();
-        map.put(0, "Odin version: " + OdinManager.pluginVersion);
+        map.put(0, "Odin version: " + OdinManager.getPluginVersion());
         map.put(1, "MySQL keep alive: " + OdinManager.getScript().getDataManager().isKeepAlive());
         map.put(2, "MySQL connection: " + OdinManager.getScript().getDataManager().isConnected());
         map.put(3, "MySQL last query: " + OdinManager.getScript().getDataManager().getLastQuery());

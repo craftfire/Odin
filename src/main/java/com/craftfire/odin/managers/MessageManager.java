@@ -91,8 +91,8 @@ public class MessageManager {
         string = string.replaceAll("\\{USERMAX\\}", OdinManager.getConfig().getString("username.maximum"));
         string = string.replaceAll("\\{PASSMIN\\}", OdinManager.getConfig().getString("password.minimum"));
         string = string.replaceAll("\\{PASSMAX\\}", OdinManager.getConfig().getString("password.maximum"));
-        string = string.replaceAll("\\{PLUGIN\\}", OdinManager.pluginName);
-        string = string.replaceAll("\\{VERSION\\}", OdinManager.pluginVersion);
+        string = string.replaceAll("\\{PLUGIN\\}", OdinManager.getPluginName());
+        string = string.replaceAll("\\{VERSION\\}", OdinManager.getPluginVersion());
         string = string.replaceAll("\\{LOGINTIMEOUT\\}",
                             OdinManager.getConfig().getString("login.timeout").split(" ")[0] + " " +
                                     stringToTimeLanguage(OdinManager.getConfig().getString("login.timeout")));
