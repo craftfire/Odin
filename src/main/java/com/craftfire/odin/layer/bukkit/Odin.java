@@ -34,9 +34,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class Odin extends JavaPlugin {
-    public static Permission permission = null;
-    public static Economy economy = null;
-    public static Chat chat = null;
+    private static Permission permission = null;
+    private static Economy economy = null;
+    private static Chat chat = null;
     private InventoryManager inventoryManager = new InventoryManager();
     private OdinManager odinManager;
     private static Odin instance;
@@ -79,6 +79,18 @@ public class Odin extends JavaPlugin {
             player = (Player) sender;
         }
         return true;
+    }
+
+    public static Permission getPermissions() {
+        return permission;
+    }
+
+    public static Chat getChat() {
+        return chat;
+    }
+
+    public static Economy getEconomy() {
+        return economy;
     }
 
     private Boolean setupPermissions() {

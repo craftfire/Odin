@@ -17,27 +17,45 @@
 package com.craftfire.odin.managers;
 
 import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.util.PermissionType;
 
 public enum Permissions {
+    command_register (PermissionType.USER, "register"),
+    command_unregister (PermissionType.USER, "unregister"),
+    command_login (PermissionType.USER, "login"),
+    command_logout (PermissionType.USER, "logout"),
+    command_link (PermissionType.USER, "link"),
+    command_unlink (PermissionType.USER, "unlink"),
+    command_password (PermissionType.USER, "password"),
+    command_email (PermissionType.USER, "email"),
+    command_users (PermissionType.USER, "users"),
+    command_admin_unregister (PermissionType.ADMIN, "unregister"),
+    command_admin_login (PermissionType.ADMIN, "login"),
+    command_admin_logout (PermissionType.ADMIN, "logout"),
+    command_admin_password (PermissionType.ADMIN, "password"),
+    command_admin_reload (PermissionType.ADMIN, "reload");
 
-    command_register (getUserNode() + "register"),
-    command_unregister (getUserNode() + "unregister"),
-    command_login (getUserNode() + "login"),
-    command_logout (getUserNode() + "logout"),
-    command_link (getUserNode() + "link"),
-    command_unlink (getUserNode() + "unlink"),
-    command_password (getUserNode() + "password"),
-    command_email (getUserNode() + "email"),
-    command_users (getUserNode() + "users"),
-    command_admin_unregister (getAdminNode() + "unregister"),
-    command_admin_login (getAdminNode() + "login"),
-    command_admin_logout (getAdminNode() + "logout"),
-    command_admin_password (getAdminNode() + "password"),
-    command_admin_reload (getAdminNode() + "reload");
-
-    public String permission;
-    Permissions(String permission) {
+    private PermissionType type;
+    private String permission;
+    Permissions(PermissionType type, String permission) {
+        this.type = type;
         this.permission = permission;
+    }
+
+    public String getNode() {
+        return (isUserNode() ? getUserNode() + this.permission : getAdminNode() + this.permission);
+    }
+
+    public boolean isUserNode() {
+        return getType().equals(PermissionType.USER);
+    }
+
+    public boolean isAdminNode() {
+        return getType().equals(PermissionType.ADMIN);
+    }
+
+    public PermissionType getType() {
+        return this.type;
     }
 
     public static String getUserNode() {

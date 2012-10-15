@@ -60,15 +60,15 @@ public class OdinPlayer extends OdinUser {
     }
 
     public boolean hasPermissions(String permission) {
-        return Odin.permission.has(this.player, permission);
+        return Odin.getPermissions().has(this.player, permission);
     }
 
     public boolean hasPermissions(CommandSender sender, String permission) {
-        return Odin.permission.has(sender, permission);
+        return Odin.getPermissions().has(sender, permission);
     }
     
     public boolean hasPermissions(Permissions permission) {
-        return Odin.permission.has(this.player, permission.permission);
+        return Odin.getPermissions().has(this.player, permission.getNode());
     }
 
     public PlayerInventory getInventory() {
@@ -82,7 +82,7 @@ public class OdinPlayer extends OdinUser {
                                                                this.player.getInventory().getArmorContents());
             clearInventory();
         } catch (IOException e) {
-            Odin.getInstance().getOdinManager().getLogging().stackTrace(e);
+            OdinManager.getLogging().stackTrace(e);
         }
     }
 

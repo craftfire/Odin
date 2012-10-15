@@ -22,8 +22,8 @@ import com.craftfire.odin.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 
 public abstract class OdinPlayerEvent extends OdinEvent {
-    protected Player player;
-    protected OdinPlayer odinPlayer;
+    private Player player;
+    private OdinPlayer odinPlayer;
     
     public OdinPlayerEvent(final Player player) {
         this.player = player;
