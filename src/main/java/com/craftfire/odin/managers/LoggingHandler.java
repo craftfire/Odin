@@ -33,9 +33,11 @@ public class LoggingHandler extends LoggingManager {
     public void stackTrace(final Exception e) {
         HashMap<Integer, String> map = new HashMap<Integer, String>();
         map.put(0, "Odin version: " + OdinManager.getPluginVersion());
-        map.put(1, "MySQL keep alive: " + OdinManager.getScript().getDataManager().isKeepAlive());
-        map.put(2, "MySQL connection: " + OdinManager.getScript().getDataManager().isConnected());
-        map.put(3, "MySQL last query: " + OdinManager.getScript().getDataManager().getLastQuery());
+        if (OdinManager.getBifrost() != null) {
+            map.put(1, "MySQL keep alive: " + OdinManager.getScript().getDataManager().isKeepAlive());
+            map.put(2, "MySQL connection: " + OdinManager.getScript().getDataManager().isConnected());
+            map.put(3, "MySQL last query: " + OdinManager.getScript().getDataManager().getLastQuery());
+        }
         if (OdinManager.getConfig().getBoolean("customdb.enabled")) {
             map.put(4, "Script: Custom");
             map.put(5, "Custom table: " + OdinManager.getConfig().getString("customdb.table"));
@@ -63,7 +65,7 @@ public class LoggingHandler extends LoggingManager {
                 error("Failed while getting MySQL table schema.");
             }
         } else {
-            if (OdinManager.getScript() != null) {
+            if (OdinManager.getBifrost() != null && OdinManager.getScript() != null) {
                 map.put(14, "Script chosen: " + OdinManager.getScript().getScriptName());
                 map.put(15, "Script version: " + OdinManager.getScript().getVersion());
                 map.put(16, "Table prefix: " + OdinManager.getConfig().getString("script.tableprefix"));
