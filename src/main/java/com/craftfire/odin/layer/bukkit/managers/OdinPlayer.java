@@ -16,14 +16,12 @@
  */
 package com.craftfire.odin.layer.bukkit.managers;
 
-import com.craftfire.bifrost.exceptions.UnsupportedMethod;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.layer.bukkit.util.event.Events;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
-import com.craftfire.odin.managers.LoggingHandler;
-import com.craftfire.odin.managers.permissions.Permissions;
+import com.craftfire.odin.managers.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -32,7 +30,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.io.IOException;
 
 public class OdinPlayer extends OdinUser {
-    protected Player player;
+    private Player player;
     /**
      * Default constructor for the object.
      *
@@ -126,14 +124,14 @@ public class OdinPlayer extends OdinUser {
     }
 
     public void checkTimeout() {
-        if (!isAuthenticated() && OdinManager.getUserTimeouts().contains(this.username)) {
+        if (!isAuthenticated() && OdinManager.getUserTimeouts().contains(getUsername())) {
             if (isRegistered()) {
                 kickPlayer("login.timeout");
             } else {
                 kickPlayer("register.timeout");
             }
-        } else if (OdinManager.getUserTimeouts().contains(this.username)) {
-            OdinManager.getUserTimeouts().remove(this.username);
+        } else if (OdinManager.getUserTimeouts().contains(getUsername())) {
+            OdinManager.getUserTimeouts().remove(getUsername());
         }
     }
 

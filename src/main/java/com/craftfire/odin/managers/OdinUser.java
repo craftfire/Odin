@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class OdinUser {
-    protected String username;
+    private String username;
     private ScriptUser user = null;
     private Status status;
     private String password, ip;

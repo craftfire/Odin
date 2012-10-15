@@ -26,10 +26,7 @@ import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.managers.DataManager;
 import com.craftfire.commons.managers.LoggingManager;
 import com.craftfire.commons.managers.YamlManager;
-import com.craftfire.odin.managers.permissions.PermissionsManager;
 import com.craftfire.odin.util.MainUtils;
-import com.craftfire.commons.CraftCommons;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,17 +35,15 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class OdinManager {
-    private static OdinManager instance;
     private static Bifrost bifrost;
     private static StorageManager storageManager;
     private static ConfigurationManager configurationManager;
     private static CommandManager commandManager;
     private static InventoryManager inventoryManager;
-    private static PermissionsManager permissionsManager;
     private static MessageManager messageManager;
     private static LoggingHandler loggingHandler;
 
-    public static String pluginName, pluginVersion;
+    private static String pluginName, pluginVersion;
 
     private static Map<String, Long> userSessions = new HashMap<String, Long>();
     private static HashSet<String> userAuthenticated = new HashSet<String>();
@@ -60,14 +55,20 @@ public class OdinManager {
     private static Map<String, Long> playerJoin = new HashMap<String, Long>();
 
     public OdinManager(File directory) {
-        instance = this;
         configurationManager = new ConfigurationManager();
-        permissionsManager = new PermissionsManager();
         commandManager = new CommandManager();
         inventoryManager = new InventoryManager();
         messageManager = new MessageManager();
         loadConfiguration(directory);
         loadAuthAPI(directory);
+    }
+
+    public static String getPluginName() {
+        return pluginName;
+    }
+
+    public static String getPluginVersion() {
+        return pluginVersion;
     }
 
     public static Bifrost getBifrost() {
@@ -100,10 +101,6 @@ public class OdinManager {
 
     public static InventoryManager getInventories() {
         return inventoryManager;
-    }
-
-    public static PermissionsManager getPermissions() {
-        return permissionsManager;
     }
 
     public static MessageManager getMessages() {

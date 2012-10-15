@@ -16,13 +16,12 @@
  */
 package com.craftfire.odin.layer.bukkit.listeners;
 
-import com.craftfire.bifrost.exceptions.UnsupportedMethod;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.permissions.Permissions;
+import com.craftfire.odin.managers.Permissions;
 import com.craftfire.odin.util.MainUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
