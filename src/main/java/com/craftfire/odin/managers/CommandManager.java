@@ -74,10 +74,10 @@ public class CommandManager {
     }
 
     private boolean exist(String node) {
-        return this.config.exist(node.toLowerCase());
+        return node != null && this.config.exist(node.toLowerCase());
     }
 
     private boolean existDefault(String node) {
-        return this.defaults.exist(node.toLowerCase());
+        return node != null && this.defaults.exist(node.toLowerCase());
     }
 }

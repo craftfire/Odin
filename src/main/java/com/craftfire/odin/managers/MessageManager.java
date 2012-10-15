@@ -71,11 +71,11 @@ public class MessageManager {
     }
 
     private boolean exist(String node) {
-        return this.messages.exist(node.toLowerCase());
+        return node != null && this.messages.exist(node.toLowerCase());
     }
 
     private boolean existDefault(String node) {
-        return this.defaults.exist(node.toLowerCase());
+        return node != null && this.defaults.exist(node.toLowerCase());
     }
     
     public String replace(String message, OdinUser user) {
