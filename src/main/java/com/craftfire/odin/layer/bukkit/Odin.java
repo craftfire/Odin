@@ -38,15 +38,10 @@ public class Odin extends JavaPlugin {
     private static Economy economy = null;
     private static Chat chat = null;
     private InventoryManager inventoryManager = new InventoryManager();
-    private OdinManager odinManager;
     private static Odin instance;
 
     public static Odin getInstance() {
         return instance;
-    }
-
-    public OdinManager getOdinManager() {
-        return this.odinManager;
     }
 
     public InventoryManager getInventoryManager() {
@@ -62,8 +57,8 @@ public class Odin extends JavaPlugin {
         setupPermissions();
         setupChat();
         setupEconomy();
-        this.odinManager = new OdinManager(getDataFolder());
-        getOdinManager().getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
+        OdinManager.init(getDataFolder());
+        OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
         Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
     }
 
