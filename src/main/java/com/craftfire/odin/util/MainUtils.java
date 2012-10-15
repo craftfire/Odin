@@ -16,6 +16,7 @@
  */
 package com.craftfire.odin.util;
 
+import com.craftfire.commons.classes.TimeUtil;
 import com.craftfire.commons.managers.YamlManager;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
@@ -33,6 +34,10 @@ public class MainUtils {
         return new OdinUser(username);
     }
 
+    public static TimeUtil getTimeUtil(String timeString) {
+        return new TimeUtil(timeString);
+    }
+
     public static boolean hasBadCharacters(String string, String filter) {
         char char1, char2;
         for (int i = 0; i < string.length(); i++) {
@@ -47,46 +52,6 @@ public class MainUtils {
             }
         }
         return false;
-    }
-
-    public static int stringToTicks(String string) {
-        String[] split = string.split(" ");
-        String length = split[0];
-        String time = split[1].toLowerCase();
-        int lengthint = Integer.parseInt(length);
-        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
-            return lengthint * 1728000;
-        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
-                   time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
-            return lengthint * 72000;
-        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
-                   time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
-            return lengthint * 1200;
-        } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
-                   time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
-            return lengthint * 20;
-        }
-        return 0;
-    }
-
-    public static int stringToSeconds(String string) {
-        String[] split = string.split(" ");
-        String length = split[0];
-        String time = split[1].toLowerCase();
-        int lengthint = Integer.parseInt(length);
-        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
-            return lengthint * 86400;
-        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
-                   time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
-            return lengthint * 3600;
-        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
-                   time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
-            return lengthint * 60;
-        } else if (time.equalsIgnoreCase("second") || time.equalsIgnoreCase("seconds") ||
-                   time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
-            return lengthint;
-        }
-        return 0;
     }
 
     public void loadLanguage(String dir, String type) throws IOException {

@@ -16,6 +16,7 @@
  */
 package com.craftfire.odin.layer.bukkit.listeners;
 
+import com.craftfire.commons.classes.TimeUtil;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.Util;
@@ -91,8 +92,8 @@ public class OdinPlayerListener implements Listener {
                 long diff = System.currentTimeMillis() / 1000 - player.getSessionTime();
                 OdinManager.getLogging().debug("Difference: " + diff);
                 OdinManager.getLogging().debug("Session in config: " +
-                                        MainUtils.stringToSeconds(OdinManager.getConfig().getString("session.length")));
-                if (diff < MainUtils.stringToSeconds(OdinManager.getConfig().getString("session.length"))) {
+                                        MainUtils.getTimeUtil(OdinManager.getConfig().getString("session.length")).getSeconds());
+                if (diff < MainUtils.getTimeUtil(OdinManager.getConfig().getString("session.length")).getSeconds()) {
                     allow = true;
                 }
             }
@@ -100,12 +101,12 @@ public class OdinPlayerListener implements Listener {
 
         if (!allow) {
             int time = 0;
-            if (MainUtils.stringToTicks(OdinManager.getConfig().getString("login.timeout")) > 0 && player.isRegistered()) {
-                time =  MainUtils.stringToTicks(OdinManager.getConfig().getString("login.timeout"));
+            if (MainUtils.getTimeUtil(OdinManager.getConfig().getString("login.timeout")).getTicks() > 0 && player.isRegistered()) {
+                time =  MainUtils.getTimeUtil(OdinManager.getConfig().getString("login.timeout")).getTicks();
                 OdinManager.getLogging().debug("Login timeout time is: " + time + " ticks.");
-            } else if (MainUtils.stringToTicks(OdinManager.getConfig().getString("register.timeout")) > 0 &&
+            } else if (MainUtils.getTimeUtil(OdinManager.getConfig().getString("register.timeout")).getTicks() > 0 &&
                        !player.isRegistered()) {
-                time =  MainUtils.stringToTicks(OdinManager.getConfig().getString("register.timeout"));
+                time =  MainUtils.getTimeUtil(OdinManager.getConfig().getString("register.timeout")).getTicks();
                 OdinManager.getLogging().debug("Register timeout time is: " + time + " ticks.");
             }
             if (time > 0) {

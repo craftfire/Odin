@@ -52,19 +52,15 @@ public class OdinManager {
     private static Map<String, String> userLinkedNames = new HashMap<String, String>();
     private static Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
     private static Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
-
     private static Map<String, Long> playerJoin = new HashMap<String, Long>();
 
-    public OdinManager(File directory) {
+    private OdinManager() {}
+
+    public static void init(File directory) {
         configurationManager = new ConfigurationManager();
         commandManager = new CommandManager();
         inventoryManager = new InventoryManager();
         messageManager = new MessageManager();
-        loadConfiguration(directory);
-        loadAuthAPI(directory);
-    }
-
-    public void reload(File directory) {
         loadConfiguration(directory);
         loadAuthAPI(directory);
     }
@@ -145,7 +141,7 @@ public class OdinManager {
         return playerJoin;
     }
 
-    public void clean() {
+    public static void clean() {
         userSessions.clear();
         userAuthenticated.clear();
         userStorage.clear();
@@ -155,7 +151,7 @@ public class OdinManager {
         playerJoin.clear();
     }
 
-    private void loadAuthAPI(File directory) {
+    private static void loadAuthAPI(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
                                                         getConfig().getString("database.username"),
                                                         getConfig().getString("database.password"));
@@ -184,7 +180,7 @@ public class OdinManager {
         storageManager = new StorageManager(storageDataManager);
     }
 
-    private void loadConfiguration(File directory) {
+    private static void loadConfiguration(File directory) {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
             getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
