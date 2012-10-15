@@ -35,9 +35,9 @@ public class MainUtils {
 
     public static boolean hasBadCharacters(String string, String filter) {
         char char1, char2;
-        for (int i= 0; i < string.length(); i++) {
+        for (int i = 0; i < string.length(); i++) {
             char1 = string.charAt(i);
-            for (int a= 0; a < filter.length(); a++) {
+            for (int a = 0; a < filter.length(); a++) {
                 char2 = filter.charAt(a);
                 if (char1 == char2 || char1 == '\'' || char1 == '\"') {
                     /* TODO Logging */
@@ -93,7 +93,7 @@ public class MainUtils {
         CodeSource src = getClass().getProtectionDomain().getCodeSource();
         String language = "English";
         File allLanguages = new File(dir);
-        if(! allLanguages.exists()) {
+        if(!allLanguages.exists()) {
             if (allLanguages.mkdir()) {
                OdinManager.getInstance().getLogging().debug("Sucesfully created directory: " + allLanguages);
             }
