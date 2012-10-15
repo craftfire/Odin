@@ -17,15 +17,26 @@
 package com.craftfire.odin.layer.bukkit.api.events.player;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class OdinPlayerQuitEvent extends OdinPlayerEvent {
+public class OdinPlayerQuitEvent extends OdinPlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel;
 
     public OdinPlayerQuitEvent(Player player) {
         super(player);
         this.cancel = false;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class StorageManager {
         return getDataManager().exist(table.name, this.primaries.get(table), value);
     }
 
-    public void checkDatabases() {
+    private void checkDatabases() {
         checkInventoryDatabase();
     }
 
@@ -63,7 +63,7 @@ public class StorageManager {
                                           "ID INT PRIMARY KEY, " +
                                           "PLAYERNAME VARCHAR(50), " +
                                           "INVENTORY TEXT," +
-                                           "ARMOR TEXT)");
+                                          "ARMOR TEXT)");
         } catch (SQLException e) {
             OdinManager.getLogging().error("Failed while creating odin_inventories table for H2 database.");
             OdinManager.getLogging().stackTrace(e);

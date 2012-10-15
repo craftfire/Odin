@@ -30,11 +30,6 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 public class OdinPlayerListener implements Listener {
-    private Odin plugin;
-
-    public OdinPlayerListener(Odin plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
@@ -114,7 +109,7 @@ public class OdinPlayerListener implements Listener {
                 OdinManager.getLogging().debug("Register timeout time is: " + time + " ticks.");
             }
             if (time > 0) {
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                Odin.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Odin.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         player.checkTimeout();
@@ -144,7 +139,7 @@ public class OdinPlayerListener implements Listener {
             /* TODO */
         } else if (player.isRegistered()) {
             player.storeInventory();
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            Odin.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Odin.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     if (!player.isAuthenticated()) {

@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class OdinManager {
     private static Bifrost bifrost;
@@ -46,8 +47,8 @@ public class OdinManager {
     private static String pluginName, pluginVersion;
 
     private static Map<String, Long> userSessions = new HashMap<String, Long>();
-    private static HashSet<String> userAuthenticated = new HashSet<String>();
-    private static HashSet<String> userTimeouts = new HashSet<String>();
+    private static Set<String> userAuthenticated = new HashSet<String>();
+    private static Set<String> userTimeouts = new HashSet<String>();
     private static Map<String, String> userLinkedNames = new HashMap<String, String>();
     private static Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
     private static Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
@@ -59,6 +60,11 @@ public class OdinManager {
         commandManager = new CommandManager();
         inventoryManager = new InventoryManager();
         messageManager = new MessageManager();
+        loadConfiguration(directory);
+        loadAuthAPI(directory);
+    }
+
+    public void reload(File directory) {
         loadConfiguration(directory);
         loadAuthAPI(directory);
     }
@@ -115,11 +121,11 @@ public class OdinManager {
         return userSessions;
     }
 
-    public static HashSet<String> getAuthenticatedUsers() {
+    public static Set<String> getAuthenticatedUsers() {
         return userAuthenticated;
     }
 
-    public static HashSet<String> getUserTimeouts() {
+    public static Set<String> getUserTimeouts() {
         return userTimeouts;
     }
 
@@ -149,7 +155,7 @@ public class OdinManager {
         playerJoin.clear();
     }
 
-    protected void loadAuthAPI(File directory) {
+    private void loadAuthAPI(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
                                                         getConfig().getString("database.username"),
                                                         getConfig().getString("database.password"));
@@ -178,7 +184,7 @@ public class OdinManager {
         storageManager = new StorageManager(storageDataManager);
     }
 
-    protected void loadConfiguration(File directory) {
+    private void loadConfiguration(File directory) {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
             getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),

@@ -58,7 +58,7 @@ public class Odin extends JavaPlugin {
         instance = this;
         getDataFolder().mkdirs();
 
-        getServer().getPluginManager().registerEvents(new OdinPlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new OdinPlayerListener(), this);
         setupPermissions();
         setupChat();
         setupEconomy();

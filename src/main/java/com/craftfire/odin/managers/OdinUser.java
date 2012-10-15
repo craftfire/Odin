@@ -29,7 +29,7 @@ public class OdinUser {
     private String username;
     private ScriptUser user = null;
     private Status status;
-    private String password, ip;
+    private String ip;
     private boolean badcharacters;
 
     /**
@@ -40,14 +40,6 @@ public class OdinUser {
     public OdinUser(final String username) {
         this.username = username;
         this.badcharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
-        load();
-    }
-    
-    public void save() {
-        OdinManager.getUserStorage().put(this.username, this);
-    }
-
-    public void load() {
         if (OdinManager.getUserStorage().containsKey(this.username)) {
             /* TODO */
             OdinUser temp = OdinManager.getUserStorage().get(this.username);
@@ -56,6 +48,10 @@ public class OdinUser {
             this.status = temp.getStatus();
             this.ip = temp.getIP();
         }
+    }
+
+    public void save() {
+        OdinManager.getUserStorage().put(this.username, this);
     }
     
     public String getUsername() {

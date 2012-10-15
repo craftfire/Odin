@@ -24,13 +24,14 @@ import java.util.logging.Logger;
 
 public class Odin extends CommonPlugin implements Named {
     private static final Logger logger = Logger.getLogger("Minecraft.Odin");
-
     private static Odin instance;
-    {
-        instance = this;
+
+    public static Odin getInstance() {
+        return instance;
     }
 
     public void onEnable() {
+        instance = this;
         logger.info("Odin " + getDescription().getVersion() + " enabled.");
         getDataFolder().mkdirs();
         registerEvents();
