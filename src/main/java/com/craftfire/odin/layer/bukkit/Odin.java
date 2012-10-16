@@ -19,11 +19,13 @@
  */
 package com.craftfire.odin.layer.bukkit;
 
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinDisableEvent;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinEnableEvent;
 import com.craftfire.odin.layer.bukkit.listeners.OdinPlayerListener;
 import com.craftfire.odin.layer.bukkit.managers.InventoryManager;
 import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.util.MainUtils;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -33,7 +35,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.PluginClassLoader;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class Odin extends JavaPlugin {
@@ -55,14 +64,41 @@ public class Odin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         getDataFolder().mkdirs();
-
         getServer().getPluginManager().registerEvents(new OdinPlayerListener(), this);
         setupPermissions();
         setupChat();
         setupEconomy();
+        loadLibraries(getDataFolder());
         OdinManager.init(getDataFolder());
         OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
         Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
+    }
+
+    private void loadLibraries(File directory) {
+        //TODO: use LoggingManager for output.
+        File outputDirectory = new File(directory.toString() + File.separator + "lib");
+        if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
+            System.out.println("Could not create " + outputDirectory.toString());
+        }
+        File h2Driver = new File(outputDirectory.toString() + File.separator + "h2.jar");
+        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && !h2Driver.exists()) {
+            System.out.println("Could not find required H2 driver.");
+            System.out.println("Starting download for the H2 driver. Please wait...");
+            Set<String> urls = new HashSet<String>();
+            urls.add("http://hsql.sourceforge.net/m2-repo/com/h2database/h2/1.3.169/h2-1.3.169.jar");
+            urls.add("http://repo2.maven.org/maven2/com/h2database/h2/1.3.169/h2-1.3.169.jar");
+            if (!MainUtils.downloadLibrary(h2Driver, urls)) {
+                System.out.println("Could not download H2 driver, see log for more information.");
+            }
+        }
+
+        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && h2Driver.exists()) {
+            try {
+                ((PluginClassLoader)getInstance().getClassLoader()).addURL(h2Driver.toURI().toURL());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

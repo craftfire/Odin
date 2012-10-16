@@ -180,17 +180,6 @@ public class OdinManager {
         storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
 
-        File h2Driver = new File(directory.toString() + File.separator + "lib" + File.separator + "h2.jar");
-        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && h2Driver.exists()) {
-            //TODO FIX?
-            URL[] url = new URL[0];
-            try {
-                url = new URL[]{h2Driver.toURI().toURL()};
-                storageDataManager.setClassLoader(new URLClassLoader(url));
-            } catch (MalformedURLException ignore) {
-            }
-        }
-
         getLogging().debug("Storage data manager has been loaded.");
         try {
             bifrost = new Bifrost();
