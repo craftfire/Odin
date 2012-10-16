@@ -1,5 +1,8 @@
 /*
- * This file is part of Odin <http://www.odin.com/>.
+ * This file is part of Odin.
+ *
+ * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,6 +25,8 @@ import com.craftfire.bifrost.classes.general.ScriptHandle;
 import com.craftfire.bifrost.enums.Scripts;
 import com.craftfire.bifrost.exceptions.UnsupportedScript;
 import com.craftfire.bifrost.exceptions.UnsupportedVersion;
+import com.craftfire.commons.CraftCommons;
+import com.craftfire.commons.classes.FileDownloader;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.managers.DataManager;
 import com.craftfire.commons.managers.LoggingManager;
@@ -30,6 +35,9 @@ import com.craftfire.odin.util.MainUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -62,7 +70,9 @@ public class OdinManager {
         configurationManager = new ConfigurationManager();
         inventoryManager = new InventoryManager();
         loadConfiguration(directory);
-        loadAuthAPI(directory);
+        if (loadLibraries(directory)) {
+            loadDatabases(directory);
+        }
     }
 
     public static String getPluginName() {
@@ -151,7 +161,7 @@ public class OdinManager {
         playerJoin.clear();
     }
 
-    private static void loadAuthAPI(File directory) {
+    private static void loadDatabases(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
                                                         getConfig().getString("database.username"),
                                                         getConfig().getString("database.password"));
@@ -161,10 +171,25 @@ public class OdinManager {
         scriptDataManager.setPrefix(getConfig().getString("script.tableprefix"));
         scriptDataManager.setTimeout(getConfig().getInt("database.timeout"));
         scriptDataManager.setKeepAlive(getConfig().getBoolean("database.keepalive"));
+        scriptDataManager.getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
         DataManager storageDataManager = new DataManager(DataType.H2,
                                                          getConfig().getString("database.username"),
                                                          getConfig().getString("database.password"));
-        storageDataManager.setDirectory(directory + "/data/Odin");
+        storageDataManager.setLoggingManager(getLogging());
+        storageDataManager.setDirectory(directory + "\\data\\");
+        storageDataManager.setDatabase("OdinStorage");
+
+        File h2Driver = new File(directory.toString() + "\\lib\\H2driver.jar");
+        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && h2Driver.exists()) {
+            //TODO FIX?
+            URL[] url = new URL[0];
+            try {
+                url = new URL[]{h2Driver.toURI().toURL()};
+                storageDataManager.setClassLoader(new URLClassLoader(url));
+            } catch (MalformedURLException ignore) {
+            }
+        }
+
         getLogging().debug("Storage data manager has been loaded.");
         try {
             bifrost = new Bifrost();
@@ -183,6 +208,9 @@ public class OdinManager {
     private static void loadConfiguration(File directory) {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
+            MainUtils util = new MainUtils();
+            util.defaultFile(directory.toString() + "/config", "config", "basic.yml");
+            util.defaultFile(directory.toString() + "/config", "config", "advanced.yml");
             getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
                              new YamlManager("files/config/basic.yml"));
             getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
@@ -191,11 +219,31 @@ public class OdinManager {
             loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
             loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
             loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
-            MainUtils util = new MainUtils();
             util.loadLanguage(directory.toString() + "\\translations\\", "commands");
             util.loadLanguage(directory.toString() + "\\translations\\", "messages");
         } catch (IOException e) {
             loggingHandler.stackTrace(e);
         }
+    }
+
+    private static boolean loadLibraries(File directory) {
+        File outputDirectory = new File(directory.toString() + "\\lib");
+        if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
+            getLogging().error("Could not create " + outputDirectory.toString());
+        }
+        File h2Driver = new File(outputDirectory.toString() + "\\H2driver.jar");
+        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && !h2Driver.exists()) {
+            getLogging().error("Could not find required H2 driver.");
+
+            getLogging().info("Starting download for the H2 driver. Please wait...");
+            Set<String> urls = new HashSet<String>();
+            urls.add("http://hsql.sourceforge.net/m2-repo/com/h2database/h2/1.3.169/h2-1.3.169.jar");
+            urls.add("http://repo2.maven.org/maven2/com/h2database/h2/1.3.169/h2-1.3.169.jar");
+            if (!MainUtils.downloadLibrary(h2Driver, urls)) {
+                getLogging().error("Could not download H2 driver, see log for more information.");
+                return false;
+            }
+        }
+        return true;
     }
 }

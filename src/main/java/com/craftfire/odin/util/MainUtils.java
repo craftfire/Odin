@@ -1,5 +1,8 @@
 /*
- * This file is part of Odin <http://www.odin.com/>.
+ * This file is part of Odin.
+ *
+ * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,22 +19,48 @@
  */
 package com.craftfire.odin.util;
 
+import com.craftfire.commons.classes.FileDownloader;
 import com.craftfire.commons.classes.TimeUtil;
 import com.craftfire.commons.managers.YamlManager;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
-import com.craftfire.odin.managers.LoggingHandler;
-import com.craftfire.commons.CraftCommons;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.DirectoryIteratorException;
 import java.security.CodeSource;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class MainUtils {
     public static OdinUser getUser(String username) {
         return new OdinUser(username);
+    }
+
+    public static boolean downloadLibrary(File outputFile, Set<String> urls) {
+        try {
+            FileDownloader downloader = new FileDownloader(urls, outputFile);
+            if (downloader.hasMirror()) {
+                downloader.download();
+                if (downloader.wasSuccessful()) {
+                    OdinManager.getLogging().info("Successfully downloaded " + outputFile.getName() + ". Downloaded "
+                                                 + downloader.getFileSize() + " bytes in "
+                                                 + downloader.getElapsedSeconds() + " seconds.");
+                    return true;
+                }
+            } else {
+                OdinManager.getLogging().error("Could not find a mirror for " + outputFile.getName() + ".");
+            }
+        } catch (IOException e1) {
+            OdinManager.getLogging().error("Could not download " + outputFile.getName() +
+                                           ", see log for more information.");
+            OdinManager.getLogging().stackTrace(e1);
+        }
+        return false;
     }
 
     public static TimeUtil getTimeUtil(String timeString) {
