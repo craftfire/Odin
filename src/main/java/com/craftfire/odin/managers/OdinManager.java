@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -163,8 +164,8 @@ public class OdinManager {
 
     private static void loadDatabases(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
-                                                        getConfig().getString("database.username"),
-                                                        getConfig().getString("database.password"));
+                getConfig().getString("database.username"),
+                getConfig().getString("database.password"));
         scriptDataManager.setHost(getConfig().getString("database.host"));
         scriptDataManager.setPort(getConfig().getInt("database.port"));
         scriptDataManager.setDatabase(getConfig().getString("database.name"));
@@ -173,13 +174,13 @@ public class OdinManager {
         scriptDataManager.setKeepAlive(getConfig().getBoolean("database.keepalive"));
         scriptDataManager.getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
         DataManager storageDataManager = new DataManager(DataType.H2,
-                                                         getConfig().getString("database.username"),
-                                                         getConfig().getString("database.password"));
+                getConfig().getString("database.username"),
+                getConfig().getString("database.password"));
         storageDataManager.setLoggingManager(getLogging());
-        storageDataManager.setDirectory(directory + "\\data\\");
+        storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
 
-        File h2Driver = new File(directory.toString() + "\\lib\\H2driver.jar");
+        File h2Driver = new File(directory.toString() + File.separator + "lib" + File.separator + "h2.jar");
         if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && h2Driver.exists()) {
             //TODO FIX?
             URL[] url = new URL[0];
@@ -194,8 +195,8 @@ public class OdinManager {
         try {
             bifrost = new Bifrost();
             getScriptAPI().addHandle(Scripts.stringToScript(getConfig().getString("script.name")),
-                                                            getConfig().getString("script.version"),
-                                                            scriptDataManager);
+                    getConfig().getString("script.version"),
+                    scriptDataManager);
             getLogging().debug("Bifrost has been loaded.");
         } catch (UnsupportedScript e) {
             getLogging().stackTrace(e);
@@ -212,26 +213,26 @@ public class OdinManager {
             util.defaultFile(directory.toString() + "/config", "config", "basic.yml");
             util.defaultFile(directory.toString() + "/config", "config", "advanced.yml");
             getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
-                             new YamlManager("files/config/basic.yml"));
+                    new YamlManager("files/config/basic.yml"));
             getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
-                             new YamlManager("files/config/advanced.yml"));
+                    new YamlManager("files/config/advanced.yml"));
             loggingHandler.setDirectory(directory + "/logs/");
             loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
             loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
             loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
-            util.loadLanguage(directory.toString() + "\\translations\\", "commands");
-            util.loadLanguage(directory.toString() + "\\translations\\", "messages");
+            util.loadLanguage(directory.toString() + File.separator + "translations" + File.separator, "commands");
+            util.loadLanguage(directory.toString() + File.separator + "translations" + File.separator, "messages");
         } catch (IOException e) {
             loggingHandler.stackTrace(e);
         }
     }
 
     private static boolean loadLibraries(File directory) {
-        File outputDirectory = new File(directory.toString() + "\\lib");
+        File outputDirectory = new File(directory.toString() + File.separator + "lib");
         if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
             getLogging().error("Could not create " + outputDirectory.toString());
         }
-        File h2Driver = new File(outputDirectory.toString() + "\\H2driver.jar");
+        File h2Driver = new File(outputDirectory.toString() + File.separator + "h2.jar");
         if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && !h2Driver.exists()) {
             getLogging().error("Could not find required H2 driver.");
 
