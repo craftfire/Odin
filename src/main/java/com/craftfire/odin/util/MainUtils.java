@@ -26,12 +26,8 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.DirectoryIteratorException;
 import java.security.CodeSource;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
