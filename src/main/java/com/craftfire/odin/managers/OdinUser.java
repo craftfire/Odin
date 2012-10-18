@@ -20,7 +20,7 @@
 package com.craftfire.odin.managers;
 
 import com.craftfire.bifrost.classes.general.ScriptUser;
-import com.craftfire.bifrost.exceptions.UnsupportedMethod;
+import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.enums.Encryption;
 import com.craftfire.odin.util.MainUtils;
 import com.craftfire.commons.CraftCommons;
@@ -72,7 +72,7 @@ public class OdinUser {
     public void setUser() {
         try {
             this.user = OdinManager.getScript().getUser(this.username);
-        } catch (UnsupportedMethod e) {
+        } catch (ScriptException e) {
             OdinManager.getLogging().stackTrace(e);
         } catch (SQLException e) {
             OdinManager.getLogging().stackTrace(e);
@@ -134,7 +134,7 @@ public class OdinUser {
                     }
                 }
             }
-        } catch (UnsupportedMethod e) {
+        } catch (ScriptException e) {
             OdinManager.getLogging().stackTrace(e);
         }
         return false;
@@ -192,7 +192,7 @@ public class OdinUser {
                 this.status = Status.Registered;
                 return true;
             }
-        } catch (UnsupportedMethod e) {
+        } catch (ScriptException e) {
             OdinManager.getLogging().stackTrace(e);
             return false;
         }

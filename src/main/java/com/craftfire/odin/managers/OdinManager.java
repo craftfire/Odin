@@ -23,8 +23,7 @@ import com.craftfire.bifrost.Bifrost;
 import com.craftfire.bifrost.ScriptAPI;
 import com.craftfire.bifrost.classes.general.ScriptHandle;
 import com.craftfire.bifrost.enums.Scripts;
-import com.craftfire.bifrost.exceptions.UnsupportedScript;
-import com.craftfire.bifrost.exceptions.UnsupportedVersion;
+import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.classes.FileDownloader;
 import com.craftfire.commons.enums.DataType;
@@ -187,9 +186,7 @@ public class OdinManager {
                     getConfig().getString("script.version"),
                     scriptDataManager);
             getLogging().debug("Bifrost has been loaded.");
-        } catch (UnsupportedScript e) {
-            getLogging().stackTrace(e);
-        } catch (UnsupportedVersion e) {
+        } catch (ScriptException e) {
             getLogging().stackTrace(e);
         }
         storageManager = new StorageManager(storageDataManager);
