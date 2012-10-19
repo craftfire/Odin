@@ -69,7 +69,7 @@ public class Odin extends JavaPlugin {
         setupChat();
         setupEconomy();
         loadLibraries(getDataFolder());
-        OdinManager.init(getDataFolder());
+        OdinManager.init(getDataFolder(), getDescription().getVersion());
         OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
         Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
     }

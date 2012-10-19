@@ -25,7 +25,6 @@ import com.craftfire.bifrost.classes.general.ScriptHandle;
 import com.craftfire.bifrost.enums.Scripts;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.classes.FileDownloader;
 import com.craftfire.commons.enums.DataType;
 import com.craftfire.commons.managers.AnalyticsManager;
 import com.craftfire.commons.managers.DataManager;
@@ -36,9 +35,6 @@ import com.craftfire.odin.util.MainUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -53,7 +49,7 @@ public class OdinManager {
     private static MessageManager messageManager;
     private static LoggingHandler loggingHandler;
 
-    private static String pluginName = "Odin", pluginVersion = "NULL";
+    private static String pluginVersion = "NULL";
 
     private static Map<String, Long> userSessions = new HashMap<String, Long>();
     private static Set<String> userAuthenticated = new HashSet<String>();
@@ -81,7 +77,7 @@ public class OdinManager {
     }
 
     public static String getPluginName() {
-        return pluginName;
+        return "Odin";
     }
 
     public static String getPluginVersion() {
