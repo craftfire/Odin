@@ -81,7 +81,7 @@ public class Odin extends JavaPlugin {
             System.out.println("Could not create " + outputDirectory.toString());
         }
         File h2Driver = new File(outputDirectory.toString() + File.separator + "h2.jar");
-        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && !h2Driver.exists()) {
+        if (!CraftCommons.hasClass("org.h2.Driver") && !h2Driver.exists()) {
             System.out.println("Could not find required H2 driver.");
             System.out.println("Starting download for the H2 driver. Please wait...");
             Set<String> urls = new HashSet<String>();
@@ -92,7 +92,7 @@ public class Odin extends JavaPlugin {
             }
         }
 
-        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && h2Driver.exists()) {
+        if (!CraftCommons.hasClass("org.h2.Driver") && h2Driver.exists()) {
             try {
                 ((PluginClassLoader)getInstance().getClassLoader()).addURL(h2Driver.toURI().toURL());
             } catch (MalformedURLException e) {

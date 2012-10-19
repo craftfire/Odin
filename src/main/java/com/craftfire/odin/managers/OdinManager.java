@@ -27,6 +27,7 @@ import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.classes.FileDownloader;
 import com.craftfire.commons.enums.DataType;
+import com.craftfire.commons.managers.AnalyticsManager;
 import com.craftfire.commons.managers.DataManager;
 import com.craftfire.commons.managers.LoggingManager;
 import com.craftfire.commons.managers.YamlManager;
@@ -52,7 +53,7 @@ public class OdinManager {
     private static MessageManager messageManager;
     private static LoggingHandler loggingHandler;
 
-    private static String pluginName, pluginVersion;
+    private static String pluginName = "Odin", pluginVersion = "NULL";
 
     private static Map<String, Long> userSessions = new HashMap<String, Long>();
     private static Set<String> userAuthenticated = new HashSet<String>();
@@ -64,14 +65,18 @@ public class OdinManager {
 
     private OdinManager() {}
 
-    public static void init(File directory) {
+    public static void init(File directory, String version) {
+        pluginVersion = version;
         messageManager = new MessageManager();
         commandManager = new CommandManager();
         configurationManager = new ConfigurationManager();
         inventoryManager = new InventoryManager();
         loadConfiguration(directory);
+        submitStats();
         if (loadLibraries(directory)) {
             loadDatabases(directory);
+        } else {
+            getLogging().error("Could not load required libraries, see log for more information.");
         }
     }
 
@@ -219,7 +224,7 @@ public class OdinManager {
             getLogging().error("Could not create " + outputDirectory.toString());
         }
         File h2Driver = new File(outputDirectory.toString() + File.separator + "h2.jar");
-        if (!CraftCommons.getUtil().hasClass("org.h2.Driver") && !h2Driver.exists()) {
+        if (!CraftCommons.hasClass("org.h2.Driver") && !h2Driver.exists()) {
             getLogging().error("Could not find required H2 driver.");
 
             getLogging().info("Starting download for the H2 driver. Please wait...");
@@ -232,5 +237,15 @@ public class OdinManager {
             }
         }
         return true;
+    }
+
+    protected static void submitStats() {
+        try {
+            AnalyticsManager analyticsManager = new AnalyticsManager("http://stats.craftfire.com",
+                    OdinManager.getPluginName(),
+                    OdinManager.getPluginVersion());
+            analyticsManager.setLoggingManager(OdinManager.getLogging());
+            getLogging().info(analyticsManager.getParameters());
+        } catch (MalformedURLException ignore) {}
     }
 }

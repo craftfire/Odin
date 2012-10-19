@@ -26,6 +26,7 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Set;
