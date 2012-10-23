@@ -69,10 +69,15 @@ public class OdinManager {
         inventoryManager = new InventoryManager();
         loadConfiguration(directory);
         submitStats();
+    }
+
+    public static boolean loadDatabases(File directory) {
         if (loadLibraries(directory)) {
-            loadDatabases(directory);
+            loadPrivateDatabases(directory);
+            return true;
         } else {
-            getLogging().error("Could not load required libraries, see log for more information.");
+            getLogging().error("Could not load required databases, see log for more information.");
+            return false;
         }
     }
 
@@ -162,7 +167,7 @@ public class OdinManager {
         playerJoin.clear();
     }
 
-    private static void loadDatabases(File directory) {
+    private static void loadPrivateDatabases(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
                 getConfig().getString("database.username"),
                 getConfig().getString("database.password"));
@@ -217,18 +222,17 @@ public class OdinManager {
     private static boolean loadLibraries(File directory) {
         File outputDirectory = new File(directory.toString() + File.separator + "lib");
         if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
-            getLogging().error("Could not create " + outputDirectory.toString());
+            System.out.println("Could not create " + outputDirectory.toString());
         }
         File h2Driver = new File(outputDirectory.toString() + File.separator + "h2.jar");
         if (!CraftCommons.hasClass("org.h2.Driver") && !h2Driver.exists()) {
-            getLogging().error("Could not find required H2 driver.");
-
-            getLogging().info("Starting download for the H2 driver. Please wait...");
+            System.out.println("Could not find required H2 driver.");
+            System.out.println("Starting download for the H2 driver. Please wait...");
             Set<String> urls = new HashSet<String>();
             urls.add("http://hsql.sourceforge.net/m2-repo/com/h2database/h2/1.3.169/h2-1.3.169.jar");
             urls.add("http://repo2.maven.org/maven2/com/h2database/h2/1.3.169/h2-1.3.169.jar");
             if (!MainUtils.downloadLibrary(h2Driver, urls)) {
-                getLogging().error("Could not download H2 driver, see log for more information.");
+                System.out.println("Could not download H2 driver, see log for more information.");
                 return false;
             }
         }
@@ -238,8 +242,8 @@ public class OdinManager {
     protected static void submitStats() {
         try {
             AnalyticsManager analyticsManager = new AnalyticsManager("http://stats.craftfire.com",
-                    OdinManager.getPluginName(),
-                    OdinManager.getPluginVersion());
+                                                                     OdinManager.getPluginName(),
+                                                                     OdinManager.getPluginVersion());
             analyticsManager.setLoggingManager(OdinManager.getLogging());
             getLogging().info(analyticsManager.getParameters());
         } catch (MalformedURLException ignore) {}
