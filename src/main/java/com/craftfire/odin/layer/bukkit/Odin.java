@@ -20,7 +20,7 @@
 package com.craftfire.odin.layer.bukkit;
 
 import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.managers.TranslationManager;
+import com.craftfire.commons.TranslationManager;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinDisableEvent;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinEnableEvent;
 import com.craftfire.odin.layer.bukkit.listeners.OdinPlayerListener;

@@ -25,11 +25,11 @@ import com.craftfire.bifrost.classes.general.ScriptHandle;
 import com.craftfire.bifrost.enums.Scripts;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.enums.DataType;
-import com.craftfire.commons.managers.AnalyticsManager;
-import com.craftfire.commons.managers.DataManager;
-import com.craftfire.commons.managers.LoggingManager;
-import com.craftfire.commons.managers.YamlManager;
+import com.craftfire.commons.YamlManager;
+import com.craftfire.commons.analytics.AnalyticsManager;
+import com.craftfire.commons.database.DataManager;
+import com.craftfire.commons.database.DataType;
+import com.craftfire.commons.util.LoggingManager;
 import com.craftfire.odin.util.MainUtils;
 
 import java.io.File;

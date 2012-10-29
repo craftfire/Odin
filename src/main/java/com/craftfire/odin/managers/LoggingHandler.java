@@ -19,7 +19,7 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.commons.managers.LoggingManager;
+import com.craftfire.commons.util.LoggingManager;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
