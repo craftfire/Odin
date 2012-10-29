@@ -19,7 +19,7 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.commons.managers.DataManager;
+import com.craftfire.commons.database.DataManager;
 
 import java.sql.SQLException;
 import java.util.HashMap;

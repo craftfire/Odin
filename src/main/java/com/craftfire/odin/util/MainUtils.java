@@ -19,9 +19,9 @@
  */
 package com.craftfire.odin.util;
 
-import com.craftfire.commons.classes.FileDownloader;
-import com.craftfire.commons.classes.TimeUtil;
-import com.craftfire.commons.managers.YamlManager;
+import com.craftfire.commons.FileDownloader;
+import com.craftfire.commons.TimeUtil;
+import com.craftfire.commons.YamlManager;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 
