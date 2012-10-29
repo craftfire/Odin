@@ -19,7 +19,7 @@
  */
 package com.craftfire.odin.layer.bukkit.listeners;
 
-import com.craftfire.commons.classes.TimeUtil;
+import com.craftfire.commons.TimeUtil;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.Util;

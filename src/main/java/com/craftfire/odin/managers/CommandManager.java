@@ -19,7 +19,7 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.commons.managers.YamlManager;
+import com.craftfire.commons.YamlManager;
 
 import java.util.Map;
 

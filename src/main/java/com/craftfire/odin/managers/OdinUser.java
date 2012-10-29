@@ -21,7 +21,7 @@ package com.craftfire.odin.managers;
 
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
-import com.craftfire.commons.enums.Encryption;
+import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.odin.util.MainUtils;
 import com.craftfire.commons.CraftCommons;
 
