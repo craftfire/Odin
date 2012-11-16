@@ -70,7 +70,7 @@ public class Odin extends JavaPlugin {
         setupChat();
         setupEconomy();
         OdinManager.init(getDataFolder(), getDescription().getVersion());
-        if (OdinManager.loadDatabases(getDataFolder()) && loadLibraries()) {
+        if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
             OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
             Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
         } else {
@@ -79,7 +79,11 @@ public class Odin extends JavaPlugin {
     }
 
     private boolean loadLibraries() {
+        if (!OdinManager.loadLibraries(getDataFolder())) {
+            return false;
+        }
         File h2Driver = new File(getDataFolder() + File.separator + "lib" + File.separator + "h2.jar");
+        OdinManager.getLogging().debug("Trying to load library driver: " + getDataFolder() + File.separator + "lib" + File.separator + "h2.jar");
         if (!CraftCommons.hasClass("org.h2.Driver") && h2Driver.exists()) {
             try {
                 ((PluginClassLoader) getInstance().getClassLoader()).addURL(h2Driver.toURI().toURL());
@@ -89,7 +93,7 @@ public class Odin extends JavaPlugin {
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
     @Override

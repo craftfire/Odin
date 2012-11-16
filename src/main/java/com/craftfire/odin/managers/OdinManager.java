@@ -31,6 +31,7 @@ import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataType;
 import com.craftfire.commons.util.LoggingManager;
 import com.craftfire.odin.util.MainUtils;
+import sun.font.TrueTypeFont;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,16 +70,6 @@ public class OdinManager {
         inventoryManager = new InventoryManager();
         loadConfiguration(directory);
         submitStats();
-    }
-
-    public static boolean loadDatabases(File directory) {
-        if (loadLibraries(directory)) {
-            loadPrivateDatabases(directory);
-            return true;
-        } else {
-            getLogging().error("Could not load required databases, see log for more information.");
-            return false;
-        }
     }
 
     public static String getPluginName() {
@@ -167,10 +158,10 @@ public class OdinManager {
         playerJoin.clear();
     }
 
-    private static void loadPrivateDatabases(File directory) {
+    public static boolean loadDatabases(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
-                getConfig().getString("database.username"),
-                getConfig().getString("database.password"));
+                                                        getConfig().getString("database.username"),
+                                                        getConfig().getString("database.password"));
         scriptDataManager.setHost(getConfig().getString("database.host"));
         scriptDataManager.setPort(getConfig().getInt("database.port"));
         scriptDataManager.setDatabase(getConfig().getString("database.name"));
@@ -179,8 +170,8 @@ public class OdinManager {
         scriptDataManager.setKeepAlive(getConfig().getBoolean("database.keepalive"));
         scriptDataManager.getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
         DataManager storageDataManager = new DataManager(DataType.H2,
-                getConfig().getString("database.username"),
-                getConfig().getString("database.password"));
+                                                         getConfig().getString("database.username"),
+                                                         getConfig().getString("database.password"));
         storageDataManager.setLoggingManager(getLogging());
         storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
@@ -189,26 +180,28 @@ public class OdinManager {
         try {
             bifrost = new Bifrost();
             getScriptAPI().addHandle(Scripts.stringToScript(getConfig().getString("script.name")),
-                    getConfig().getString("script.version"),
-                    scriptDataManager);
+                                                            getConfig().getString("script.version"),
+                                                            scriptDataManager);
             getLogging().debug("Bifrost has been loaded.");
         } catch (ScriptException e) {
             getLogging().stackTrace(e);
+            return false;
         }
         storageManager = new StorageManager(storageDataManager);
+        return true;
     }
 
     private static void loadConfiguration(File directory) {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
             MainUtils util = new MainUtils();
-            util.defaultFile(directory.toString() + "/config", "config", "basic.yml");
-            util.defaultFile(directory.toString() + "/config", "config", "advanced.yml");
-            getConfig().load(new YamlManager(new File(directory + "/config/basic.yml")),
-                    new YamlManager("files/config/basic.yml"));
-            getConfig().load(new YamlManager(new File(directory + "/config/advanced.yml")),
-                    new YamlManager("files/config/advanced.yml"));
-            loggingHandler.setDirectory(directory + "/logs/");
+            util.defaultFile(directory.toString() + File.separator + "config", "config", "basic.yml");
+            util.defaultFile(directory.toString() + File.separator + "config", "config", "advanced.yml");
+            getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "basic.yml")),
+                    new YamlManager("files" + File.separator + "config" + File.separator + "basic.yml"));
+            getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "advanced.yml")),
+                             new YamlManager("files" + File.separator + "config" + File.separator + "advanced.yml"));
+            loggingHandler.setDirectory(directory + File.separator + "logs" + File.separator);
             loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
             loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
             loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
@@ -219,7 +212,7 @@ public class OdinManager {
         }
     }
 
-    private static boolean loadLibraries(File directory) {
+    public static boolean loadLibraries(File directory) {
         File outputDirectory = new File(directory.toString() + File.separator + "lib");
         if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
             System.out.println("Could not create " + outputDirectory.toString());

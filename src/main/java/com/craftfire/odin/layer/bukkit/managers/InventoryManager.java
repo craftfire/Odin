@@ -44,11 +44,11 @@ public class InventoryManager {
     }
 
     public void storeInventory(Player player, ItemStack[] inventory, ItemStack[] armorinventory) throws IOException {
-        StringBuffer inv = new StringBuffer();
-        StringBuffer armorinv = new StringBuffer();
+        StringBuilder inv = new StringBuilder();
+        StringBuilder armorinv = new StringBuilder();
         for (short i = 0; i < inventory.length; i = (short)(i + 1)) {
             if (inventory[i] != null) {
-                StringBuffer enchantment = new StringBuffer();
+                StringBuilder enchantment = new StringBuilder();
                 Iterator<Map.Entry<Enchantment, Integer>> enchantments =
                         inventory[i].getEnchantments().entrySet().iterator();
                 while (enchantments.hasNext()) {
