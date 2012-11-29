@@ -19,53 +19,126 @@
  */
 package com.craftfire.odin.managers.inventory;
 
+import com.craftfire.odin.managers.OdinUser;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class InventoryManager {
-    private Map<String, String> inventories = new HashMap<String, String>();
-    private Map<String, String> armor = new HashMap<String, String>();
+    private Map<String, Set<InventoryItem>> inventories = new HashMap<String, Set<InventoryItem>>();
+    private Map<String, Set<InventoryItem>> armor = new HashMap<String, Set<InventoryItem>>();
 
     public void clear() {
         this.inventories.clear();
         this.armor.clear();
     }
 
-    public Map<String, String> getInventories() {
+    public Map<String, Set<InventoryItem>> getInventories() {
         return this.inventories;
     }
 
-    public Map<String, String> getArmor() {
+    public Map<String, Set<InventoryItem>> getArmor() {
         return this.armor;
     }
 
-    public void setInventory(String player, String inventory) {
-        this.inventories.put(player, inventory);
+    public void setInventory(OdinUser user, Set<InventoryItem> inventory) {
+        setInventory(user.getUsername(), inventory);
     }
 
-    public String getInventory(String player) {
-        if (this.inventories.containsKey(player)) {
-            return this.inventories.get(player);
+    public void setInventory(String username, Set<InventoryItem> inventory) {
+        this.inventories.put(username, inventory);
+    }
+
+    public Set<InventoryItem> getInventory(OdinUser user) {
+        return getInventory(user.getUsername());
+    }
+
+    public Set<InventoryItem> getInventory(String username) {
+        if (hasInventory(username)) {
+            return this.inventories.get(username);
         }
         return null;
     }
 
-    public boolean hasInventory(String player) {
-        return this.inventories.containsKey(player);
+    public String getInventoryString(OdinUser user) {
+        return getInventoryString(user.getUsername());
     }
 
-    public void setArmor(String player, String armor) {
-        this.armor.put(player, armor);
-    }
-
-    public String getArmor(String player) {
-        if (this.armor.containsKey(player)) {
-            return this.armor.get(player);
+    public String getInventoryString(String username) {
+        if (hasInventory(username)) {
+            StringBuilder itemsString = new StringBuilder();
+            Set<InventoryItem> items = getInventory(username);
+            for (InventoryItem item : items) {
+                String enchantments = "0";
+                if (item.getEnchantments().size() > 0) {
+                   enchantments = "";
+                   for (ItemEnchantment enchantment : item.getEnchantments()) {
+                       enchantments += enchantment.getID() + "=" + enchantment.getLevel() + "-";
+                   }
+                }
+                itemsString.append(item.getID() + ":" + item.getAmount() + ":" + item.getMaterial() + ":" + item.getDurability() + ":" + enchantments + ",");
+            }
+            return itemsString.toString();
         }
         return null;
     }
 
-    public boolean hasArmor(String player) {
-        return this.armor.containsKey(player);
+    public boolean hasInventory(OdinUser user) {
+        return hasInventory(user.getUsername());
+    }
+
+    public boolean hasInventory(String username) {
+        return this.inventories.containsKey(username);
+    }
+
+    public void setArmor(OdinUser user, Set<InventoryItem> armor) {
+        setArmor(user.getUsername(), armor);
+    }
+
+    public void setArmor(String username, Set<InventoryItem> armor) {
+        this.armor.put(username, armor);
+    }
+
+    public Set<InventoryItem> getArmor(OdinUser user) {
+        return getArmor(user.getUsername());
+    }
+
+    public Set<InventoryItem> getArmor(String username) {
+        if (hasArmor(username)) {
+            return this.armor.get(username);
+        }
+        return null;
+    }
+
+    public String getArmorString(OdinUser user) {
+        return getInventoryString(user.getUsername());
+    }
+
+    public String getArmorString(String username) {
+        if (hasArmor(username)) {
+            StringBuilder itemsString = new StringBuilder();
+            Set<InventoryItem> items = getArmor(username);
+            for (InventoryItem item : items) {
+                String enchantments = "0";
+                if (item.getEnchantments().size() > 0) {
+                    enchantments = "";
+                    for (ItemEnchantment enchantment : item.getEnchantments()) {
+                        enchantments += enchantment.getID() + "=" + enchantment.getLevel() + "-";
+                    }
+                }
+                itemsString.append(item.getID() + ":" + item.getAmount() + ":" + item.getMaterial() + ":" + item.getDurability() + ":" + enchantments + ",");
+            }
+            return itemsString.toString();
+        }
+        return null;
+    }
+
+    public boolean hasArmor(OdinUser user) {
+        return hasArmor(user.getUsername());
+    }
+
+    public boolean hasArmor(String username) {
+        return this.armor.containsKey(username);
     }
 }

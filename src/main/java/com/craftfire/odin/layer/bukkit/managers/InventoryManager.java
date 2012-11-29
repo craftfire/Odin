@@ -97,8 +97,9 @@ public class InventoryManager {
     }
 
     public ItemStack[] getInventory(Player player) {
+        //TODO: redo
         if (OdinManager.getInventories().hasInventory(player.getName())) {
-            String data = OdinManager.getInventories().getInventory(player.getName());
+            String data = OdinManager.getInventories().getInventoryString(player.getName());
             if (data != null && ! data.isEmpty()) {
                 String[] inv = data.split(",");
                 ItemStack[] inventory;
@@ -143,8 +144,9 @@ public class InventoryManager {
     }
 
     public ItemStack[] getArmorInventory(Player player) {
+        //TODO: redo
         if (OdinManager.getInventories().hasArmor(player.getName())) {
-            String data = OdinManager.getInventories().getArmor(player.getName());
+            String data = OdinManager.getInventories().getArmorString(player.getName());
             if (data != null && ! data.isEmpty()) {
                 String[] inv = data.split(",");
                 ItemStack[] inventory = new ItemStack[4];
