@@ -44,7 +44,6 @@ public class InventoryManager {
     }
 
     public String getInventory(String player) {
-        //TODO: Check database
         if (this.inventories.containsKey(player)) {
             return this.inventories.get(player);
         }

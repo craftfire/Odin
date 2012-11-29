@@ -21,63 +21,111 @@ package com.craftfire.odin.managers;
 
 import com.craftfire.commons.database.DataManager;
 
+import javax.swing.text.TabExpander;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class StorageManager {
     private final DataManager dataManager;
-    private Map<Table, String> primaries = new HashMap<Table, String>();
 
     public StorageManager(DataManager dataManager) {
         this.dataManager = dataManager;
         checkDatabases();
-        setupPrimaries();
     }
 
     public enum Table {
-        INVENTORY("ODIN_INVENTORIES");
+        INVENTORY("ODIN_INVENTORIES", "PLAYERNAME"),
+        INFORMATION("ODIN_INFORMATION", "INFO");
 
-        private String name;
-        Table(String name) {
+        private String name, primary;
+        Table(String name, String primary) {
             this.name = name;
+            this.primary = primary;
         }
 
         public String getName() {
             return this.name;
         }
+
+        public String getPrimary() {
+            return this.primary;
+        }
+    }
+
+    public String getVersion() {
+        return "1.0";
+    }
+
+    public String getStoredVersion() {
+        return (getInfo("version") == null) ? getVersion() : getInfo("version");
     }
 
     public DataManager getDataManager() {
         return this.dataManager;
     }
+
+    public String getString(Table table, String field, String where) {
+        return getDataManager().getStringField(table.getName(), field, where);
+    }
     
     public boolean exists(Table table, String value) {
-        return getDataManager().exist(table.name, this.primaries.get(table), value);
+        return getDataManager().exist(table.getName(), table.getPrimary(), value);
     }
 
     private void checkDatabases() {
         checkInventoryDatabase();
     }
 
-    private void setupPrimaries() {
-        this.primaries.put(Table.INVENTORY, "PLAYERNAME");
+    public String getInfo(String info) {
+        return getDataManager().getStringField(Table.INFORMATION.getName(), "DATA", Table.INFORMATION.getPrimary() + "='" + info + "'");
+    }
+
+    private void setInfo(String info, Object value) throws SQLException {
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("INFO", info);
+        data.put("DATA", value);
+        getDataManager().insertFields(data, Table.INFORMATION.getName());
     }
 
     private void checkInventoryDatabase() {
-        if (!getDataManager().tableExist("ODIN_INVENTORIES")) {
+        if (!getDataManager().tableExist(Table.INVENTORY.getName())) {
             try {
-                getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS ODIN_INVENTORIES(" +
+                getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.INVENTORY.getName() + "(" +
                                               "ID INT PRIMARY KEY, " +
                                               "PLAYERNAME VARCHAR(50), " +
                                               "INVENTORY TEXT," +
                                               "ARMOR TEXT)");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed while creating odin_inventories table for H2 database.");
+                OdinManager.getLogging().error("Failed while creating " + Table.INVENTORY.getName() + " table for H2 database.");
                 OdinManager.getLogging().stackTrace(e);
                 return;
             }
-            OdinManager.getLogging().debug("Successfully created odin_inventories table for H2 database.");
+            OdinManager.getLogging().debug("Successfully created " + Table.INVENTORY.getName() + " table for H2 database.");
+        }
+        if (!getDataManager().tableExist(Table.INFORMATION.getName())) {
+            try {
+                getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.INFORMATION.getName() + "(" +
+                                              "INFO VARCHAR(50), " +
+                                              "VALUE VARCHAR(100))");
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed while creating " + Table.INFORMATION.getName() + " table for H2 database.");
+                OdinManager.getLogging().stackTrace(e);
+                return;
+            }
+            OdinManager.getLogging().debug("Successfully created " + Table.INFORMATION.getName() + " table for H2 database.");
+            try {
+                setInfo("version", getVersion());
+                setInfo("installed", System.currentTimeMillis() / 1000);
+                setInfo("updated", 0);
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed while inserting into the " + Table.INFORMATION.getName() + " table.");
+                OdinManager.getLogging().stackTrace(e);
+                return;
+            }
+
+            OdinManager.getLogging().debug("Successfully inserted data into the " + Table.INFORMATION.getName() + " table.");
         }
     }
 }

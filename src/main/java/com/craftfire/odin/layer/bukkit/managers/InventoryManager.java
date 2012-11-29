@@ -63,7 +63,7 @@ public class InventoryManager {
                     Enchantment enc = key.getKey();
                     enchantments.add(new ItemEnchantment(enc.getId(), inventory[i].getEnchantmentLevel(enc)));
                 }
-                String material = (String) (inventory[i].getData() == null ? "0" : Byte.valueOf(inventory[i].getData().getData()));
+                String material = (inventory[i].getData() == null) ? "0" : "" + Byte.valueOf(inventory[i].getData().getData());
                 InventoryItem item = new InventoryItem(inventory[i].getTypeId(), material);
                 item.setAmount(inventory[i].getAmount());
                 item.setDurability(inventory[i].getDurability());
@@ -83,7 +83,7 @@ public class InventoryManager {
                     Enchantment enc = key.getKey();
                     enchantments.add(new ItemEnchantment(enc.getId(), inventory[i].getEnchantmentLevel(enc)));
                 }
-                String material = (String) (armorInventory[i].getData() == null ? "0" : Byte.valueOf(armorInventory[i].getData().getData()));
+                String material = (inventory[i].getData() == null) ? "0" : "" + Byte.valueOf(inventory[i].getData().getData());
                 InventoryItem item = new InventoryItem(armorInventory[i].getTypeId(), material);
                 item.setAmount(armorInventory[i].getAmount());
                 item.setDurability(armorInventory[i].getDurability());
