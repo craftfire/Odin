@@ -20,6 +20,9 @@
 package com.craftfire.odin.layer.bukkit.managers;
 
 import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.managers.inventory.InventoryItem;
+
+import com.craftfire.odin.managers.inventory.ItemEnchantment;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -27,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -43,55 +47,53 @@ public class InventoryManager {
         }
     }
 
-    public void storeInventory(Player player, ItemStack[] inventory, ItemStack[] armorinventory) throws IOException {
-        StringBuilder inv = new StringBuilder();
-        StringBuilder armorinv = new StringBuilder();
+    public void storeInventory(OdinPlayer player) {
+        ItemStack[] inventory = player.getInventory().getContents();
+        ItemStack[] armorInventory = player.getInventory().getArmorContents();
+        HashSet<InventoryItem> inv = new HashSet<InventoryItem>();
+        HashSet<InventoryItem> armorinv = new HashSet<InventoryItem>();
+
         for (short i = 0; i < inventory.length; i = (short)(i + 1)) {
             if (inventory[i] != null) {
-                StringBuilder enchantment = new StringBuilder();
-                Iterator<Map.Entry<Enchantment, Integer>> enchantments =
+                HashSet<ItemEnchantment> enchantments = new HashSet<ItemEnchantment>();
+                Iterator<Map.Entry<Enchantment, Integer>> itemEnchantments =
                         inventory[i].getEnchantments().entrySet().iterator();
-                while (enchantments.hasNext()) {
-                    Map.Entry<Enchantment, Integer> key = enchantments.next();
+                while (itemEnchantments.hasNext()) {
+                    Map.Entry<Enchantment, Integer> key = itemEnchantments.next();
                     Enchantment enc = key.getKey();
-                    enchantment.append(enc.getId() + "=" + inventory[i].getEnchantmentLevel(enc) + "-");
+                    enchantments.add(new ItemEnchantment(enc.getId(), inventory[i].getEnchantmentLevel(enc)));
                 }
-                if(enchantment.length() == 0) {
-                    enchantment.append("0");
-                }
-                inv.append(inventory[i].getTypeId() +
-                        ":" + inventory[i].getAmount() +
-                        ":" + (inventory[i].getData() == null ? "0" : Byte.valueOf(inventory[i].getData().getData())) +
-                        ":" + inventory[i].getDurability() +
-                        ":" + enchantment + ",");
+                String material = (String) (inventory[i].getData() == null ? "0" : Byte.valueOf(inventory[i].getData().getData()));
+                InventoryItem item = new InventoryItem(inventory[i].getTypeId(), material);
+                item.setAmount(inventory[i].getAmount());
+                item.setDurability(inventory[i].getDurability());
+                item.setEnchantments(enchantments);
+                inv.add(item);
             } else {
-                inv.append("0:0:0:0:0,");
+                inv.add(new InventoryItem(0, null));
             }
         }
-        for (short i = 0; i < armorinventory.length; i = (short)(i + 1)) {
-            if (armorinventory[i] != null) {
-                String enchantment = "";
-                Iterator<Map.Entry<Enchantment, Integer>> enchantments =
-                        armorinventory[i].getEnchantments().entrySet().iterator();
-                while (enchantments.hasNext()) {
-                    Map.Entry<Enchantment, Integer> key = enchantments.next();
+        for (short i = 0; i < armorInventory.length; i = (short)(i + 1)) {
+            if (armorInventory[i] != null) {
+                HashSet<ItemEnchantment> enchantments = new HashSet<ItemEnchantment>();
+                Iterator<Map.Entry<Enchantment, Integer>> itemEnchantments =
+                        inventory[i].getEnchantments().entrySet().iterator();
+                while (itemEnchantments.hasNext()) {
+                    Map.Entry<Enchantment, Integer> key = itemEnchantments.next();
                     Enchantment enc = key.getKey();
-                    enchantment += enc.getId() + "=" + armorinventory[i].getEnchantmentLevel(enc) + "-";
+                    enchantments.add(new ItemEnchantment(enc.getId(), inventory[i].getEnchantmentLevel(enc)));
                 }
-                if (enchantment.isEmpty()) {
-                    enchantment = "0";
-                }
-                armorinv.append(armorinventory[i].getTypeId() +
-                        ":" + armorinventory[i].getAmount() +
-                        ":" + (armorinventory[i].getData() == null ? "0" :
-                        Byte.valueOf(armorinventory[i].getData().getData())) +
-                        ":" + armorinventory[i].getDurability() + ":" + enchantment + ",");
+                String material = (String) (armorInventory[i].getData() == null ? "0" : Byte.valueOf(armorInventory[i].getData().getData()));
+                InventoryItem item = new InventoryItem(armorInventory[i].getTypeId(), material);
+                item.setAmount(armorInventory[i].getAmount());
+                item.setDurability(armorInventory[i].getDurability());
+                item.setEnchantments(enchantments);
+                armorinv.add(item);
             } else {
-                armorinv.append("0:0:0:0:0,");
+                inv.add(new InventoryItem(0, null));
             }
         }
-        OdinManager.getInventories().setInventory(player.getName(), inv.toString());
-        OdinManager.getInventories().setArmor(player.getName(), armorinv.toString());
+        player.storeInventory(inv, armorinv);
     }
 
     public ItemStack[] getInventory(Player player) {

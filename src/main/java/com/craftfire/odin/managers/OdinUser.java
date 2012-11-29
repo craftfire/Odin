@@ -22,11 +22,15 @@ package com.craftfire.odin.managers;
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.encryption.Encryption;
+import com.craftfire.odin.managers.inventory.InventoryItem;
+import com.craftfire.odin.managers.inventory.ItemEnchantment;
 import com.craftfire.odin.util.MainUtils;
 import com.craftfire.commons.CraftCommons;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class OdinUser {
     private String username;
@@ -183,9 +187,12 @@ public class OdinUser {
     public boolean isRegistered() {
         if (this.status != null) {
             switch (this.status) {
-                case Authenticated: return true;
-                case Registered: return true;
-                case Guest: return false;
+                case Authenticated:
+                    return true;
+                case Registered:
+                    return true;
+                case Guest:
+                    return false;
             }
         } else try {
             if (OdinManager.getScript().getScript().isRegistered(this.username)) {
@@ -281,5 +288,9 @@ public class OdinUser {
 
     public void setTimeout() {
         OdinManager.getUserTimeouts().add(this.username);
+    }
+
+    public void storeInventory(Set<InventoryItem> inventory, Set<InventoryItem> armor) {
+
     }
 }

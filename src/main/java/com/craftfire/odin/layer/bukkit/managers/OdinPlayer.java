@@ -79,14 +79,8 @@ public class OdinPlayer extends OdinUser {
     }
 
     public void storeInventory() {
-        try {
-            Odin.getInstance().getInventoryManager().storeInventory(this.player,
-                                                               this.player.getInventory().getContents(),
-                                                               this.player.getInventory().getArmorContents());
-            clearInventory();
-        } catch (IOException e) {
-            OdinManager.getLogging().stackTrace(e);
-        }
+        Odin.getInstance().getInventoryManager().storeInventory(this);
+        clearInventory();
     }
 
     public void clearInventory() {

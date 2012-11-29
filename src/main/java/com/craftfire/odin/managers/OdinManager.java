@@ -30,8 +30,8 @@ import com.craftfire.commons.analytics.AnalyticsManager;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataType;
 import com.craftfire.commons.util.LoggingManager;
+import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.util.MainUtils;
-import sun.font.TrueTypeFont;
 
 import java.io.File;
 import java.io.IOException;

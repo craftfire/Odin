@@ -42,6 +42,10 @@ public class StorageManager {
         Table(String name) {
             this.name = name;
         }
+
+        public String getName() {
+            return this.name;
+        }
     }
 
     public DataManager getDataManager() {
@@ -61,17 +65,19 @@ public class StorageManager {
     }
 
     private void checkInventoryDatabase() {
-        try {
-            getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS ODIN_INVENTORIES(" +
-                                          "ID INT PRIMARY KEY, " +
-                                          "PLAYERNAME VARCHAR(50), " +
-                                          "INVENTORY TEXT," +
-                                          "ARMOR TEXT)");
-        } catch (SQLException e) {
-            OdinManager.getLogging().error("Failed while creating odin_inventories table for H2 database.");
-            OdinManager.getLogging().stackTrace(e);
-            return;
+        if (!getDataManager().tableExist("ODIN_INVENTORIES")) {
+            try {
+                getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS ODIN_INVENTORIES(" +
+                                              "ID INT PRIMARY KEY, " +
+                                              "PLAYERNAME VARCHAR(50), " +
+                                              "INVENTORY TEXT," +
+                                              "ARMOR TEXT)");
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed while creating odin_inventories table for H2 database.");
+                OdinManager.getLogging().stackTrace(e);
+                return;
+            }
+            OdinManager.getLogging().debug("Successfully created odin_inventories table for H2 database.");
         }
-        OdinManager.getLogging().debug("Successfully created odin_inventories table for H2 database.");
     }
 }
