@@ -35,6 +35,10 @@ public class StorageManager {
         checkDatabases();
     }
 
+    public enum InventoryField {
+        INVENTORY, ARMOR
+    }
+
     public enum Table {
         INVENTORY("ODIN_INVENTORIES", "PLAYERNAME"),
         INFORMATION("ODIN_INFORMATION", "INFO");

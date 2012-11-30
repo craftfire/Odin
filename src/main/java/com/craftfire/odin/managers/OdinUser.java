@@ -290,7 +290,7 @@ public class OdinUser {
         OdinManager.getUserTimeouts().add(this.username);
     }
 
-    public void storeInventory(Set<InventoryItem> inventory, Set<InventoryItem> armor) {
-
+    public void storeInventory(InventoryItem[] inventory, InventoryItem[] armor) {
+        //todo
     }
 }

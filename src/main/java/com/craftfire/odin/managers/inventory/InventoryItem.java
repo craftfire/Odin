@@ -23,15 +23,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class InventoryItem {
-    private int id;
-    private int amount = 1;
-    private String material = "0";
+    private int id, amount = 1;
+    private byte material = 1;
     private Set<ItemEnchantment> enchantments = new HashSet<ItemEnchantment>();
     private short durability = 0;
 
-    public InventoryItem(int id, String material) {
+    public InventoryItem(String string) {
+        String[] options = string.split(":");
+        if (options.length == 5) {
+            setID(Integer.valueOf(options[0]));
+            setAmount(Integer.valueOf(options[1]));
+            setMaterial(Integer.valueOf(options[2]));
+            setDurability(Short.valueOf(options[3]));
+            if (!options[4].equals("0")) {
+                setEnchantments(options[4].split("-"));
+            }
+        }
+    }
+
+    public InventoryItem(int id, byte material) {
         this.id = id;
         this.material = material;
+    }
+
+    public InventoryItem(int id, int material) {
+        this.id = id;
+        setMaterial(material);
     }
 
     public int getID() {
@@ -50,12 +67,16 @@ public class InventoryItem {
         this.amount = amount;
     }
 
-    public String getMaterial() {
+    public byte getMaterial() {
         return this.material;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(byte material) {
         this.material = material;
+    }
+
+    public void setMaterial(int material) {
+        this.material = (byte) material;
     }
 
     public short getDurability() {
@@ -70,7 +91,22 @@ public class InventoryItem {
         return this.enchantments;
     }
 
-    public void setEnchantments(HashSet<ItemEnchantment> enchantments) {
+    public void setEnchantments(Set<ItemEnchantment> enchantments) {
         this.enchantments = enchantments;
+    }
+
+    public void setEnchantments(String[] enchantments) {
+        for (String enchantment : enchantments) {
+            String[] options = enchantment.split("=");
+            addEnchantment(Integer.parseInt(options[0]), Integer.parseInt(options[1]));
+        }
+    }
+
+    public void addEnchantment(ItemEnchantment enchantment) {
+       this.enchantments.add(enchantment);
+    }
+
+    public void addEnchantment(int id, int level) {
+        this.enchantments.add(new ItemEnchantment(id, level));
     }
 }
