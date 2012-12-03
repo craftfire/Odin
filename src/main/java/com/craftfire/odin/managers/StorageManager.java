@@ -64,7 +64,7 @@ public class StorageManager {
     }
 
     public String getStoredVersion() {
-        return (getInfo("version") == null) ? getVersion() : getInfo("version");
+        return getInfo("version");
     }
 
     public DataManager getDataManager() {
@@ -96,10 +96,14 @@ public class StorageManager {
     }
 
     private void setInfo(String info, Object value) throws SQLException {
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("INFO", info);
-        data.put("DATA", value);
-        getDataManager().insertFields(data, Table.INFORMATION.getName());
+        if (exists(Table.INFORMATION, info)) {
+            getDataManager().updateField(Table.INFORMATION.getName(), "DATA", value, Table.INFORMATION.getPrimary() + "='" + info + "'");
+        } else {
+            Map<String, Object> data = new HashMap<String, Object>();
+            data.put("INFO", info);
+            data.put("DATA", value);
+            getDataManager().insertFields(data, Table.INFORMATION.getName());
+        }
     }
 
     public String getInventory(String username) {
@@ -167,7 +171,7 @@ public class StorageManager {
                                               "INVENTORY TEXT, " +
                                               "ARMOR TEXT)");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed while creating " + Table.INVENTORY.getName() + " table for H2 database.");
+                OdinManager.getLogging().error("Failed creating " + Table.INVENTORY.getName() + " table for H2 database.");
                 OdinManager.getLogging().stackTrace(e);
                 return;
             }
@@ -177,9 +181,9 @@ public class StorageManager {
             try {
                 getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.INFORMATION.getName() + "(" +
                                               "INFO VARCHAR(50), " +
-                                              "VALUE VARCHAR(100))");
+                                              "DATA VARCHAR(100))");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed while creating " + Table.INFORMATION.getName() + " table for H2 database.");
+                OdinManager.getLogging().error("Failed creating " + Table.INFORMATION.getName() + " table for H2 database.");
                 OdinManager.getLogging().stackTrace(e);
                 return;
             }
@@ -189,12 +193,26 @@ public class StorageManager {
                 setInfo("installed", System.currentTimeMillis() / 1000);
                 setInfo("updated", 0);
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed while inserting into the " + Table.INFORMATION.getName() + " table.");
+                OdinManager.getLogging().error("Failed inserting into the " + Table.INFORMATION.getName() + " table.");
                 OdinManager.getLogging().stackTrace(e);
                 return;
             }
-
             OdinManager.getLogging().debug("Successfully inserted data into the " + Table.INFORMATION.getName() + " table.");
+        } else {
+            String version = getStoredVersion();
+            if (version == null || !version.equalsIgnoreCase(getVersion())) {
+                try {
+                    setInfo("version", getVersion());
+                    setInfo("updated", System.currentTimeMillis() / 1000);
+                } catch (SQLException e) {
+                    OdinManager.getLogging().debug("Failed while updating the version of the StorageDatabase (" + version +
+                                                   " -> " + getVersion() + ".");
+                    OdinManager.getLogging().stackTrace(e);
+                    return;
+                }
+                OdinManager.getLogging().debug("Successfully updated the version of the StorageDatabase (" + version +
+                                               " -> " + getVersion() + ".");
+            }
         }
     }
 }
