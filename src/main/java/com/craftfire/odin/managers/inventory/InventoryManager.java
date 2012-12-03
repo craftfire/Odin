@@ -36,6 +36,22 @@ public class InventoryManager {
         this.armor.clear();
     }
 
+    public static String getItemDelimiter() {
+        return ",";
+    }
+
+    public static String getOptionDelimiter() {
+        return ":";
+    }
+
+    public static String getEnchantmentDelimiter() {
+        return "-";
+    }
+
+    public static String getEnchantmentOptionDelimiter() {
+        return "=";
+    }
+
     public Map<String, InventoryItem[]> getInventories() {
         return this.inventories;
     }
@@ -162,10 +178,15 @@ public class InventoryManager {
             if (item.getEnchantments().size() > 0) {
                 enchantments = "";
                 for (ItemEnchantment enchantment : item.getEnchantments()) {
-                    enchantments += enchantment.getID() + "=" + enchantment.getLevel() + "-";
+                    enchantments += enchantment.getID() + getEnchantmentOptionDelimiter() +
+                                    enchantment.getLevel() + getEnchantmentDelimiter();
                 }
             }
-            itemsString.append(item.getID() + ":" + item.getAmount() + ":" + item.getMaterial() + ":" + item.getDurability() + ":" + enchantments + ",");
+            itemsString.append(item.getID() + getOptionDelimiter() +
+                               item.getAmount() + getOptionDelimiter() +
+                               item.getMaterial() + getOptionDelimiter() +
+                               item.getDurability() + getOptionDelimiter() +
+                               enchantments + getItemDelimiter());
         }
         return itemsString.toString();
     }
@@ -173,19 +194,19 @@ public class InventoryManager {
     public static InventoryItem[] itemStringToArray(String items) {
         //TODO: Add a check to see if it's real? Also go through and make sure it works.
         if (items != null && ! items.isEmpty()) {
-            String[] inv = items.split(",");
+            String[] inv = items.split(getItemDelimiter());
             InventoryItem[] inventory = new InventoryItem[inv.length];
             for (int i = 0; i < inv.length; i++) {
                 String line = inv[i];
-                String[] split = line.split(":");
+                String[] split = line.split(getOptionDelimiter());
                 if (split.length == 5) {
                     inventory[i] = new InventoryItem(Integer.valueOf(split[0]), Integer.valueOf(split[1]));
                     inventory[i].setDurability(Short.valueOf(split[3]));
                     inventory[i].setMaterial((split[2].length() == 0) ? 0 : Byte.valueOf(split[2]));
                     if (!split[4].equals("0")) {
-                        String[] enchantments = split[4].split("-");
+                        String[] enchantments = split[4].split(getEnchantmentDelimiter());
                         for (String enchantment : enchantments) {
-                            String[] enchantmentOptions = enchantment.split("=");
+                            String[] enchantmentOptions = enchantment.split(getEnchantmentOptionDelimiter());
                             inventory[i].addEnchantment(Integer.parseInt(enchantmentOptions[0]), Integer.parseInt(enchantmentOptions[1]));
                         }
                     }
