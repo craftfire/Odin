@@ -20,6 +20,7 @@
 package com.craftfire.odin.managers;
 
 import com.craftfire.commons.database.DataManager;
+import com.craftfire.odin.managers.inventory.InventoryManager;
 
 import javax.swing.text.TabExpander;
 import java.sql.SQLException;
@@ -78,6 +79,14 @@ public class StorageManager {
         return getDataManager().exist(table.getName(), table.getPrimary(), value);
     }
 
+    public boolean userExists(Table table, OdinUser user) {
+        return userExists(table, user.getUsername());
+    }
+
+    public boolean userExists(Table table, String username) {
+       return exists(table, username);
+    }
+
     private void checkDatabases() {
         checkInventoryDatabase();
     }
@@ -93,13 +102,69 @@ public class StorageManager {
         getDataManager().insertFields(data, Table.INFORMATION.getName());
     }
 
+    public String getInventory(String username) {
+        return getDataManager().getStringField(Table.INVENTORY.getName(), "INVENTORY", Table.INVENTORY.getPrimary() + "='" + username + "'");
+    }
+
+    public void setInventory(String username, String inventory) {
+        if (userExists(Table.INVENTORY, username)) {
+            try {
+                getDataManager().updateField(Table.INVENTORY.getName(), "INVENTORY", inventory, Table.INVENTORY.getPrimary() + "='" + username + "'");
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed updating inventory for username '" + username + "'.");
+                OdinManager.getLogging().debug("Tried updating inventory '" + inventory + "'");
+                OdinManager.getLogging().stackTrace(e);
+            }
+        } else {
+            Map<String, Object> data = new HashMap<String, Object>();
+            data.put(Table.INVENTORY.getPrimary(), username);
+            data.put("INVENTORY", inventory);
+            try {
+                getDataManager().insertFields(data, Table.INFORMATION.getName());
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed inserting inventory for username '" + username + "'.");
+                OdinManager.getLogging().debug("Tried inserting inventory '" + inventory + "'");
+                OdinManager.getLogging().stackTrace(e);
+            }
+            data.clear();
+        }
+    }
+
+    public String getArmor(String username) {
+        return getDataManager().getStringField(Table.INVENTORY.getName(), "ARMOR", Table.INVENTORY.getPrimary() + "='" + username + "'");
+    }
+
+    public void setArmor(String username, String armor) {
+        if (userExists(Table.INVENTORY, username)) {
+            try {
+                getDataManager().updateField(Table.INVENTORY.getName(), "ARMOR", armor, Table.INVENTORY.getPrimary() + "='" + username + "'");
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed updating armor for username '" + username + "'.");
+                OdinManager.getLogging().debug("Tried updating armor '" + armor + "'");
+                OdinManager.getLogging().stackTrace(e);
+            }
+        } else {
+            Map<String, Object> data = new HashMap<String, Object>();
+            data.put(Table.INVENTORY.getPrimary(), username);
+            data.put("ARMOR", armor);
+            try {
+                getDataManager().insertFields(data, Table.INFORMATION.getName());
+            } catch (SQLException e) {
+                OdinManager.getLogging().error("Failed inserting armor for username '" + username + "'.");
+                OdinManager.getLogging().debug("Tried inserting armor '" + armor + "'");
+                OdinManager.getLogging().stackTrace(e);
+            }
+            data.clear();
+        }
+    }
+
     private void checkInventoryDatabase() {
         if (!getDataManager().tableExist(Table.INVENTORY.getName())) {
             try {
                 getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.INVENTORY.getName() + "(" +
                                               "ID INT PRIMARY KEY, " +
                                               "PLAYERNAME VARCHAR(50), " +
-                                              "INVENTORY TEXT," +
+                                              "INVENTORY TEXT, " +
                                               "ARMOR TEXT)");
             } catch (SQLException e) {
                 OdinManager.getLogging().error("Failed while creating " + Table.INVENTORY.getName() + " table for H2 database.");

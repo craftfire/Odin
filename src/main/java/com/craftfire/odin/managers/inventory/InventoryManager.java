@@ -58,9 +58,17 @@ public class InventoryManager {
         setInventory(user.getUsername(), inventory);
     }
 
+    public void setInventory(OdinUser user, String inventory) {
+        setInventory(user.getUsername(), inventory);
+    }
+
+    public void setInventory(String username, String inventory) {
+        setInventory(username, itemStringToArray(inventory));
+    }
+
     public void setInventory(String username, InventoryItem[] inventory) {
-        this.inventories.put(username, inventory);
-        OdinManager.getStorage(); //TODO
+        getInventories().put(username, inventory);
+        OdinManager.getStorage().setInventory(username, itemArrayToString(inventory));
     }
 
     public InventoryItem[] getInventory(OdinUser user) {
@@ -69,11 +77,15 @@ public class InventoryManager {
 
     public InventoryItem[] getInventory(String username) {
         if (hasInventory(username)) {
-            return this.inventories.get(username);
-        } else {
-            //TODO: OdinManager.getStorage().getString(StorageManager.Table.INVENTORY);
+            return getInventories().get(username);
         }
-        return null;
+        InventoryItem[] items = itemStringToArray(OdinManager.getStorage().getInventory(username));
+        if (items != null) {
+            getInventories().put(username, items);
+            return items;
+        } else {
+            return null;
+        }
     }
 
     public String getInventoryString(OdinUser user) {
@@ -81,10 +93,7 @@ public class InventoryManager {
     }
 
     public String getInventoryString(String username) {
-        if (hasInventory(username)) {
-            return itemArrayToString(getInventory(username));
-        }
-        return null;
+        return itemArrayToString(getInventory(username));
     }
 
     public boolean hasInventory(OdinUser user) {
@@ -92,15 +101,24 @@ public class InventoryManager {
     }
 
     public boolean hasInventory(String username) {
-        return this.inventories.containsKey(username);
+        return getInventories().containsKey(username);
     }
 
     public void setArmor(OdinUser user, InventoryItem[] armor) {
         setArmor(user.getUsername(), armor);
     }
 
+    public void setArmor(OdinUser user, String armor) {
+        setArmor(user.getUsername(), armor);
+    }
+
+    public void setArmor(String username, String armor) {
+        setArmor(username, itemStringToArray(armor));
+    }
+
     public void setArmor(String username, InventoryItem[] armor) {
-        this.armor.put(username, armor);
+        getArmor().put(username, armor);
+        OdinManager.getStorage().setArmor(username, itemArrayToString(armor));
     }
 
     public InventoryItem[] getArmor(OdinUser user) {
@@ -109,20 +127,23 @@ public class InventoryManager {
 
     public InventoryItem[] getArmor(String username) {
         if (hasArmor(username)) {
-            return this.armor.get(username);
+            return getArmor().get(username);
         }
-        return null;
+        InventoryItem[] items = itemStringToArray(OdinManager.getStorage().getArmor(username));
+        if (items != null) {
+            getArmor().put(username, items);
+            return items;
+        } else {
+            return null;
+        }
     }
 
     public String getArmorString(OdinUser user) {
-        return getInventoryString(user.getUsername());
+        return getArmorString(user.getUsername());
     }
 
     public String getArmorString(String username) {
-        if (hasArmor(username)) {
-            return itemArrayToString(getArmor(username));
-        }
-        return null;
+        return itemArrayToString(getArmor(username));
     }
 
     public boolean hasArmor(OdinUser user) {
@@ -130,10 +151,10 @@ public class InventoryManager {
     }
 
     public boolean hasArmor(String username) {
-        return this.armor.containsKey(username);
+        return getArmor().containsKey(username);
     }
 
-    private String itemArrayToString(InventoryItem[] items) {
+    public static String itemArrayToString(InventoryItem[] items) {
         //TODO: Add a check to see if it's a real set?
         StringBuilder itemsString = new StringBuilder();
         for (InventoryItem item : items) {
@@ -149,7 +170,7 @@ public class InventoryManager {
         return itemsString.toString();
     }
 
-    private InventoryItem[] itemStringToArray(String items) {
+    public static InventoryItem[] itemStringToArray(String items) {
         //TODO: Add a check to see if it's real? Also go through and make sure it works.
         if (items != null && ! items.isEmpty()) {
             String[] inv = items.split(",");
@@ -172,6 +193,6 @@ public class InventoryManager {
             }
             return inventory;
         }
-        return null;
+        return new InventoryItem[0];
     }
 }
