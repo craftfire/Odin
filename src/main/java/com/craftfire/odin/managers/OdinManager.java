@@ -173,6 +173,7 @@ public class OdinManager {
                                                          getConfig().getString("database.username"),
                                                          getConfig().getString("database.password"));
         storageDataManager.setLoggingManager(getLogging());
+        storageDataManager.setKeepAlive(true);
         storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
 
