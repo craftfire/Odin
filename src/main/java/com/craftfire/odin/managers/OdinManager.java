@@ -180,6 +180,7 @@ public class OdinManager {
         getLogging().debug("Storage data manager has been loaded.");
         try {
             bifrost = new Bifrost();
+            getBifrost().getLoggingManager().setDebug(getConfig().getBoolean("plugin.debugmode"));
             getScriptAPI().addHandle(Scripts.stringToScript(getConfig().getString("script.name")),
                                                             getConfig().getString("script.version"),
                                                             scriptDataManager);
