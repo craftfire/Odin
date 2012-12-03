@@ -234,12 +234,11 @@ public class OdinManager {
     }
 
     protected static void submitStats() {
-        try {
-            AnalyticsManager analyticsManager = new AnalyticsManager("http://stats.craftfire.com",
-                                                                     OdinManager.getPluginName(),
-                                                                     OdinManager.getPluginVersion());
-            analyticsManager.setLoggingManager(OdinManager.getLogging());
-            getLogging().info(analyticsManager.getParameters());
-        } catch (MalformedURLException ignore) {}
+        AnalyticsManager analyticsManager = new AnalyticsManager("http://stats.craftfire.com",
+                                                                 OdinManager.getPluginName(),
+                                                                 OdinManager.getPluginVersion());
+        analyticsManager.setLoggingManager(OdinManager.getLogging());
+        //TODO: analyticsManager.submitVoid();
+        //getLogging().info(analyticsManager.getParameters());
     }
 }
