@@ -23,6 +23,7 @@ import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.odin.managers.inventory.InventoryItem;
+import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.managers.inventory.ItemEnchantment;
 import com.craftfire.odin.util.MainUtils;
 import com.craftfire.commons.CraftCommons;
@@ -240,41 +241,41 @@ public class OdinUser {
     }
     
     public long getJoinTime() {
-        if (OdinManager.getPlayerJoins().containsKey(this.username)) {
-            return OdinManager.getPlayerJoins().get(this.username);
+        if (OdinManager.getPlayerJoins().containsKey(getUsername())) {
+            return OdinManager.getPlayerJoins().get(getUsername());
         }
         return 0;
     }
     
     public void setJoinTime() {
-        OdinManager.getPlayerJoins().put(this.username, System.currentTimeMillis());
+        OdinManager.getPlayerJoins().put(getUsername(), System.currentTimeMillis());
     }
 
     public void setJoinTime(long time) {
-        OdinManager.getPlayerJoins().put(this.username, time);
+        OdinManager.getPlayerJoins().put(getUsername(), time);
     }
     
     public int getPasswordAttempts() {
-        if (OdinManager.getUserPasswordAttempts().containsKey(this.username)) {
-            return OdinManager.getUserPasswordAttempts().get(this.username);
+        if (OdinManager.getUserPasswordAttempts().containsKey(getUsername())) {
+            return OdinManager.getUserPasswordAttempts().get(getUsername());
         }
         return 0;
     }
 
     public void setPasswordAttempts(int attempts) {
-        OdinManager.getUserPasswordAttempts().put(this.username, attempts);
+        OdinManager.getUserPasswordAttempts().put(getUsername(), attempts);
     }
 
     public void clearPasswordAttempts() {
-        OdinManager.getUserPasswordAttempts().put(this.username, 0);
+        OdinManager.getUserPasswordAttempts().put(getUsername(), 0);
     }
 
     public void increasePasswordAttempts() {
-        if (OdinManager.getUserPasswordAttempts().containsKey(this.username)) {
-            OdinManager.getUserPasswordAttempts().put(this.username,
-                                                   OdinManager.getUserPasswordAttempts().get(this.username) + 1);
+        if (OdinManager.getUserPasswordAttempts().containsKey(getUsername())) {
+            OdinManager.getUserPasswordAttempts().put(getUsername(),
+                                                   OdinManager.getUserPasswordAttempts().get(getUsername()) + 1);
         } else {
-            OdinManager.getUserPasswordAttempts().put(this.username, 1);
+            OdinManager.getUserPasswordAttempts().put(getUsername(), 1);
         }
     }
     
@@ -283,14 +284,15 @@ public class OdinUser {
     }
     
     public boolean isFilterWhitelisted() {
-        return OdinManager.getConfig().getString("filter.whitelist").contains(this.username);
+        return OdinManager.getConfig().getString("filter.whitelist").contains(getUsername());
     }
 
     public void setTimeout() {
-        OdinManager.getUserTimeouts().add(this.username);
+        OdinManager.getUserTimeouts().add(getUsername());
     }
 
     public void storeInventory(InventoryItem[] inventory, InventoryItem[] armor) {
-        //todo
+        OdinManager.getInventories().setInventory(getUsername(), inventory);
+        OdinManager.getInventories().setArmor(getUsername(), armor);
     }
 }

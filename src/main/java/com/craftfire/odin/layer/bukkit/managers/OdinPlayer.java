@@ -134,14 +134,21 @@ public class OdinPlayer extends OdinUser {
 
     public boolean callEventResults(Event event, String message) {
         switch (event) {
-            case KICK:      return Events.kick(this, message);
-            case LINK:      return Events.link(this, getLinkedName());
-            case LOGIN:     return Events.login(this);
-            case LOGOUT:    return Events.logout(this, false);
-            case UNLINK:    return Events.unlink(this);
-            case QUIT:      Events.quit(this);
-                            return true;
-            case MESSAGE:   return Events.message(this, message);
+            case KICK:
+                return Events.kick(this, message);
+            case LINK:
+                return Events.link(this, getLinkedName());
+            case LOGIN:
+                return Events.login(this);
+            case LOGOUT:
+                return Events.logout(this, false);
+            case UNLINK:
+                return Events.unlink(this);
+            case QUIT:
+                Events.quit(this);
+                return true;
+            case MESSAGE:
+                return Events.message(this, message);
         }
         return false;
     }
@@ -152,20 +159,27 @@ public class OdinPlayer extends OdinUser {
 
     public void callEvent(Event event, String message) {
         switch (event) {
-            case KICK:      Events.kick(this, message);
-                            break;
-            case LINK:      Events.link(this, getLinkedName());
-                            break;
-            case LOGIN:     Events.login(this);
-                            break;
-            case LOGOUT:    Events.logout(this, false);
-                            break;
-            case UNLINK:    Events.unlink(this);
-                            break;
-            case QUIT:      Events.quit(this);
-                            break;
-            case MESSAGE:   Events.message(this, message);
-                            break;
+            case KICK:
+                Events.kick(this, message);
+                break;
+            case LINK:
+                Events.link(this, getLinkedName());
+                break;
+            case LOGIN:
+                Events.login(this);
+                break;
+            case LOGOUT:
+                Events.logout(this, false);
+                break;
+            case UNLINK:
+                Events.unlink(this);
+                break;
+            case QUIT:
+                Events.quit(this);
+                break;
+            case MESSAGE:
+                Events.message(this, message);
+                break;
         }
     }
 
