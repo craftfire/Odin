@@ -78,6 +78,12 @@ public class Odin extends JavaPlugin {
         }
     }
 
+    @Override
+    public void onDisable() {
+        OdinManager.disable();
+        Bukkit.getServer().getPluginManager().callEvent(new OdinDisableEvent());
+    }
+
     private boolean loadLibraries() {
         if (!OdinManager.loadLibraries(getDataFolder())) {
             return false;
@@ -94,11 +100,6 @@ public class Odin extends JavaPlugin {
             }
         }
         return false;
-    }
-
-    @Override
-    public void onDisable() {
-        Bukkit.getServer().getPluginManager().callEvent(new OdinDisableEvent());
     }
 
     @Override
