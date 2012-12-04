@@ -149,30 +149,37 @@ public class OdinManager {
     }
 
     public static void clean() {
-        userSessions.clear();
-        userAuthenticated.clear();
-        userStorage.clear();
-        userTimeouts.clear();
-        userPasswordAttempts.clear();
+        getUserSessions().clear();
+        getAuthenticatedUsers().clear();
+        getUserSessions().clear();
+        getUserTimeouts().clear();
+        getUserPasswordAttempts().clear();
         getInventories().clear();
-        playerJoin.clear();
+        getPlayerJoins().clear();
+    }
+
+    public static void disable() {
+        getStorage().getDataManager().close(true);
+        getScript().getDataManager().close(true);
+        clean();
     }
 
     public static boolean loadDatabases(File directory) {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
                                                         getConfig().getString("database.username"),
                                                         getConfig().getString("database.password"));
+        scriptDataManager.getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
         scriptDataManager.setHost(getConfig().getString("database.host"));
         scriptDataManager.setPort(getConfig().getInt("database.port"));
         scriptDataManager.setDatabase(getConfig().getString("database.name"));
         scriptDataManager.setPrefix(getConfig().getString("script.tableprefix"));
         scriptDataManager.setTimeout(getConfig().getInt("database.timeout"));
         scriptDataManager.setKeepAlive(getConfig().getBoolean("database.keepalive"));
-        scriptDataManager.getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
         DataManager storageDataManager = new DataManager(DataType.H2,
-                                                         getConfig().getString("database.username"),
-                                                         getConfig().getString("database.password"));
+                                                         "odin",
+                                                         "odin");
         storageDataManager.setLoggingManager(getLogging());
+        //TODO storageDataManager.getLogging().setPrefix("[Odin] [Storage]");
         storageDataManager.setKeepAlive(true);
         storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
