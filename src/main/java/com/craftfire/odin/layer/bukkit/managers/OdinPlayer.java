@@ -114,8 +114,10 @@ public class OdinPlayer extends OdinUser {
     public void sendMessage(String node, PlayerLoginEvent event) {
         //TODO: Call event?
         if (isNode(node)) {
+            OdinManager.getLogging().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().getMessage(node, this) + "'");
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().getMessage(node, this));
         } else {
+            OdinManager.getLogging().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().replace(node, this) + "'");
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().replace(node, this));
         }
     }
@@ -203,7 +205,7 @@ public class OdinPlayer extends OdinUser {
     }
     
     private boolean isNode(String string) {
-        for (int i=0; i < string.length(); i++) {
+        for (int i = 0; i < string.length(); i++) {
             if (Character.isWhitespace(string.charAt(i))) {
                 return false;
             }
