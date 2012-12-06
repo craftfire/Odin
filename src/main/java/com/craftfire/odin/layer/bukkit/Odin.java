@@ -71,8 +71,13 @@ public class Odin extends JavaPlugin {
         setupEconomy();
         OdinManager.init(getDataFolder(), getDescription().getVersion());
         if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
-            OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
-            Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
+            if (OdinManager.getDataManager().hasConnection()) {
+                OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
+                Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
+            } else {
+                OdinManager.getLogging().error("Odin " + getDescription().getVersion() + " could not be enabled due to an issue with the MySQL connection.");
+                Bukkit.getPluginManager().disablePlugin(this);
+            }
         } else {
             OdinManager.getLogging().error("Failed loading Odin databases, check log for more information.");
         }
