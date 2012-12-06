@@ -207,17 +207,18 @@ public class OdinManager {
             util.defaultFile(directory.toString() + File.separator + "config", "config", "basic.yml");
             util.defaultFile(directory.toString() + File.separator + "config", "config", "advanced.yml");
             getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "basic.yml")),
-                    new YamlManager("files" + File.separator + "config" + File.separator + "basic.yml"));
+                             new YamlManager("files" + File.separator + "config" + File.separator + "basic.yml"));
             getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "advanced.yml")),
                              new YamlManager("files" + File.separator + "config" + File.separator + "advanced.yml"));
-            loggingHandler.setDirectory(directory + File.separator + "logs" + File.separator);
-            loggingHandler.setFormat(getConfig().getString("plugin.logformat"));
-            loggingHandler.setDebug(getConfig().getBoolean("plugin.debugmode"));
-            loggingHandler.setLogging(getConfig().getBoolean("plugin.logging"));
+            getLogging().setDirectory(directory + File.separator + "logs" + File.separator);
+            getLogging().setFormat(getConfig().getString("plugin.logformat"));
+            getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
+            getLogging().setLogging(getConfig().getBoolean("plugin.logging"));
+
             util.loadLanguage(directory.toString() + File.separator + "translations" + File.separator, "commands");
             util.loadLanguage(directory.toString() + File.separator + "translations" + File.separator, "messages");
         } catch (IOException e) {
-            loggingHandler.stackTrace(e);
+            getLogging().stackTrace(e);
         }
     }
 

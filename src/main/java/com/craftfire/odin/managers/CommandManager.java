@@ -24,11 +24,12 @@ import com.craftfire.commons.YamlManager;
 import java.util.Map;
 
 public class CommandManager {
-    private YamlManager config = null;
-    private YamlManager defaults = null;
+    private YamlManager config = new YamlManager();
+    private YamlManager defaults = new YamlManager();
 
-    public boolean isInitialized() {
-        return this.config != null && this.defaults != null;
+    public CommandManager() {
+        getConfig().setLoggingManager(OdinManager.getLogging());
+        getDefaults().setLoggingManager(OdinManager.getLogging());
     }
 
     public String getCommand(String node) {
@@ -55,8 +56,16 @@ public class CommandManager {
         return this.config.getNodes();
     }
 
-    public Map<String, Object> getDefaults() {
+    public Map<String, Object> getDefaultNodes() {
         return this.defaults.getNodes();
+    }
+
+    public YamlManager getConfig() {
+        return this.config;
+    }
+
+    public YamlManager getDefaults() {
+        return this.defaults;
     }
     
     public boolean equals(String command, String node) {

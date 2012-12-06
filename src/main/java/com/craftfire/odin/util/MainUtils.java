@@ -106,7 +106,7 @@ public class MainUtils {
                     if (directory.startsWith("files/translations/") && ! directory.endsWith(".yml"))  {
                         directory = directory.replace("files/translations/", "");
                         directory = directory.replace("/", "");
-                        if (! directory.equals("")) {
+                        if (!directory.equals("")) {
                             OdinManager.getLogging().debug("Directory: " + directory);
                             File f = new File(dir + "/" + directory + "/" + type + ".yml");
                             if (! f.exists()) {
@@ -167,11 +167,11 @@ public class MainUtils {
                                       OdinManager.getConfig().getString("plugin.language.messages"));
         }
         if (type.equalsIgnoreCase("commands")) {
-            OdinManager.getCommands().load(new YamlManager(new File(dir + language + "/", type + ".yml")),
-                                    new YamlManager(("files/translations/advanced.yml")));
+            OdinManager.getCommands().getConfig().load(new File(dir + language + "/", type + ".yml"));
+            OdinManager.getCommands().getDefaults().load("files/translations/English/" + type + ".yml");
         } else if (type.equalsIgnoreCase("messages")) {
-            OdinManager.getMessages().load(new YamlManager(new File(dir + language + "/", type + ".yml")),
-                                    new YamlManager("files/translations/advanced.yml"));
+            OdinManager.getMessages().getMessages().load(new File(dir + language + "/", type + ".yml"));
+            OdinManager.getMessages().getDefaults().load("files/translations/English/" + type + ".yml");
         }
     }
 
