@@ -35,18 +35,30 @@ public class MessageManager {
     }
 
     public String getMessage(String node, OdinUser user) {
-        if (exist(node.toLowerCase())) {
-            return replace(this.messages.getString(node), user);
-        } else if (existDefault(node.toLowerCase())) {
-            return replace(this.defaults.getString(node), user);
+        OdinManager.getLogging().debug("Getting message from node: '" + node + "'.");
+        if (exist(node)) {
+            String message = replace(this.messages.getString(node), user);
+            OdinManager.getLogging().debug("Found message for node '" + node + "'");
+            OdinManager.getLogging().debug("Raw message (" + node + "): '" + this.messages.getString(node) + "'.");
+            OdinManager.getLogging().debug("Formatted message (" + node + "): '" + message + "'.");
+            return message;
+        } else if (existDefault(node)) {
+            String message = replace(this.defaults.getString(node), user);
+            OdinManager.getLogging().debug("Could not find message for node '" + node + "', using default instead.");
+            OdinManager.getLogging().debug("Raw message (" + node + "): '" + this.defaults.getString(node) + "'.");
+            OdinManager.getLogging().debug("Formatted message (" + node + "): '" + message + "'.");
+            return message;
         }
+        OdinManager.getLogging().error("Could not find a message for node '" + node + "', returning null.");
+        OdinManager.getLogging().debug("Custom messages size: " + this.messages.getNodes().size());
+        OdinManager.getLogging().debug("Default messages size: " + this.defaults.getNodes().size());
         return null;
     }
 
     public String getString(String node) {
         if (exist(node)) {
             return this.messages.getString(node);
-        } else if (existDefault(node.toLowerCase())) {
+        } else if (existDefault(node)) {
             return this.defaults.getString(node);
         }
         return null;
