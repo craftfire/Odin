@@ -38,7 +38,7 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
-        if (!OdinManager.getDataManager().isConnected()) {
+        if (!OdinManager.getDataManager().hasConnection() ) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
                     "You cannot join when the server has no database connection.");
             return;
@@ -47,6 +47,8 @@ public class OdinPlayerListener implements Listener {
         if (OdinManager.getConfig().getBoolean("session.protect") && player.hasSession()) {
             player.sendMessage("session.protected", event);
             return;
+        } else {
+            player.sync();
         }
 
         if (OdinManager.getConfig().getBoolean("join.restrict") && !player.isRegistered()) {
@@ -113,12 +115,14 @@ public class OdinPlayerListener implements Listener {
                 OdinManager.getLogging().debug("Register timeout time is: " + time + " ticks.");
             }
             if (time > 0) {
-                Odin.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Odin.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        player.checkTimeout();
+                Odin.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Odin.getInstance(),
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            player.checkTimeout();
+                        }
                     }
-                }, time);
+                , time);
                 player.setTimeout();
                 OdinManager.getLogging().debug("Added timeout for " + player.getName() + ".");
             }
@@ -126,8 +130,8 @@ public class OdinPlayerListener implements Listener {
 
         if (OdinManager.getConfig().getBoolean("customdb.enabled") &&
                 OdinManager.getConfig().getString("customdb.encryption").isEmpty()) {
-            player.sendMessage("§4YOUR PASSWORD WILL NOT BE ENCRYPTED," +
-                               "PLEASE BE ADWARE THAT THIS SERVER STORES THE PASSWORDS IN PLAINTEXT.");
+            player.sendMessage("YOUR PASSWORD WILL NOT BE ENCRYPTED, " +
+                               "PLEASE BE AWARE THAT THIS SERVER STORES THE PASSWORDS IN PLAINTEXT.");
         }
 
         if (OdinManager.getConfig().getBoolean("session.enabled") /* TODO: Reload time*/) {
