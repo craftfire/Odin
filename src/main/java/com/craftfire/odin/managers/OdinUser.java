@@ -50,16 +50,21 @@ public class OdinUser {
         this.badcharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
         if (OdinManager.getUserStorage().containsKey(this.username)) {
             /* TODO */
-            OdinUser temp = OdinManager.getUserStorage().get(this.username);
-            this.username = temp.getUsername();
-            this.user = temp.getUser();
-            this.status = temp.getStatus();
-            this.ip = temp.getIP();
+            OdinUser user = OdinManager.getUserStorage().get(this.username);
+            this.username = user.getUsername();
+            this.user = user.getUser();
+            this.status = user.getStatus();
+            this.ip = user.getIP();
         }
     }
 
     public void save() {
         OdinManager.getUserStorage().put(this.username, this);
+    }
+
+    public void sync() {
+        OdinManager.getLogging().debug("Running sync for username '" + this.username + "'.");
+        //TODO
     }
     
     public String getUsername() {
