@@ -72,14 +72,14 @@ public class Odin extends JavaPlugin {
         OdinManager.init(getDataFolder(), getDescription().getVersion());
         if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
             if (OdinManager.getDataManager().hasConnection()) {
-                OdinManager.getLogging().info("Odin " + getDescription().getVersion() + " enabled.");
+                OdinManager.getLogger().info("Odin " + getDescription().getVersion() + " enabled.");
                 Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
             } else {
-                OdinManager.getLogging().error("Odin " + getDescription().getVersion() + " could not be enabled due to an issue with the MySQL connection.");
+                OdinManager.getLogger().error("Odin " + getDescription().getVersion() + " could not be enabled due to an issue with the MySQL connection.");
                 Bukkit.getPluginManager().disablePlugin(this);
             }
         } else {
-            OdinManager.getLogging().error("Failed loading Odin databases, check log for more information.");
+            OdinManager.getLogger().error("Failed loading Odin databases, check log for more information.");
         }
     }
 
@@ -94,13 +94,13 @@ public class Odin extends JavaPlugin {
             return false;
         }
         File h2Driver = new File(getDataFolder() + File.separator + "lib" + File.separator + "h2.jar");
-        OdinManager.getLogging().debug("Trying to load library driver: " + getDataFolder() + File.separator + "lib" + File.separator + "h2.jar");
+        OdinManager.getLogger().debug("Trying to load library driver: " + getDataFolder() + File.separator + "lib" + File.separator + "h2.jar");
         if (!CraftCommons.hasClass("org.h2.Driver") && h2Driver.exists()) {
             try {
                 ((PluginClassLoader) getInstance().getClassLoader()).addURL(h2Driver.toURI().toURL());
                 return true;
             } catch (MalformedURLException e) {
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().stackTrace(e);
                 return false;
             }
         }

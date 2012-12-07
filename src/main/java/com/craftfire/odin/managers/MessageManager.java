@@ -29,28 +29,28 @@ public class MessageManager {
     private YamlManager defaults = new YamlManager();
 
     public MessageManager() {
-        getMessages().setLoggingManager(OdinManager.getLogging());
-        getDefaults().setLoggingManager(OdinManager.getLogging());
+        getMessages().setLoggingManager(OdinManager.getLogger());
+        getDefaults().setLoggingManager(OdinManager.getLogger());
     }
 
     public String getMessage(String node, OdinUser user) {
-        OdinManager.getLogging().debug("Getting message from node: '" + node + "'.");
+        OdinManager.getLogger().debug("Getting message from node: '" + node + "'.");
         if (exist(node)) {
             String message = replace(this.messages.getString(node), user);
-            OdinManager.getLogging().debug("Found message for node '" + node + "'");
-            OdinManager.getLogging().debug("Raw message (" + node + "): '" + this.messages.getString(node) + "'.");
-            OdinManager.getLogging().debug("Formatted message (" + node + "): '" + message + "'.");
+            OdinManager.getLogger().debug("Found message for node '" + node + "'");
+            OdinManager.getLogger().debug("Raw message (" + node + "): '" + this.messages.getString(node) + "'.");
+            OdinManager.getLogger().debug("Formatted message (" + node + "): '" + message + "'.");
             return message;
         } else if (existDefault(node)) {
             String message = replace(this.defaults.getString(node), user);
-            OdinManager.getLogging().debug("Could not find message for node '" + node + "', using default instead.");
-            OdinManager.getLogging().debug("Raw message (" + node + "): '" + this.defaults.getString(node) + "'.");
-            OdinManager.getLogging().debug("Formatted message (" + node + "): '" + message + "'.");
+            OdinManager.getLogger().debug("Could not find message for node '" + node + "', using default instead.");
+            OdinManager.getLogger().debug("Raw message (" + node + "): '" + this.defaults.getString(node) + "'.");
+            OdinManager.getLogger().debug("Formatted message (" + node + "): '" + message + "'.");
             return message;
         }
-        OdinManager.getLogging().error("Could not find a message for node '" + node + "', returning null.");
-        OdinManager.getLogging().debug("Custom messages size: " + this.messages.getNodes().size());
-        OdinManager.getLogging().debug("Default messages size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().error("Could not find a message for node '" + node + "', returning null.");
+        OdinManager.getLogger().debug("Custom messages size: " + this.messages.getNodes().size());
+        OdinManager.getLogger().debug("Default messages size: " + this.defaults.getNodes().size());
         return null;
     }
 

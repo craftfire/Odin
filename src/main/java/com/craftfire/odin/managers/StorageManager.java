@@ -115,9 +115,9 @@ public class StorageManager {
             try {
                 getDataManager().updateField(Table.INVENTORY.getName(), "INVENTORY", inventory, Table.INVENTORY.getPrimary() + "='" + username + "'");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed updating inventory for username '" + username + "'.");
-                OdinManager.getLogging().debug("Tried updating inventory '" + inventory + "'");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed updating inventory for username '" + username + "'.");
+                OdinManager.getLogger().debug("Tried updating inventory '" + inventory + "'");
+                OdinManager.getLogger().stackTrace(e);
             }
         } else {
             Map<String, Object> data = new HashMap<String, Object>();
@@ -126,9 +126,9 @@ public class StorageManager {
             try {
                 getDataManager().insertFields(data, Table.INFORMATION.getName());
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed inserting inventory for username '" + username + "'.");
-                OdinManager.getLogging().debug("Tried inserting inventory '" + inventory + "'");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed inserting inventory for username '" + username + "'.");
+                OdinManager.getLogger().debug("Tried inserting inventory '" + inventory + "'");
+                OdinManager.getLogger().stackTrace(e);
             }
             data.clear();
         }
@@ -143,9 +143,9 @@ public class StorageManager {
             try {
                 getDataManager().updateField(Table.INVENTORY.getName(), "ARMOR", armor, Table.INVENTORY.getPrimary() + "='" + username + "'");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed updating armor for username '" + username + "'.");
-                OdinManager.getLogging().debug("Tried updating armor '" + armor + "'");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed updating armor for username '" + username + "'.");
+                OdinManager.getLogger().debug("Tried updating armor '" + armor + "'");
+                OdinManager.getLogger().stackTrace(e);
             }
         } else {
             Map<String, Object> data = new HashMap<String, Object>();
@@ -154,9 +154,9 @@ public class StorageManager {
             try {
                 getDataManager().insertFields(data, Table.INFORMATION.getName());
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed inserting armor for username '" + username + "'.");
-                OdinManager.getLogging().debug("Tried inserting armor '" + armor + "'");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed inserting armor for username '" + username + "'.");
+                OdinManager.getLogger().debug("Tried inserting armor '" + armor + "'");
+                OdinManager.getLogger().stackTrace(e);
             }
             data.clear();
         }
@@ -171,11 +171,11 @@ public class StorageManager {
                                               "INVENTORY TEXT, " +
                                               "ARMOR TEXT)");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed creating " + Table.INVENTORY.getName() + " table for H2 database.");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed creating " + Table.INVENTORY.getName() + " table for H2 database.");
+                OdinManager.getLogger().stackTrace(e);
                 return;
             }
-            OdinManager.getLogging().debug("Successfully created " + Table.INVENTORY.getName() + " table for H2 database.");
+            OdinManager.getLogger().debug("Successfully created " + Table.INVENTORY.getName() + " table for H2 database.");
         }
         if (!getDataManager().tableExist(Table.INFORMATION.getName())) {
             try {
@@ -183,21 +183,21 @@ public class StorageManager {
                                               "INFO VARCHAR(50), " +
                                               "DATA VARCHAR(100))");
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed creating " + Table.INFORMATION.getName() + " table for H2 database.");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed creating " + Table.INFORMATION.getName() + " table for H2 database.");
+                OdinManager.getLogger().stackTrace(e);
                 return;
             }
-            OdinManager.getLogging().debug("Successfully created " + Table.INFORMATION.getName() + " table for H2 database.");
+            OdinManager.getLogger().debug("Successfully created " + Table.INFORMATION.getName() + " table for H2 database.");
             try {
                 setInfo("version", getVersion());
                 setInfo("installed", System.currentTimeMillis() / 1000);
                 setInfo("updated", 0);
             } catch (SQLException e) {
-                OdinManager.getLogging().error("Failed inserting into the " + Table.INFORMATION.getName() + " table.");
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().error("Failed inserting into the " + Table.INFORMATION.getName() + " table.");
+                OdinManager.getLogger().stackTrace(e);
                 return;
             }
-            OdinManager.getLogging().debug("Successfully inserted data into the " + Table.INFORMATION.getName() + " table.");
+            OdinManager.getLogger().debug("Successfully inserted data into the " + Table.INFORMATION.getName() + " table.");
         } else {
             String version = getStoredVersion();
             if (version == null || !version.equalsIgnoreCase(getVersion())) {
@@ -205,12 +205,12 @@ public class StorageManager {
                     setInfo("version", getVersion());
                     setInfo("updated", System.currentTimeMillis() / 1000);
                 } catch (SQLException e) {
-                    OdinManager.getLogging().debug("Failed while updating the version of the StorageDatabase (" + version +
+                    OdinManager.getLogger().debug("Failed while updating the version of the StorageDatabase (" + version +
                                                    " -> " + getVersion() + ".");
-                    OdinManager.getLogging().stackTrace(e);
+                    OdinManager.getLogger().stackTrace(e);
                     return;
                 }
-                OdinManager.getLogging().debug("Successfully updated the version of the StorageDatabase (" + version +
+                OdinManager.getLogger().debug("Successfully updated the version of the StorageDatabase (" + version +
                                                " -> " + getVersion() + ".");
             }
         }

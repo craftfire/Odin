@@ -114,10 +114,10 @@ public class OdinPlayer extends OdinUser {
     public void sendMessage(String node, PlayerLoginEvent event) {
         //TODO: Call event?
         if (isNode(node)) {
-            OdinManager.getLogging().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().getMessage(node, this) + "'");
+            OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().getMessage(node, this) + "'");
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().getMessage(node, this));
         } else {
-            OdinManager.getLogging().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().replace(node, this) + "'");
+            OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().replace(node, this) + "'");
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().replace(node, this));
         }
     }

@@ -28,8 +28,8 @@ public class CommandManager {
     private YamlManager defaults = new YamlManager();
 
     public CommandManager() {
-        getConfig().setLoggingManager(OdinManager.getLogging());
-        getDefaults().setLoggingManager(OdinManager.getLogging());
+        getConfig().setLoggingManager(OdinManager.getLogger());
+        getDefaults().setLoggingManager(OdinManager.getLogger());
     }
 
     public String getCommand(String node) {

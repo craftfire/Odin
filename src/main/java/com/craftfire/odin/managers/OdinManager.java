@@ -116,7 +116,10 @@ public class OdinManager {
         return messageManager;
     }
 
-    public static LoggingManager getLogging() {
+    public static LoggingManager getLogger() {
+        if (loggingHandler == null) {
+            loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
+        }
         return loggingHandler;
     }
 
@@ -168,7 +171,7 @@ public class OdinManager {
         DataManager scriptDataManager = new DataManager(DataType.MYSQL,
                                                         getConfig().getString("database.username"),
                                                         getConfig().getString("database.password"));
-        scriptDataManager.getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
+        scriptDataManager.getLogger().setDebug(getConfig().getBoolean("plugin.debugmode"));
         scriptDataManager.setHost(getConfig().getString("database.host"));
         scriptDataManager.setPort(getConfig().getInt("database.port"));
         scriptDataManager.setDatabase(getConfig().getString("database.name"));
@@ -178,22 +181,22 @@ public class OdinManager {
         DataManager storageDataManager = new DataManager(DataType.H2,
                                                          "odin",
                                                          "odin");
-        storageDataManager.setLoggingManager(getLogging());
+        storageDataManager.setLoggingManager(getLogger());
         //TODO storageDataManager.getLogging().setPrefix("[Odin] [Storage]");
         storageDataManager.setKeepAlive(true);
         storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
 
-        getLogging().debug("Storage data manager has been loaded.");
+        getLogger().debug("Storage data manager has been loaded.");
         try {
             bifrost = new Bifrost();
-            getBifrost().getLoggingManager().setDebug(getConfig().getBoolean("plugin.debugmode"));
+            getBifrost().getLogger().setDebug(getConfig().getBoolean("plugin.debugmode"));
             getScriptAPI().addHandle(Scripts.stringToScript(getConfig().getString("script.name")),
                                                             getConfig().getString("script.version"),
                                                             scriptDataManager);
-            getLogging().debug("Bifrost has been loaded.");
+            getLogger().debug("Bifrost has been loaded.");
         } catch (ScriptException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
             return false;
         }
         storageManager = new StorageManager(storageDataManager);
@@ -210,15 +213,15 @@ public class OdinManager {
                              new YamlManager("files" + File.separator + "config" + File.separator + "basic.yml"));
             getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "advanced.yml")),
                              new YamlManager("files" + File.separator + "config" + File.separator + "advanced.yml"));
-            getLogging().setDirectory(directory + File.separator + "logs" + File.separator);
-            getLogging().setFormat(getConfig().getString("plugin.logformat"));
-            getLogging().setDebug(getConfig().getBoolean("plugin.debugmode"));
-            getLogging().setLogging(getConfig().getBoolean("plugin.logging"));
+            getLogger().setDirectory(directory + File.separator + "logs" + File.separator);
+            getLogger().setFormat(getConfig().getString("plugin.logformat"));
+            getLogger().setDebug(getConfig().getBoolean("plugin.debugmode"));
+            getLogger().setLogging(getConfig().getBoolean("plugin.logging"));
 
             util.loadLanguage(directory.toString() + File.separator + "translations" + File.separator, "commands");
             util.loadLanguage(directory.toString() + File.separator + "translations" + File.separator, "messages");
         } catch (IOException e) {
-            getLogging().stackTrace(e);
+            getLogger().stackTrace(e);
         }
     }
 
@@ -246,7 +249,7 @@ public class OdinManager {
         AnalyticsManager analyticsManager = new AnalyticsManager("http://stats.craftfire.com",
                                                                  OdinManager.getPluginName(),
                                                                  OdinManager.getPluginVersion());
-        analyticsManager.setLoggingManager(OdinManager.getLogging());
+        analyticsManager.setLoggingManager(OdinManager.getLogger());
         //TODO: analyticsManager.submitVoid();
         //getLogging().info(analyticsManager.getParameters());
     }

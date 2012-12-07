@@ -58,7 +58,7 @@ public class OdinPlayerListener implements Listener {
 
         if (OdinManager.getConfig().getString("filter.action").equalsIgnoreCase("kick") && player.hasBadCharacters() &&
             !player.isFilterWhitelisted()) {
-            OdinManager.getLogging().debug(player.getUsername() +
+            OdinManager.getLogger().debug(player.getUsername() +
                                            " is not in the filter whitelist and has bad characters in his/her name.");
             player.sendMessage("filter.username", event);
             return;
@@ -92,11 +92,11 @@ public class OdinPlayerListener implements Listener {
         if (OdinManager.getConfig().getBoolean("session.enabled") &&
                 OdinManager.getConfig().getInt("session.length") != 0) {
             if (player.hasSession()) {
-                OdinManager.getLogging().debug("Found session for " + player.getName() + ", timestamp: " +
+                OdinManager.getLogger().debug("Found session for " + player.getName() + ", timestamp: " +
                         player.getSessionTime());
                 long diff = System.currentTimeMillis() / 1000 - player.getSessionTime();
-                OdinManager.getLogging().debug("Difference: " + diff);
-                OdinManager.getLogging().debug("Session in config: " +
+                OdinManager.getLogger().debug("Difference: " + diff);
+                OdinManager.getLogger().debug("Session in config: " +
                                         MainUtils.getTimeUtil(OdinManager.getConfig().getString("session.length")).getSeconds());
                 if (diff < MainUtils.getTimeUtil(OdinManager.getConfig().getString("session.length")).getSeconds()) {
                     allow = true;
@@ -108,11 +108,11 @@ public class OdinPlayerListener implements Listener {
             int time = 0;
             if (MainUtils.getTimeUtil(OdinManager.getConfig().getString("login.timeout")).getTicks() > 0 && player.isRegistered()) {
                 time =  MainUtils.getTimeUtil(OdinManager.getConfig().getString("login.timeout")).getTicks();
-                OdinManager.getLogging().debug("Login timeout time is: " + time + " ticks.");
+                OdinManager.getLogger().debug("Login timeout time is: " + time + " ticks.");
             } else if (MainUtils.getTimeUtil(OdinManager.getConfig().getString("register.timeout")).getTicks() > 0 &&
                        !player.isRegistered()) {
                 time =  MainUtils.getTimeUtil(OdinManager.getConfig().getString("register.timeout")).getTicks();
-                OdinManager.getLogging().debug("Register timeout time is: " + time + " ticks.");
+                OdinManager.getLogger().debug("Register timeout time is: " + time + " ticks.");
             }
             if (time > 0) {
                 Odin.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Odin.getInstance(),
@@ -124,7 +124,7 @@ public class OdinPlayerListener implements Listener {
                     }
                 , time);
                 player.setTimeout();
-                OdinManager.getLogging().debug("Added timeout for " + player.getName() + ".");
+                OdinManager.getLogger().debug("Added timeout for " + player.getName() + ".");
             }
         }
 
@@ -219,7 +219,7 @@ public class OdinPlayerListener implements Listener {
                 } else {
                     //TODO
                 }
-                OdinManager.getLogging().debug(player.getName() + " login ********");
+                OdinManager.getLogger().debug(player.getName() + " login ********");
                 event.setMessage(command + " ******");
                 event.setCancelled(true);
             } else {
@@ -242,7 +242,7 @@ public class OdinPlayerListener implements Listener {
                 } else {
                     player.sendMessage("link.usage");
                 }
-                OdinManager.getLogging().debug(player.getName() + " link ******** ********");
+                OdinManager.getLogger().debug(player.getName() + " link ******** ********");
                 event.setMessage(command + " ****** ********");
                 event.setCancelled(true);
             } else {
@@ -294,7 +294,7 @@ public class OdinPlayerListener implements Listener {
                     } else {
                         player.sendMessage("login.failure");
                     }
-                    OdinManager.getLogging().debug(player.getName() + " login ********");
+                    OdinManager.getLogger().debug(player.getName() + " login ********");
                     event.setMessage(" has logged in!");
                     event.setCancelled(true);
                 }

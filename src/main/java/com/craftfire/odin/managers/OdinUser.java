@@ -63,7 +63,7 @@ public class OdinUser {
     }
 
     public void sync() {
-        OdinManager.getLogging().debug("Running sync for username '" + this.username + "'.");
+        OdinManager.getLogger().debug("Running sync for username '" + this.username + "'.");
         //TODO
     }
     
@@ -83,9 +83,9 @@ public class OdinUser {
         try {
             this.user = OdinManager.getScript().getUser(this.username);
         } catch (ScriptException e) {
-            OdinManager.getLogging().stackTrace(e);
+            OdinManager.getLogger().stackTrace(e);
         } catch (SQLException e) {
-            OdinManager.getLogging().stackTrace(e);
+            OdinManager.getLogger().stackTrace(e);
         }
     }
 
@@ -145,7 +145,7 @@ public class OdinUser {
                 }
             }
         } catch (ScriptException e) {
-            OdinManager.getLogging().stackTrace(e);
+            OdinManager.getLogger().stackTrace(e);
         }
         return false;
     }
@@ -206,7 +206,7 @@ public class OdinUser {
                 return true;
             }
         } catch (ScriptException e) {
-            OdinManager.getLogging().stackTrace(e);
+            OdinManager.getLogger().stackTrace(e);
             return false;
         }
         this.status = Status.Guest;
