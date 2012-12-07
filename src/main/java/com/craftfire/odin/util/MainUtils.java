@@ -44,18 +44,18 @@ public class MainUtils {
             if (downloader.hasMirror()) {
                 downloader.download();
                 if (downloader.wasSuccessful()) {
-                    OdinManager.getLogging().info("Successfully downloaded " + outputFile.getName() + ". Downloaded "
+                    OdinManager.getLogger().info("Successfully downloaded " + outputFile.getName() + ". Downloaded "
                                                  + downloader.getFileSize() + " bytes in "
                                                  + downloader.getElapsedSeconds() + " seconds.");
                     return true;
                 }
             } else {
-                OdinManager.getLogging().error("Could not find a mirror for " + outputFile.getName() + ".");
+                OdinManager.getLogger().error("Could not find a mirror for " + outputFile.getName() + ".");
             }
         } catch (IOException e1) {
-            OdinManager.getLogging().error("Could not download " + outputFile.getName() +
+            OdinManager.getLogger().error("Could not download " + outputFile.getName() +
                                            ", see log for more information.");
-            OdinManager.getLogging().stackTrace(e1);
+            OdinManager.getLogger().stackTrace(e1);
         }
         return false;
     }
@@ -86,7 +86,7 @@ public class MainUtils {
         File allLanguages = new File(dir);
         if(!allLanguages.exists()) {
             if (allLanguages.mkdir()) {
-               OdinManager.getLogging().debug("Sucesfully created directory: " + allLanguages);
+               OdinManager.getLogger().debug("Sucesfully created directory: " + allLanguages);
             }
         }
         boolean set = false;
@@ -107,10 +107,10 @@ public class MainUtils {
                         directory = directory.replace("files/translations/", "");
                         directory = directory.replace("/", "");
                         if (!directory.equals("")) {
-                            OdinManager.getLogging().debug("Directory: " + directory);
+                            OdinManager.getLogger().debug("Directory: " + directory);
                             File f = new File(dir + "/" + directory + "/" + type + ".yml");
                             if (! f.exists()) {
-                                OdinManager.getLogging().debug(type + ".yml" + " could not be found in " + dir + "/" +
+                                OdinManager.getLogger().debug(type + ".yml" + " could not be found in " + dir + "/" +
                                                             directory + "/! Creating " + type + ".yml");
                                 defaultFile(dir + directory + "\\", "translations/" + directory, type + ".yml");
                             }
@@ -128,15 +128,15 @@ public class MainUtils {
                 }
                 zip.close();
             } catch (IOException e) {
-                OdinManager.getLogging().stackTrace(e);
+                OdinManager.getLogger().stackTrace(e);
             }
         }
 
         File[] files = allLanguages.listFiles(fileFilter);
         if (files.length > 0) {
-            OdinManager.getLogging().debug("Found " + files.length + " directories for " + type);
+            OdinManager.getLogger().debug("Found " + files.length + " directories for " + type);
         } else {
-            OdinManager.getLogging().error("Error! Could not find any directories for " + type);
+            OdinManager.getLogger().error("Error! Could not find any directories for " + type);
         }
         if (!set) {
             for (File file : files) {
@@ -152,18 +152,18 @@ public class MainUtils {
             }
         }
         if (!set && type.equalsIgnoreCase("commands")) {
-            OdinManager.getLogging().info(
+            OdinManager.getLogger().info(
                     "Could not find translation files for " +
                             OdinManager.getConfig().getString("plugin.language.commands") + ", defaulting to " + language);
         } else if (!set && type.equalsIgnoreCase("messages")) {
-            OdinManager.getLogging().info(
+            OdinManager.getLogger().info(
                             "Could not find translation files for " +
                             OdinManager.getConfig().getString("plugin.language.messages") + ", defaulting to " + language);
         } else if (type.equalsIgnoreCase("commands")) {
-            OdinManager.getLogging().info(type + " language set to " +
+            OdinManager.getLogger().info(type + " language set to " +
                                       OdinManager.getConfig().getString("plugin.language.commands"));
         } else if (type.equalsIgnoreCase("messages")) {
-            OdinManager.getLogging().info(type + " language set to " +
+            OdinManager.getLogger().info(type + " language set to " +
                                       OdinManager.getConfig().getString("plugin.language.messages"));
         }
         if (type.equalsIgnoreCase("commands")) {
@@ -180,7 +180,7 @@ public class MainUtils {
         File dir = new File(directory, "");
         if (!dir.exists()) {
             if (dir.mkdir()) {
-                OdinManager.getLogging().debug("Sucesfully created directory: " + dir);
+                OdinManager.getLogger().debug("Sucesfully created directory: " + dir);
             }
         }
         if (!actual.exists()) {
@@ -194,9 +194,9 @@ public class MainUtils {
                     while ((length = input.read(buf)) > 0) {
                         output.write(buf, 0, length);
                     }
-                    OdinManager.getLogging().info("Written default setup for " + file);
+                    OdinManager.getLogger().info("Written default setup for " + file);
                 } catch (Exception e) {
-                    OdinManager.getLogging().stackTrace(e);
+                    OdinManager.getLogger().stackTrace(e);
                 } finally {
                     try {
                         input.close();
@@ -204,7 +204,7 @@ public class MainUtils {
                             output.close();
                         }
                     } catch (Exception e) {
-                        OdinManager.getLogging().stackTrace(e);
+                        OdinManager.getLogger().stackTrace(e);
                     }
                 }
             }
