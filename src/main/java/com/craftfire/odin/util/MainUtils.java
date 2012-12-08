@@ -103,16 +103,16 @@ public class MainUtils {
                 ZipEntry ze = null;
                 while ((ze = zip.getNextEntry()) != null) {
                     String directory = ze.getName();
-                    if (directory.startsWith("files/translations/") && ! directory.endsWith(".yml"))  {
-                        directory = directory.replace("files/translations/", "");
-                        directory = directory.replace("/", "");
+                    if (directory.startsWith("files" + File.separator + "translations" + File.separator) && !directory.endsWith(".yml"))  {
+                        directory = directory.replace("files" + File.separator + "translations" + File.separator, "");
+                        directory = directory.replace(File.separator, "");
                         if (!directory.equals("")) {
                             OdinManager.getLogger().debug("Directory: " + directory);
-                            File f = new File(dir + "/" + directory + "/" + type + ".yml");
+                            File f = new File(dir + File.separator + directory + File.separator + type + ".yml");
                             if (! f.exists()) {
-                                OdinManager.getLogger().debug(type + ".yml" + " could not be found in " + dir + "/" +
-                                                            directory + "/! Creating " + type + ".yml");
-                                defaultFile(dir + directory + "\\", "translations/" + directory, type + ".yml");
+                                OdinManager.getLogger().debug(type + ".yml" + " could not be found in " + dir + File.separator +
+                                                            directory + File.separator + "! Creating " + type + ".yml");
+                                defaultFile(dir + directory + File.separator, "translations" + File.separator + directory, type + ".yml");
                             }
                             if (type.equals("commands") &&
                                 OdinManager.getConfig().getString("plugin.language.commands").equalsIgnoreCase(directory)) {
@@ -167,11 +167,13 @@ public class MainUtils {
                                       OdinManager.getConfig().getString("plugin.language.messages"));
         }
         if (type.equalsIgnoreCase("commands")) {
-            OdinManager.getCommands().getConfig().load(new File(dir + language + "/", type + ".yml"));
-            OdinManager.getCommands().getDefaults().load("files/translations/English/" + type + ".yml");
+            OdinManager.getCommands().getCommands().load(new File(dir + language + File.separator, type + ".yml"));
+            OdinManager.getCommands().getDefaults().load("files" + File.separator + "translations" + File.separator +
+                                                         "English" + File.separator + type + ".yml");
         } else if (type.equalsIgnoreCase("messages")) {
-            OdinManager.getMessages().getMessages().load(new File(dir + language + "/", type + ".yml"));
-            OdinManager.getMessages().getDefaults().load("files/translations/English/" + type + ".yml");
+            OdinManager.getMessages().getMessages().load(new File(dir + language + File.separator, type + ".yml"));
+            OdinManager.getMessages().getDefaults().load("files" + File.separator + "translations" + File.separator +
+                                                         "English" + File.separator + type + ".yml");
         }
     }
 
@@ -184,7 +186,7 @@ public class MainUtils {
             }
         }
         if (!actual.exists()) {
-            InputStream input = getClass().getClassLoader().getResourceAsStream("files/" + subdirectory + "/" + file);
+            InputStream input = getClass().getClassLoader().getResourceAsStream("files" + File.separator + subdirectory + File.separator + file);
             if (input != null) {
                 FileOutputStream output = null;
                 try {
