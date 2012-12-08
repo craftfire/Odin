@@ -33,38 +33,70 @@ public class ConfigurationManager {
     }
 
     public boolean getBoolean(String node) {
+        OdinManager.getLogger().debug("Getting Boolean from config node: '" + node + "'.");
         if (exist(node)) {
-            return this.config.getBoolean(node);
+            boolean value = this.config.getBoolean(node);
+            OdinManager.getLogger().debug("Found Boolean config value for node '" + node + "' = '" + value + "'.");
+            return value;
         } else if (existDefault(node)) {
-            return this.defaults.getBoolean(node);
+            boolean value = this.defaults.getBoolean(node);
+            OdinManager.getLogger().debug("Could not find a custom config node '" + node + "', using default Boolean instead = '" + value + "'.");
+            return value;
         }
+        OdinManager.getLogger().error("Could not find config node '" + node + "', returning false.");
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
         return false;
     }
 
     public String getString(String node) {
+        OdinManager.getLogger().debug("Getting String from config node: '" + node + "'.");
         if (exist(node)) {
-            return this.config.getString(node);
+            String value = this.config.getString(node);
+            OdinManager.getLogger().debug("Found String config value for node '" + node + "' = '" + value + "'.");
+            return value;
         } else if (existDefault(node)) {
-            return this.defaults.getString(node);
+            String value = this.defaults.getString(node);
+            OdinManager.getLogger().debug("Could not find a custom config node '" + node + "', using default String instead = '" + value + "'.");
+            return value;
         }
+        OdinManager.getLogger().error("Could not find config node '" + node + "', returning null.");
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
         return null;
     }
 
     public int getInt(String node) {
+        OdinManager.getLogger().debug("Getting Integer from config node: '" + node + "'.");
         if (exist(node)) {
-            return this.config.getInt(node);
+            int value = this.config.getInt(node);
+            OdinManager.getLogger().debug("Found Integer config value for node '" + node + "' = '" + value + "'.");
+            return value;
         } else if (existDefault(node)) {
-            return this.defaults.getInt(node);
+            int value = this.defaults.getInt(node);
+            OdinManager.getLogger().debug("Could not find a custom config node '" + node + "', using default Integer instead = '" + value + "'.");
+            return value;
         }
+        OdinManager.getLogger().error("Could not find config node '" + node + "', returning 0.");
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
         return 0;
     }
 
     public Long getLong(String node) {
+        OdinManager.getLogger().debug("Getting Long from config node: '" + node + "'.");
         if (exist(node)) {
-            return this.config.getLong(node);
+            long value = this.config.getLong(node);
+            OdinManager.getLogger().debug("Found Long config value for node '" + node + "' = '" + value + "'.");
+            return value;
         } else if (existDefault(node)) {
-            return this.defaults.getLong(node);
+            long value = this.defaults.getLong(node);
+            OdinManager.getLogger().debug("Could not find a custom config node '" + node + "', using default Long instead = '" + value + "'.");
+            return value;
         }
+        OdinManager.getLogger().error("Could not find config node '" + node + "', returning null.");
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
         return null;
     }
     
