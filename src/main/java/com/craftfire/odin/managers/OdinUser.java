@@ -232,17 +232,21 @@ public class OdinUser {
     }
 
     public enum Status {
-        Guest,
-        Registered,
-        Authenticated
+        Guest, Registered, Authenticated
     }
 
     public boolean hasMinLength() {
-        return this.username.length() < OdinManager.getConfig().getInt("username.minimum");
+        OdinManager.getLogger().debug("Checking (username.minimum) for '" + this.username + "' length is '" + this.username.length() + "'. " +
+                                      "'" + this.username.length() + "' < '" + OdinManager.getConfig().getInt("username.minimum") + "': " +
+                                      "'" + (this.username.length() < OdinManager.getConfig().getInt("username.minimum")) + "'");
+        return this.username.length() > OdinManager.getConfig().getInt("username.minimum");
     }
 
     public boolean hasMaxLength() {
-        return this.username.length() > OdinManager.getConfig().getInt("username.maximum");
+        OdinManager.getLogger().debug("Checking (username.maximum) for '" + this.username + "' length is '" + this.username.length() + "'. " +
+                                      "'" + this.username.length() + "' > '" + OdinManager.getConfig().getInt("username.maximum") + "': " +
+                                      "'" + (this.username.length() > OdinManager.getConfig().getInt("username.maximum")) + "'");
+        return this.username.length() < OdinManager.getConfig().getInt("username.maximum");
     }
     
     public long getJoinTime() {

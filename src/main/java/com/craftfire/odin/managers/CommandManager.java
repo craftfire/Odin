@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.craftfire.odin.managers;
-import com.craftfire.commons.YamlManager;
+import com.craftfire.commons.yaml.YamlManager;
 
 import java.util.Map;
 

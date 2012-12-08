@@ -21,12 +21,10 @@ package com.craftfire.odin.util;
 
 import com.craftfire.commons.FileDownloader;
 import com.craftfire.commons.TimeUtil;
-import com.craftfire.commons.YamlManager;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Set;
@@ -134,9 +132,9 @@ public class MainUtils {
 
         File[] files = allLanguages.listFiles(fileFilter);
         if (files.length > 0) {
-            OdinManager.getLogger().debug("Found " + files.length + " directories for " + type);
+            OdinManager.getLogger().debug("Found '" + files.length + "' directories for '" + type + "'.");
         } else {
-            OdinManager.getLogger().error("Error! Could not find any directories for " + type);
+            OdinManager.getLogger().error("Error! Could not find any directories for '" + type + "'.");
         }
         if (!set) {
             for (File file : files) {
@@ -168,12 +166,10 @@ public class MainUtils {
         }
         if (type.equalsIgnoreCase("commands")) {
             OdinManager.getCommands().getCommands().load(new File(dir + language + File.separator, type + ".yml"));
-            OdinManager.getCommands().getDefaults().load("files" + File.separator + "translations" + File.separator +
-                                                         "English" + File.separator + type + ".yml");
+            OdinManager.getCommands().getDefaults().load("files/translations/English/" + type + ".yml");
         } else if (type.equalsIgnoreCase("messages")) {
             OdinManager.getMessages().getMessages().load(new File(dir + language + File.separator, type + ".yml"));
-            OdinManager.getMessages().getDefaults().load("files" + File.separator + "translations" + File.separator +
-                                                         "English" + File.separator + type + ".yml");
+            OdinManager.getMessages().getDefaults().load("files/translations/English/" + type + ".yml");
         }
     }
 

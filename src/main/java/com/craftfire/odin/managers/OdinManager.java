@@ -25,17 +25,14 @@ import com.craftfire.bifrost.classes.general.ScriptHandle;
 import com.craftfire.bifrost.enums.Scripts;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.YamlManager;
 import com.craftfire.commons.analytics.AnalyticsManager;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataType;
-import com.craftfire.commons.util.LoggingManager;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.util.MainUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -212,10 +209,18 @@ public class OdinManager {
             MainUtils util = new MainUtils();
             util.defaultFile(directory.toString() + File.separator + "config", "config", "basic.yml");
             util.defaultFile(directory.toString() + File.separator + "config", "config", "advanced.yml");
+
             getConfig().getConfig().load(new File(directory + File.separator + "config" + File.separator + "basic.yml"));
-            getConfig().getDefaults().load("files" + File.separator + "config" + File.separator + "basic.yml");
+            getConfig().getDefaults().load("files/config/basic.yml");
             getConfig().getConfig().load(new File(directory + File.separator + "config" + File.separator + "advanced.yml"));
-            getConfig().getDefaults().load("files" + File.separator + "config" + File.separator + "advanced.yml");
+            getConfig().getDefaults().load("files/config/advanced.yml");
+
+            getLogger().setDebug(true);
+
+            getLogger().debug("Config size: " + getConfig().getConfig().getNodes().size());
+            getLogger().debug("Config size: " + getConfig().getConfig().getNodes().toString());
+            getLogger().debug("Custom config size: " + getConfig().getDefaults().getNodes().size());
+
             getLogger().setDirectory(directory + File.separator + "logs" + File.separator);
             getLogger().setFormat(getConfig().getString("plugin.logformat"));
             getLogger().setDebug(getConfig().getBoolean("plugin.debugmode"));

@@ -20,7 +20,7 @@
 package com.craftfire.odin.managers;
 
 import com.craftfire.commons.TimeUtil;
-import com.craftfire.commons.YamlManager;
+import com.craftfire.commons.yaml.YamlManager;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -119,10 +119,10 @@ public class MessageManager {
                 email = "email";
             }
 
-            string = string.replaceAll("\\{USERMIN\\}", OdinManager.getConfig().getString("username.minimum"));
-            string = string.replaceAll("\\{USERMAX\\}", OdinManager.getConfig().getString("username.maximum"));
-            string = string.replaceAll("\\{PASSMIN\\}", OdinManager.getConfig().getString("password.minimum"));
-            string = string.replaceAll("\\{PASSMAX\\}", OdinManager.getConfig().getString("password.maximum"));
+            string = string.replaceAll("\\{USERMIN\\}", "" + OdinManager.getConfig().getInt("username.minimum"));
+            string = string.replaceAll("\\{USERMAX\\}", "" + OdinManager.getConfig().getInt("username.maximum"));
+            string = string.replaceAll("\\{PASSMIN\\}", "" + OdinManager.getConfig().getInt("password.minimum"));
+            string = string.replaceAll("\\{PASSMAX\\}", "" + OdinManager.getConfig().getInt("password.maximum"));
             string = string.replaceAll("\\{PLUGIN\\}", OdinManager.getPluginName());
             string = string.replaceAll("\\{VERSION\\}", OdinManager.getPluginVersion());
             string = string.replaceAll("\\{LOGINTIMEOUT\\}",
