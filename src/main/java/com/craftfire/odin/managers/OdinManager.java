@@ -116,7 +116,7 @@ public class OdinManager {
         return messageManager;
     }
 
-    public static LoggingManager getLogger() {
+    public static LoggingHandler getLogger() {
         if (loggingHandler == null) {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
         }
@@ -206,13 +206,16 @@ public class OdinManager {
     private static void loadConfiguration(File directory) {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
+            getConfig().setLoggingHandler(getLogger());
+            getCommands().setLoggingHandler(getLogger());
+            getMessages().setLoggingHandler(getLogger());
             MainUtils util = new MainUtils();
             util.defaultFile(directory.toString() + File.separator + "config", "config", "basic.yml");
             util.defaultFile(directory.toString() + File.separator + "config", "config", "advanced.yml");
-            getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "basic.yml")),
-                             new YamlManager("files" + File.separator + "config" + File.separator + "basic.yml"));
-            getConfig().load(new YamlManager(new File(directory + File.separator + "config" + File.separator + "advanced.yml")),
-                             new YamlManager("files" + File.separator + "config" + File.separator + "advanced.yml"));
+            getConfig().getConfig().load(new File(directory + File.separator + "config" + File.separator + "basic.yml"));
+            getConfig().getDefaults().load("files" + File.separator + "config" + File.separator + "basic.yml");
+            getConfig().getConfig().load(new File(directory + File.separator + "config" + File.separator + "advanced.yml"));
+            getConfig().getDefaults().load("files" + File.separator + "config" + File.separator + "advanced.yml");
             getLogger().setDirectory(directory + File.separator + "logs" + File.separator);
             getLogger().setFormat(getConfig().getString("plugin.logformat"));
             getLogger().setDebug(getConfig().getBoolean("plugin.debugmode"));
