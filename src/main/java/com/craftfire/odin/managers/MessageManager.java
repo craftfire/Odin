@@ -29,9 +29,13 @@ public class MessageManager {
     private YamlManager messages = new YamlManager();
     private YamlManager defaults = new YamlManager();
 
-    public MessageManager() {
-        getMessages().setLoggingManager(OdinManager.getLogger());
-        getDefaults().setLoggingManager(OdinManager.getLogger());
+    public boolean isInitialized() {
+        return (!messages.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+    }
+
+    public void setLoggingHandler(LoggingHandler loggingHandler) {
+        getMessages().setLoggingManager(loggingHandler);
+        getDefaults().setLoggingManager(loggingHandler);
     }
 
     public String getMessage(String node, OdinUser user) {

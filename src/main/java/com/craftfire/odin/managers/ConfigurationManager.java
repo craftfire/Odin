@@ -21,15 +21,19 @@ package com.craftfire.odin.managers;
 
 import com.craftfire.commons.YamlManager;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigurationManager {
-    private YamlManager config = null;
-    private YamlManager defaults = null;
+    private YamlManager config = new YamlManager();
+    private YamlManager defaults = new YamlManager();
 
     public boolean isInitialized() {
-        return this.config != null && this.defaults != null;
+        return (!config.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+    }
+
+    public void setLoggingHandler(LoggingHandler loggingHandler) {
+        getConfig().setLoggingManager(loggingHandler);
+        getDefaults().setLoggingManager(loggingHandler);
     }
 
     public boolean getBoolean(String node) {
@@ -104,8 +108,16 @@ public class ConfigurationManager {
         return this.config.getNodes();
     }
     
-    public Map<String, Object> getDefaults() {
+    public Map<String, Object> getDefaultNodes() {
         return this.defaults.getNodes();
+    }
+
+    public YamlManager getConfig() {
+        return this.config;
+    }
+
+    public YamlManager getDefaults() {
+        return this.defaults;
     }
     
     public void load(YamlManager config, YamlManager defaults) {

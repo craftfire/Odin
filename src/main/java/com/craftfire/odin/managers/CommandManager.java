@@ -18,24 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.craftfire.odin.managers;
-
 import com.craftfire.commons.YamlManager;
 
 import java.util.Map;
 
+
 public class CommandManager {
-    private YamlManager config = new YamlManager();
+    private YamlManager commands = new YamlManager();
     private YamlManager defaults = new YamlManager();
 
-    public CommandManager() {
-        getConfig().setLoggingManager(OdinManager.getLogger());
-        getDefaults().setLoggingManager(OdinManager.getLogger());
+    public boolean isInitialized() {
+        return (!commands.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+    }
+
+    public void setLoggingHandler(LoggingHandler loggingHandler) {
+        getCommands().setLoggingManager(loggingHandler);
+        getDefaults().setLoggingManager(loggingHandler);
     }
 
     public String getCommand(String node) {
         String newNode = "Core.commands." + node.toLowerCase();
         if (exist(newNode)) {
-            return this.config.getString(newNode);
+            return this.commands.getString(newNode);
         } else if (existDefault(newNode)) {
             return this.defaults.getString(newNode);
         }
@@ -45,7 +49,7 @@ public class CommandManager {
     public String getAlias(String node) {
         String newNode = "Core.aliases." + node.toLowerCase();
         if (exist(newNode)) {
-            return this.config.getString(newNode);
+            return this.commands.getString(newNode);
         } else if (existDefault(newNode)) {
             return this.defaults.getString(newNode);
         }
@@ -53,15 +57,15 @@ public class CommandManager {
     }
 
     public Map<String, Object> getNodes() {
-        return this.config.getNodes();
+        return this.commands.getNodes();
     }
 
     public Map<String, Object> getDefaultNodes() {
         return this.defaults.getNodes();
     }
 
-    public YamlManager getConfig() {
-        return this.config;
+    public YamlManager getCommands() {
+        return this.commands;
     }
 
     public YamlManager getDefaults() {
@@ -73,10 +77,10 @@ public class CommandManager {
     }
 
     public void load(YamlManager config, YamlManager defaults) {
-        if (this.config == null) {
-            this.config = config;
+        if (this.commands == null) {
+            this.commands = config;
         } else {
-            this.config.addNodes(config);
+            this.commands.addNodes(config);
         }
         if (this.defaults == null) {
             this.defaults = defaults;
@@ -86,7 +90,7 @@ public class CommandManager {
     }
 
     private boolean exist(String node) {
-        return node != null && this.config.exist(node.toLowerCase());
+        return node != null && this.commands.exist(node.toLowerCase());
     }
 
     private boolean existDefault(String node) {
