@@ -19,6 +19,7 @@
  */
 package com.craftfire.odin.managers;
 
+import com.craftfire.commons.TimeUtil;
 import com.craftfire.commons.YamlManager;
 
 import java.util.Map;
@@ -37,7 +38,7 @@ public class MessageManager {
         OdinManager.getLogger().debug("Getting message from node: '" + node + "'.");
         if (exist(node)) {
             String message = replace(this.messages.getString(node), user);
-            OdinManager.getLogger().debug("Found message for node '" + node + "'");
+            OdinManager.getLogger().debug("Found message for node '" + node + "'.");
             OdinManager.getLogger().debug("Raw message (" + node + "): '" + this.messages.getString(node) + "'.");
             OdinManager.getLogger().debug("Formatted message (" + node + "): '" + message + "'.");
             return message;
@@ -222,46 +223,42 @@ public class MessageManager {
 
     public String stringToTimeLanguage(String timeString) {
         String[] split = timeString.split(" ");
-        return stringToTimeLanguage(split[0], split[1]);
+        return stringToTimeLanguage(split[0], TimeUtil.TimeUnit.getUnit(split[1]));
     }
 
-    public String stringToTimeLanguage(String length, String time) {
+    public String stringToTimeLanguage(String length, TimeUtil.TimeUnit unit) {
         int integer = Integer.parseInt(length);
-        if (time.equalsIgnoreCase("days") || time.equalsIgnoreCase("day") || time.equalsIgnoreCase("d")) {
+        if (unit.equals(TimeUtil.TimeUnit.DAY)) {
             if (integer > 1) {
                 return getString("Core.time.days");
             } else {
                 return getString("Core.time.day");
             }
-        } else if (time.equalsIgnoreCase("hours") || time.equalsIgnoreCase("hour") || time.equalsIgnoreCase("hr") ||
-                time.equalsIgnoreCase("hrs") || time.equalsIgnoreCase("h")) {
+        } else if (unit.equals(TimeUtil.TimeUnit.HOUR)) {
             if (integer > 1) {
                 return getString("Core.time.hours");
             } else {
                 return getString("Core.time.hour");
             }
-        } else if (time.equalsIgnoreCase("minute") || time.equalsIgnoreCase("minutes") ||
-                time.equalsIgnoreCase("min") || time.equalsIgnoreCase("mins") || time.equalsIgnoreCase("m")) {
+        } else if (unit.equals(TimeUtil.TimeUnit.MINUTE)) {
             if (integer > 1) {
                 return getString("Core.time.minutes");
             } else {
                 return getString("Core.time.minute");
             }
-        } else if (time.equalsIgnoreCase("seconds") || time.equalsIgnoreCase("seconds") ||
-                time.equalsIgnoreCase("sec") || time.equalsIgnoreCase("s")) {
+        } else if (unit.equals(TimeUtil.TimeUnit.SECOND)) {
             if (integer > 1) {
                 return getString("Core.time.seconds");
             } else {
                 return getString("Core.time.second");
             }
-        } else if (time.equalsIgnoreCase("milliseconds") || time.equalsIgnoreCase("millisecond") ||
-                time.equalsIgnoreCase("milli") || time.equalsIgnoreCase("ms")) {
+        } else if (unit.equals(TimeUtil.TimeUnit.MILLISECOND)) {
             if (integer > 1) {
                 return getString("Core.time.milliseconds");
             } else {
                 return getString("Core.time.millisecond");
             }
         }
-        return time;
+        return unit.getName();
     }
 }
