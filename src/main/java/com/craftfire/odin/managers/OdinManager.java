@@ -49,14 +49,6 @@ public class OdinManager {
 
     private static String pluginVersion = "NULL";
 
-    private static Map<String, Long> userSessions = new HashMap<String, Long>();
-    private static Set<String> userAuthenticated = new HashSet<String>();
-    private static Set<String> userTimeouts = new HashSet<String>();
-    private static Map<String, String> userLinkedNames = new HashMap<String, String>();
-    private static Map<String, OdinUser> userStorage = new HashMap<String, OdinUser>();
-    private static Map<String, Integer> userPasswordAttempts = new HashMap<String, Integer>();
-    private static Map<String, Long> playerJoin = new HashMap<String, Long>();
-
     private OdinManager() {}
 
     public static void init(File directory, String version) {
@@ -120,48 +112,14 @@ public class OdinManager {
         return loggingHandler;
     }
 
-    public static Map<String, Long> getUserSessions() {
-        return userSessions;
-    }
-
-    public static Set<String> getAuthenticatedUsers() {
-        return userAuthenticated;
-    }
-
-    public static Set<String> getUserTimeouts() {
-        return userTimeouts;
-    }
-
-    public static Map<String, String> getLinkedUsernames() {
-        return userLinkedNames;
-    }
-
-    public static Map<String, OdinUser> getUserStorage() {
-        return userStorage;
-    }
-
-    public static Map<String, Integer> getUserPasswordAttempts() {
-        return userPasswordAttempts;
-    }
-
-    public static Map<String, Long> getPlayerJoins() {
-        return playerJoin;
-    }
-
-    public static void clean() {
-        getUserSessions().clear();
-        getAuthenticatedUsers().clear();
-        getUserSessions().clear();
-        getUserTimeouts().clear();
-        getUserPasswordAttempts().clear();
+    public static void clear() {
         getInventories().clear();
-        getPlayerJoins().clear();
     }
 
     public static void disable() {
         getStorage().getDataManager().close(true);
         getScript().getDataManager().close(true);
-        clean();
+        clear();
     }
 
     public static boolean loadDatabases(File directory) {
@@ -214,12 +172,6 @@ public class OdinManager {
             getConfig().getDefaults().load("files/config/basic.yml");
             getConfig().getConfig().load(new File(directory + File.separator + "config" + File.separator + "advanced.yml"));
             getConfig().getDefaults().load("files/config/advanced.yml");
-
-            getLogger().setDebug(true);
-
-            getLogger().debug("Config size: " + getConfig().getConfig().getNodes().size());
-            getLogger().debug("Config size: " + getConfig().getConfig().getNodes().toString());
-            getLogger().debug("Custom config size: " + getConfig().getDefaults().getNodes().size());
 
             getLogger().setDirectory(directory + File.separator + "logs" + File.separator);
             getLogger().setFormat(getConfig().getString("plugin.logformat"));

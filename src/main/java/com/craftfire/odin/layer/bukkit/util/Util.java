@@ -21,10 +21,17 @@ package com.craftfire.odin.layer.bukkit.util;
 
 
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
+import com.craftfire.odin.managers.OdinManager;
 import org.bukkit.entity.Player;
 
 public class Util {
     public static OdinPlayer getPlayer(Player player) {
-        return new OdinPlayer(player);
+        if (OdinManager.getStorage().isCachedUser(player.getName())) {
+            return (OdinPlayer) OdinManager.getStorage().getCachedUser(player.getName());
+        } else {
+            OdinPlayer odinPlayer = new OdinPlayer(player);
+            OdinManager.getStorage().putCachedUser(odinPlayer);
+            return odinPlayer;
+        }
     }
 }

@@ -62,6 +62,15 @@ public class OdinPlayer extends OdinUser {
         }
     }
 
+    public boolean isLoggedIn() {
+        for (Player p : this.player.getServer().getOnlinePlayers()) {
+            if (p.getName().equalsIgnoreCase(this.player.getName()) && isAuthenticated()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasPermissions(String permission) {
         return Odin.getPermissions().has(this.player, permission);
     }
@@ -123,14 +132,14 @@ public class OdinPlayer extends OdinUser {
     }
 
     public void checkTimeout() {
-        if (!isAuthenticated() && OdinManager.getUserTimeouts().contains(getUsername())) {
+        if (!isAuthenticated() && getTimeout() > 0) {
             if (isRegistered()) {
                 kickPlayer("login.timeout");
             } else {
                 kickPlayer("register.timeout");
             }
-        } else if (OdinManager.getUserTimeouts().contains(getUsername())) {
-            OdinManager.getUserTimeouts().remove(getUsername());
+        } else if (getTimeout() > 0) {
+            setTimeout(0);
         }
     }
 

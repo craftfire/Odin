@@ -22,6 +22,7 @@ package com.craftfire.odin.managers;
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.encryption.Encryption;
+import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.inventory.InventoryItem;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.managers.inventory.ItemEnchantment;
@@ -34,11 +35,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class OdinUser {
-    private String username;
+    private String username, linkedUsername;
+    private IPAddress ipAddress;
     private ScriptUser user = null;
     private Status status;
-    private String ip;
-    private boolean badcharacters;
+    private boolean hasBadCharacters = false, authenticated = false;
+    private int passwordAttempts = 0;
+    private long timeout = 0, joinTime = 0;
 
     /**
      * Default constructor for the object.
@@ -46,20 +49,22 @@ public class OdinUser {
      * @param username name of the player.
      */
     public OdinUser(final String username) {
+        OdinManager.getLogger().debug("Creating new OdinUser instance for username '" + username + "'.");
         this.username = username;
-        this.badcharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
-        if (OdinManager.getUserStorage().containsKey(this.username)) {
+        this.hasBadCharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
+        if (OdinManager.getStorage().isCachedUser(username)) {
             /* TODO */
-            OdinUser user = OdinManager.getUserStorage().get(this.username);
+            OdinUser user = OdinManager.getStorage().getCachedUser(this.username);
             this.username = user.getUsername();
             this.user = user.getUser();
             this.status = user.getStatus();
-            this.ip = user.getIP();
+            this.ipAddress = user.getIP();
         }
     }
 
     public void save() {
-        OdinManager.getUserStorage().put(this.username, this);
+        OdinManager.getLogger().debug("Saving username '" + this.username + "'.");
+        OdinManager.getStorage().putCachedUser(this);
     }
 
     public void sync() {
@@ -90,23 +95,29 @@ public class OdinUser {
     }
 
     public boolean isLinked() {
-        return OdinManager.getLinkedUsernames().containsKey(this.username);
+        return OdinManager.getStorage().hasLinkedUsername(this.username);
     }
 
     public String getLinkedName() {
-        if (OdinManager.getLinkedUsernames().containsKey(this.username)) {
-            return OdinManager.getLinkedUsernames().get(this.username);
+        if (this.username == null && OdinManager.getStorage().hasLinkedUsername(this.username)) {
+            String username = OdinManager.getStorage().getLinkedUsersname(this.username);
+            this.linkedUsername = username;
+            return username;
         }
-        return null;
+        return this.username;
     }
 
     public boolean isAuthenticated() {
-        return OdinManager.getAuthenticatedUsers().contains(this.username);
+        if (!this.authenticated && OdinManager.getStorage().isAuthenticated(this.username)) {
+            this.authenticated = true;
+            return true;
+        }
+        return this.authenticated;
     }
 
     public void setAuthenticated(boolean authenticated) {
         if (authenticated) {
-            OdinManager.getAuthenticatedUsers().add(this.username);
+            OdinManager.getStorage().putAuthenticated(this.username);
             if (OdinManager.getConfig().getBoolean("session.enabled")) {
                 setSession();
             }
@@ -116,14 +127,10 @@ public class OdinUser {
     }
 
     public boolean logout() {
-        if (OdinManager.getAuthenticatedUsers().contains(this.username)) {
-            OdinManager.getAuthenticatedUsers().remove(this.username);
-            if (OdinManager.getUserPasswordAttempts().containsKey(this.username)) {
-                OdinManager.getUserPasswordAttempts().remove(this.username);
-            }
-            if (OdinManager.getUserTimeouts().contains(this.username)) {
-                OdinManager.getUserTimeouts().remove(this.username);
-            }
+        if (OdinManager.getStorage().isAuthenticated(this.username)) {
+            OdinManager.getStorage().removeAuthenticated(this.username);
+            this.passwordAttempts = 0;
+            this.timeout = 0;
             return true;
         }
         return false;
@@ -131,17 +138,15 @@ public class OdinUser {
 
     public boolean login(String password) {
         try {
-            if (!OdinManager.getAuthenticatedUsers().contains(this.username)) {
-                if (isLinked()) {
-                    if (OdinManager.getScript().authenticate(getLinkedName(), password)) {
-                        OdinManager.getAuthenticatedUsers().add(this.username);
-                        return true;
-                    }
-                } else {
-                    if (OdinManager.getScript().authenticate(this.username, password)) {
-                        OdinManager.getAuthenticatedUsers().add(this.username);
-                        return true;
-                    }
+            if (!OdinManager.getStorage().isAuthenticated(this.username)) {
+                if (isLinked() && OdinManager.getScript().authenticate(getLinkedName(), password)) {
+                    OdinManager.getStorage().putAuthenticated(this.username);
+                    this.authenticated = true;
+                    return true;
+                } else if (OdinManager.getScript().authenticate(this.username, password)) {
+                    OdinManager.getStorage().putAuthenticated(this.username);
+                    this.authenticated = true;
+                    return true;
                 }
             }
         } catch (ScriptException e) {
@@ -151,42 +156,46 @@ public class OdinUser {
     }
 
     public void login() {
-        if (!OdinManager.getAuthenticatedUsers().contains(this.username)) {
-            OdinManager.getAuthenticatedUsers().add(this.username);
-        }
+        OdinManager.getStorage().putAuthenticated(this.username);
+        this.authenticated = true;
     }
 
     public boolean unlink() {
-        if (OdinManager.getLinkedUsernames().containsKey(this.username)) {
-            OdinManager.getLinkedUsernames().remove(this.username);
+        if (this.linkedUsername != null || OdinManager.getStorage().hasLinkedUsername(this.username)) {
+            OdinManager.getStorage().removeLinkedUsername(this.username);
+            this.linkedUsername = null;
             return true;
         }
         return false;
     }
 
-    public String getIP() {
-        return ip;
+    public void link(String name) {
+        //TODO: link
+    }
+
+    public IPAddress getIP() {
+        return this.ipAddress;
     }
     
     public void setIP(String ip) {
-        this.ip = ip;
+        this.ipAddress = IPAddress.valueOf(ip);
     }
 
     public boolean hasSession() {
-        //TODO: Check storage for session.
-        return OdinManager.getUserSessions().containsKey(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip));
+        //TODO
+        return OdinManager.getStorage().hasSession(this);
     }
     
     public long getSessionTime() {
         if (OdinManager.getConfig().getBoolean("session.enabled") && hasSession()) {
-            return OdinManager.getUserSessions().get(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip));
+            return OdinManager.getStorage().getSessionTime(this);
         }
         return 0;
     }
     
     public void setSession() {
         if (OdinManager.getConfig().getBoolean("session.enabled")) {
-            OdinManager.getUserSessions().put(CraftCommons.encrypt(Encryption.MD5, this.username + this.ip), new Date().getTime() / 1000);
+            OdinManager.getStorage().putSession(this);
         }
     }
 
@@ -250,54 +259,51 @@ public class OdinUser {
     }
     
     public long getJoinTime() {
-        if (OdinManager.getPlayerJoins().containsKey(getUsername())) {
-            return OdinManager.getPlayerJoins().get(getUsername());
-        }
-        return 0;
+        return this.joinTime;
     }
     
     public void setJoinTime() {
-        OdinManager.getPlayerJoins().put(getUsername(), System.currentTimeMillis());
+        this.joinTime = System.currentTimeMillis();
     }
 
     public void setJoinTime(long time) {
-        OdinManager.getPlayerJoins().put(getUsername(), time);
+        this.joinTime = time;
     }
     
     public int getPasswordAttempts() {
-        if (OdinManager.getUserPasswordAttempts().containsKey(getUsername())) {
-            return OdinManager.getUserPasswordAttempts().get(getUsername());
-        }
-        return 0;
+        return this.passwordAttempts;
     }
 
     public void setPasswordAttempts(int attempts) {
-        OdinManager.getUserPasswordAttempts().put(getUsername(), attempts);
+        this.passwordAttempts = attempts;
     }
 
     public void clearPasswordAttempts() {
-        OdinManager.getUserPasswordAttempts().put(getUsername(), 0);
+        this.passwordAttempts = 0;
     }
 
     public void increasePasswordAttempts() {
-        if (OdinManager.getUserPasswordAttempts().containsKey(getUsername())) {
-            OdinManager.getUserPasswordAttempts().put(getUsername(),
-                                                   OdinManager.getUserPasswordAttempts().get(getUsername()) + 1);
-        } else {
-            OdinManager.getUserPasswordAttempts().put(getUsername(), 1);
-        }
+        this.passwordAttempts++;
     }
     
     public boolean hasBadCharacters() {
-        return this.badcharacters;
+        return this.hasBadCharacters;
     }
     
     public boolean isFilterWhitelisted() {
         return OdinManager.getConfig().getString("filter.whitelist").contains(getUsername());
     }
 
+    public long getTimeout() {
+        return this.timeout;
+    }
+
     public void setTimeout() {
-        OdinManager.getUserTimeouts().add(getUsername());
+        this.timeout = System.currentTimeMillis();
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 
     public void storeInventory(InventoryItem[] inventory, InventoryItem[] armor) {

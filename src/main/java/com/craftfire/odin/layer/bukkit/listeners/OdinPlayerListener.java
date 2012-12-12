@@ -44,7 +44,7 @@ public class OdinPlayerListener implements Listener {
             return;
         }
 
-        if (OdinManager.getConfig().getBoolean("session.protect") && player.hasSession()) {
+        if (OdinManager.getConfig().getBoolean("session.protect") && player.isLoggedIn()) {
             player.sendMessage("session.protected", event);
             return;
         } else {
@@ -189,7 +189,7 @@ public class OdinPlayerListener implements Listener {
             //this.plugin.Odin_AuthTime.put(player.getName(), thetimestamp);
         }
 
-        if (!OdinManager.getConfig().getBoolean("guest.inventory") && ! player.isRegistered()) {
+        if (!OdinManager.getConfig().getBoolean("guest.inventory") && !player.isRegistered()) {
             player.getInventory().setContents(new ItemStack[36]);
         }
 
@@ -258,9 +258,8 @@ public class OdinPlayerListener implements Listener {
             return;
         }
 
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
-        if (!player.isAuthenticated() && player.getJoinTime() != 0 &&
-            !OdinManager.getConfig().getBoolean("guest.movement")) {
+        OdinPlayer player = Util.getPlayer(event.getPlayer());
+        if (!player.isAuthenticated() && player.getJoinTime() != 0 && !OdinManager.getConfig().getBoolean("guest.movement")) {
             if (OdinManager.getConfig().getBoolean("protection.freeze.enabled") &&
                     (player.getJoinTime() + OdinManager.getConfig().getInt("protection.freeze.delay")) <
                             System.currentTimeMillis() / 1000) {
@@ -271,7 +270,7 @@ public class OdinPlayerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerEvent(AsyncPlayerChatEvent event) {
         if (event.isCancelled()) {
             return;
         }

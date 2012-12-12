@@ -19,21 +19,118 @@
  */
 package com.craftfire.odin.managers;
 
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.database.DataManager;
+import com.craftfire.commons.encryption.Encryption;
+import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 
 import javax.swing.text.TabExpander;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class StorageManager {
     private final DataManager dataManager;
+    private Map<String, OdinUser> users = new HashMap<String, OdinUser>();
+    private Map<String, String> linkedUsernames = new HashMap<String, String>();
+    private Set<String> authenticatedUsers = new HashSet<String>();
+    private Map<String, Long> userSessions = new HashMap<String, Long>();
 
     public StorageManager(DataManager dataManager) {
         this.dataManager = dataManager;
         checkDatabases();
+    }
+
+    public void clear() {
+        this.users.clear();
+        this.linkedUsernames.clear();
+        this.authenticatedUsers.clear();
+        this.userSessions.clear();
+    }
+
+    public boolean hasLinkedUsername(String username) {
+        return this.linkedUsernames.containsKey(username);
+    }
+
+    public void putLinkedUsername(String username, String linkedUsername) {
+        this.linkedUsernames.put(username, linkedUsername);
+    }
+
+    public void removeLinkedUsername(String username) {
+        if (hasLinkedUsername(username)) {
+            this.linkedUsernames.remove(username);
+        }
+    }
+
+    public String getLinkedUsername(String username) {
+        return this.linkedUsernames.get(username);
+    }
+
+    public boolean isAuthenticated(String username) {
+        return this.authenticatedUsers.contains(username);
+    }
+
+    public void putAuthenticated(String username) {
+        this.authenticatedUsers.add(username);
+    }
+
+    public void removeAuthenticated(String username) {
+        if (isAuthenticated(username)) {
+            this.authenticatedUsers.remove(username);
+        }
+    }
+
+    public boolean hasSession(OdinUser user) {
+        return this.userSessions.containsKey(CraftCommons.encrypt(Encryption.MD5,
+                                                                  user.getUsername() + user.getIP().toString()));
+    }
+
+    public void putSession(OdinUser user) {
+        this.userSessions.put(CraftCommons.encrypt(Encryption.MD5,
+                                                   user.getUsername() + user.getIP().toString()),
+                              System.currentTimeMillis());
+    }
+
+    public long getSessionTime(OdinUser user) {
+        if (hasSession(user)) {
+            return this.userSessions.get(CraftCommons.encrypt(Encryption.MD5,
+                                         user.getUsername() + user.getIP().toString()));
+        }
+        return 0;
+    }
+
+    public void removeSession(OdinUser user) {
+        if (hasSession(user)) {
+            this.userSessions.remove(CraftCommons.encrypt(Encryption.MD5,
+                                     user.getUsername() + user.getIP().toString()));
+        }
+    }
+
+    public Map<String, OdinUser> getCachedUsers() {
+        return this.users;
+    }
+
+    public OdinUser getCachedUser(String username) {
+        if (isCachedUser(username)) {
+            return this.users.get(username);
+        } else {
+            OdinManager.getLogger().debug("Could not find cached username '" + username + "', attempting to create new.");
+            OdinUser user = new OdinUser(username);
+            putCachedUser(user);
+            return user;
+        }
+    }
+
+    public void putCachedUser(OdinUser user) {
+        OdinManager.getLogger().debug("Adding username '" + user.getUsername() + "' to cache.");
+        this.users.put(user.getUsername(), user);
+    }
+
+    public boolean isCachedUser(String username) {
+        return this.users.containsKey(username);
     }
 
     public enum InventoryField {
