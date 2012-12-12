@@ -100,7 +100,7 @@ public class OdinUser {
 
     public String getLinkedName() {
         if (this.username == null && OdinManager.getStorage().hasLinkedUsername(this.username)) {
-            String username = OdinManager.getStorage().getLinkedUsersname(this.username);
+            String username = OdinManager.getStorage().getLinkedUsername(this.username);
             this.linkedUsername = username;
             return username;
         }
