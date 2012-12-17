@@ -34,13 +34,14 @@ import java.io.IOException;
 
 public class OdinPlayer extends OdinUser {
     private Player player;
+
     /**
      * Default constructor for the object.
      *
      * @param player player object.
      */
     public OdinPlayer(Player player) {
-        super(player.getName());
+        super(player.getName(), player.getAddress());
         this.player = player;
     }
     

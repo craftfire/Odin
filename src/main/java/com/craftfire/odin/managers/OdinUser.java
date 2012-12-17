@@ -26,16 +26,21 @@ import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.inventory.InventoryItem;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.managers.inventory.ItemEnchantment;
+import com.craftfire.odin.managers.storage.StoredOdinUser;
 import com.craftfire.odin.util.MainUtils;
 import com.craftfire.commons.CraftCommons;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class OdinUser {
-    private String username, linkedUsername;
+    private final String username;
+    private final StoredOdinUser storedUser;
+    private String linkedUsername;
     private IPAddress ipAddress;
     private ScriptUser user = null;
     private Status status;
@@ -48,17 +53,63 @@ public class OdinUser {
      *
      * @param username name of the player.
      */
-    public OdinUser(final String username) {
+    public OdinUser(String username, InetAddress ipAddress) {
+        this(username, IPAddress.valueOf(ipAddress));
+    }
+
+    /**
+     * Default constructor for the object.
+     *
+     * @param username name of the player.
+     */
+    public OdinUser(String username, InetSocketAddress ipAddress) {
+        if (username == null) {
+            throw new IllegalArgumentException("Parameter for OdinUser username cannot be null!");
+        }
+        this.username = username;
+        if (ipAddress != null) {
+            new OdinUser(username, IPAddress.valueOf(ipAddress.getAddress()));
+        } else {
+            new OdinUser(username, (IPAddress) null);
+        }
+    }
+
+    /**
+     * Default constructor for the object.
+     *
+     * @param username name of the player.
+     */
+    public OdinUser(String username, String ipAddress) {
+        this(username, IPAddress.valueOf(ipAddress));
+    }
+
+    /**
+     * Default constructor for the object.
+     *
+     * @param username name of the player.
+     */
+    public OdinUser(final String username, IPAddress ipAddress) {
+        if (username == null) {
+            throw new IllegalArgumentException("Parameter for OdinUser username cannot be null!");
+        }
         OdinManager.getLogger().debug("Creating new OdinUser instance for username '" + username + "'.");
         this.username = username;
+        this.ipAddress = ipAddress;
         this.hasBadCharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
+        try {
+            this.storedUser = OdinManager.getStorage().getUser(this.username);
+        } catch (SQLException e) {
+            OdinManager.getLogger().error("Could not grab user from storage,");
+            OdinManager.getLogger().stackTrace(e);
+        }
         if (OdinManager.getStorage().isCachedUser(username)) {
             /* TODO */
-            OdinUser user = OdinManager.getStorage().getCachedUser(this.username);
-            this.username = user.getUsername();
+            OdinUser user = OdinManager.getStorage().getCachedUser(username);
             this.user = user.getUser();
             this.status = user.getStatus();
-            this.ipAddress = user.getIP();
+            if (user.getIP() != null) {
+                this.ipAddress = user.getIP();
+            }
         }
     }
 
@@ -70,6 +121,10 @@ public class OdinUser {
     public void sync() {
         OdinManager.getLogger().debug("Running sync for username '" + this.username + "'.");
         //TODO
+    }
+
+    public StoredOdinUser getStoredUser() {
+        return this.storedUser;
     }
     
     public String getUsername() {
@@ -174,7 +229,11 @@ public class OdinUser {
     }
 
     public IPAddress getIP() {
-        return this.ipAddress;
+        if (this.ipAddress == null) {
+            return IPAddress.valueOf("127.0.0.1");
+        } else {
+            return this.ipAddress;
+        }
     }
     
     public void setIP(String ip) {

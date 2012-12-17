@@ -29,13 +29,12 @@ import com.craftfire.commons.analytics.AnalyticsManager;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.database.DataType;
 import com.craftfire.odin.managers.inventory.InventoryManager;
+import com.craftfire.odin.managers.storage.StorageManager;
 import com.craftfire.odin.util.MainUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class OdinManager {
