@@ -77,13 +77,13 @@ public class InventoryManager {
             if (armorInventory[i] != null) {
                 HashSet<ItemEnchantment> enchantments = new HashSet<ItemEnchantment>();
                 Iterator<Map.Entry<Enchantment, Integer>> itemEnchantments =
-                        inventory[i].getEnchantments().entrySet().iterator();
+                        armorInventory[i].getEnchantments().entrySet().iterator();
                 while (itemEnchantments.hasNext()) {
                     Map.Entry<Enchantment, Integer> key = itemEnchantments.next();
                     Enchantment enc = key.getKey();
-                    enchantments.add(new ItemEnchantment(enc.getId(), inventory[i].getEnchantmentLevel(enc)));
+                    enchantments.add(new ItemEnchantment(enc.getId(), armorInventory[i].getEnchantmentLevel(enc)));
                 }
-                byte material = (inventory[i].getData() == null) ? 0 : inventory[i].getData().getData();
+                byte material = (armorInventory[i].getData() == null) ? 0 : armorInventory[i].getData().getData();
                 InventoryItem item = new InventoryItem(armorInventory[i].getTypeId(), material);
                 item.setAmount(armorInventory[i].getAmount());
                 item.setDurability(armorInventory[i].getDurability());
