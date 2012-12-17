@@ -17,12 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.odin.managers;
+package com.craftfire.odin.managers.storage;
 
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.ip.IPAddress;
+import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.managers.OdinUser;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 
 import javax.swing.text.TabExpander;
@@ -117,10 +119,8 @@ public class StorageManager {
         if (isCachedUser(username)) {
             return this.users.get(username);
         } else {
-            OdinManager.getLogger().debug("Could not find cached username '" + username + "', attempting to create new.");
-            OdinUser user = new OdinUser(username);
-            putCachedUser(user);
-            return user;
+            OdinManager.getLogger().debug("Could not find cached username '" + username + "', returning null.");
+            return null;
         }
     }
 
@@ -130,7 +130,7 @@ public class StorageManager {
     }
 
     public boolean isCachedUser(String username) {
-        return this.users.containsKey(username);
+        return this.users.containsKey(username) && this.users.get(username) != null;
     }
 
     public enum InventoryField {
@@ -138,7 +138,8 @@ public class StorageManager {
     }
 
     public enum Table {
-        INVENTORY("ODIN_INVENTORIES", "PLAYERNAME"),
+        INVENTORY("ODIN_INVENTORIES", "USERNAME"),
+        USERS("ODIN_USERS", "USERNAME"),
         INFORMATION("ODIN_INFORMATION", "INFO");
 
         private String name, primary;
@@ -184,8 +185,8 @@ public class StorageManager {
        return exists(table, username);
     }
 
-    private void checkDatabases() {
-        checkInventoryDatabase();
+    public StoredOdinUser getUser(String username) throws SQLException {
+        return new StoredOdinUser(getDataManager().getResults("SELECT * FROM " + Table.USERS.getName() + " WHERE " + Table.USERS.getPrimary() + " = '" + username + "' LIMIT 1"));
     }
 
     public String getInfo(String info) {
@@ -259,12 +260,33 @@ public class StorageManager {
         }
     }
 
-    private void checkInventoryDatabase() {
+    private void checkDatabases() {
+        if (!getDataManager().tableExist(Table.USERS.getName())) {
+            try {
+                getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.USERS.getName() + "(" +
+                                              "ID INT PRIMARY KEY, " +
+                                              "USERNAME VARCHAR(50), " +
+                                              "LINKED_NAME VARCHAR(50), " +
+                                              "PASSWORD VARCHAR(255), " +
+                                              "PASSWORD_SALT VARCHAR(255), " +
+                                              "EMAIL VARCHAR(255), " +
+                                              "IP_ADDRESS VARCHAR(45), " +
+                                              "ACTIVATED INT(1), " +
+                                              "REGISTERED INT(1), " +
+                                              "RELOAD_TIME INT(11), " +
+                                              "SESSION_TIME INT(11))");
+            } catch (SQLException e) {
+                OdinManager.getLogger().error("Failed creating " + Table.USERS.getName() + " table for H2 database.");
+                OdinManager.getLogger().stackTrace(e);
+                return;
+            }
+            OdinManager.getLogger().debug("Successfully created " + Table.USERS.getName() + " table for H2 database.");
+        }
         if (!getDataManager().tableExist(Table.INVENTORY.getName())) {
             try {
                 getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.INVENTORY.getName() + "(" +
                                               "ID INT PRIMARY KEY, " +
-                                              "PLAYERNAME VARCHAR(50), " +
+                                              "USERNAME VARCHAR(50), " +
                                               "INVENTORY TEXT, " +
                                               "ARMOR TEXT)");
             } catch (SQLException e) {
