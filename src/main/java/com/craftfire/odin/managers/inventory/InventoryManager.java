@@ -21,11 +21,9 @@ package com.craftfire.odin.managers.inventory;
 
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
-import com.craftfire.odin.managers.StorageManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class InventoryManager {
     private Map<String, InventoryItem[]> inventories = new HashMap<String, InventoryItem[]>();
