@@ -55,7 +55,7 @@ public class CommandManager {
     }
 
     public String getAlias(String node) {
-        String newNode = "alias." + node.toLowerCase();
+        String newNode = "aliases." + node.toLowerCase();
         OdinManager.getLogger().debug("Getting alias from alias node: '" + newNode + "'.");
         if (exist(newNode)) {
             String value = this.commands.getString(newNode);
