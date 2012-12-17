@@ -21,6 +21,7 @@ package com.craftfire.odin.util;
 
 import com.craftfire.commons.FileDownloader;
 import com.craftfire.commons.TimeUtil;
+import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 
@@ -33,7 +34,10 @@ import java.util.zip.ZipInputStream;
 
 public class MainUtils {
     public static OdinUser getUser(String username) {
-        return new OdinUser(username);
+        if (OdinManager.getStorage().isCachedUser(username)) {
+            return OdinManager.getStorage().getCachedUser(username);
+        }
+        return null;
     }
 
     public static boolean downloadLibrary(File outputFile, Set<String> urls) {
