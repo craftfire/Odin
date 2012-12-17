@@ -128,13 +128,12 @@ public class OdinPlayerListener implements Listener {
             }
         }
 
-        if (OdinManager.getConfig().getBoolean("customdb.enabled") &&
-                OdinManager.getConfig().getString("customdb.encryption").isEmpty()) {
+        if (OdinManager.getConfig().getBoolean("customdb.enabled") && OdinManager.getConfig().getString("customdb.encryption").isEmpty()) {
             player.sendMessage("YOUR PASSWORD WILL NOT BE ENCRYPTED, " +
                                "PLEASE BE AWARE THAT THIS SERVER STORES THE PASSWORDS IN PLAINTEXT.");
         }
 
-        if (OdinManager.getConfig().getBoolean("session.enabled") /* TODO: Reload time*/) {
+        if (OdinManager.getConfig().getBoolean("session.enabled") &&  (player.getReloadTime() + 30) >= (System.currentTimeMillis() / 1000)) {
             allow = true;
         }
 

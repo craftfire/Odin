@@ -46,7 +46,7 @@ public class OdinUser {
     private Status status;
     private boolean hasBadCharacters = false, authenticated = false;
     private int passwordAttempts = 0;
-    private long timeout = 0, joinTime = 0;
+    private long timeout = 0, joinTime = 0, reloadTime = 0;
 
     /**
      * Default constructor for the object.
@@ -104,6 +104,8 @@ public class OdinUser {
         this.hasBadCharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
         try {
             this.storedUser = OdinManager.getStorage().getUser(username);
+            this.storedUser.setIPAddress(ipAddress);
+            this.reloadTime = this.storedUser.getReloadTime();
         } catch (SQLException e) {
             OdinManager.getLogger().error("Could not grab user '" + username + "' from storage.");
             OdinManager.getLogger().stackTrace(e);
@@ -163,12 +165,12 @@ public class OdinUser {
     }
 
     public String getLinkedName() {
-        if (this.username == null && OdinManager.getStorage().hasLinkedUsername(this.username)) {
-            String username = OdinManager.getStorage().getLinkedUsername(this.username);
-            this.linkedUsername = username;
-            return username;
+        if (this.linkedUsername == null && OdinManager.getStorage().hasLinkedUsername(this.username)) {
+            String linkedUsername = OdinManager.getStorage().getLinkedUsername(this.username);
+            this.linkedUsername = linkedUsername;
+            return linkedUsername;
         }
-        return this.username;
+        return this.linkedUsername;
     }
 
     public boolean isAuthenticated() {
@@ -226,6 +228,7 @@ public class OdinUser {
 
     public boolean unlink() {
         if (this.linkedUsername != null || OdinManager.getStorage().hasLinkedUsername(this.username)) {
+            getStoredUser().setLinkedName("");
             OdinManager.getStorage().removeLinkedUsername(this.username);
             this.linkedUsername = null;
             return true;
@@ -262,9 +265,24 @@ public class OdinUser {
     }
     
     public void setSession() {
+        getStoredUser().setSessionTime();
         if (OdinManager.getConfig().getBoolean("session.enabled")) {
             OdinManager.getStorage().putSession(this);
         }
+    }
+
+    public long getReloadTime() {
+        return this.reloadTime;
+    }
+
+    public void setReloadTime() {
+        this.reloadTime = System.currentTimeMillis();
+        getStoredUser().setReloadTime();
+    }
+
+    public void setReloadTime(long reloadTime) {
+        this.reloadTime = reloadTime;
+        getStoredUser().setReloadTime(reloadTime);
     }
 
     public boolean isRegistered() {
@@ -279,6 +297,7 @@ public class OdinUser {
             }
         } else try {
             if (OdinManager.getScript().getScript().isRegistered(this.username)) {
+                getStoredUser().setRegistered(true);
                 this.status = Status.Registered;
                 return true;
             }
@@ -286,6 +305,7 @@ public class OdinUser {
             OdinManager.getLogger().stackTrace(e);
             return false;
         }
+        getStoredUser().setRegistered(false);
         this.status = Status.Guest;
         return false;
     }
