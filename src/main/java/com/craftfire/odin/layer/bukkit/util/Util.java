@@ -26,7 +26,9 @@ import org.bukkit.entity.Player;
 
 public class Util {
     public static OdinPlayer getPlayer(Player player) {
-        if (OdinManager.getStorage().isCachedUser(player.getName())) {
+        if (player == null) {
+            throw new IllegalArgumentException("Parameter for getPlayer() cannot be null!");
+        } else if (OdinManager.getStorage().isCachedUser(player.getName())) {
             return (OdinPlayer) OdinManager.getStorage().getCachedUser(player.getName());
         } else {
             OdinPlayer odinPlayer = new OdinPlayer(player);
