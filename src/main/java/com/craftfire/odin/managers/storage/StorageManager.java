@@ -55,45 +55,54 @@ public class StorageManager {
 
     public boolean hasLinkedUsername(String username) {
         return this.linkedUsernames.containsKey(username);
+        //TODO: Stored user
     }
 
     public void putLinkedUsername(String username, String linkedUsername) {
         this.linkedUsernames.put(username, linkedUsername);
+        //TODO: Stored user
     }
 
     public void removeLinkedUsername(String username) {
         if (hasLinkedUsername(username)) {
             this.linkedUsernames.remove(username);
         }
+        //TODO: Stored user
     }
 
     public String getLinkedUsername(String username) {
         return this.linkedUsernames.get(username);
+        //TODO: Stored user
     }
 
     public boolean isAuthenticated(String username) {
         return this.authenticatedUsers.contains(username);
+        //TODO: Stored user
     }
 
     public void putAuthenticated(String username) {
         this.authenticatedUsers.add(username);
+        //TODO: Stored user
     }
 
     public void removeAuthenticated(String username) {
         if (isAuthenticated(username)) {
             this.authenticatedUsers.remove(username);
         }
+        //TODO: Stored user
     }
 
     public boolean hasSession(OdinUser user) {
         return this.userSessions.containsKey(CraftCommons.encrypt(Encryption.MD5,
                                                                   user.getUsername() + user.getIP().toString()));
+        //TODO: Stored user
     }
 
     public void putSession(OdinUser user) {
         this.userSessions.put(CraftCommons.encrypt(Encryption.MD5,
                                                    user.getUsername() + user.getIP().toString()),
                               System.currentTimeMillis());
+        user.getStoredUser().setSessionTime(System.currentTimeMillis());
     }
 
     public long getSessionTime(OdinUser user) {
@@ -101,6 +110,7 @@ public class StorageManager {
             return this.userSessions.get(CraftCommons.encrypt(Encryption.MD5,
                                          user.getUsername() + user.getIP().toString()));
         }
+        //TODO: Stored user
         return 0;
     }
 
@@ -109,6 +119,7 @@ public class StorageManager {
             this.userSessions.remove(CraftCommons.encrypt(Encryption.MD5,
                                      user.getUsername() + user.getIP().toString()));
         }
+        //TODO: Stored user
     }
 
     public Map<String, OdinUser> getCachedUsers() {

@@ -70,7 +70,7 @@ public class OdinUser {
         try {
             this.storedUser = OdinManager.getStorage().getUser(username);
         } catch (SQLException e) {
-            OdinManager.getLogger().error("Could not grab user from storage,");
+            OdinManager.getLogger().error("Could not grab user '" + username + "' from storage.");
             OdinManager.getLogger().stackTrace(e);
         }
         if (ipAddress != null) {
@@ -105,7 +105,7 @@ public class OdinUser {
         try {
             this.storedUser = OdinManager.getStorage().getUser(username);
         } catch (SQLException e) {
-            OdinManager.getLogger().error("Could not grab user from storage,");
+            OdinManager.getLogger().error("Could not grab user '" + username + "' from storage.");
             OdinManager.getLogger().stackTrace(e);
         }
         if (OdinManager.getStorage().isCachedUser(username)) {
@@ -116,12 +116,15 @@ public class OdinUser {
             if (user.getIP() != null) {
                 this.ipAddress = user.getIP();
             }
+            this.storedUser = user.getStoredUser();
         }
     }
 
     public void save() {
         OdinManager.getLogger().debug("Saving username '" + this.username + "'.");
         OdinManager.getStorage().putCachedUser(this);
+        getStoredUser().save();
+        //TODO
     }
 
     public void sync() {
