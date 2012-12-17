@@ -160,9 +160,12 @@ public class OdinManager {
     private static void loadConfiguration(File directory) {
         try {
             loggingHandler = new LoggingHandler("Minecraft.Odin", "[Odin]");
+            /*
+            Debugging
             getConfig().setLoggingHandler(getLogger());
             getCommands().setLoggingHandler(getLogger());
             getMessages().setLoggingHandler(getLogger());
+            */
             MainUtils util = new MainUtils();
             util.defaultFile(directory.toString() + File.separator + "config", "config", "basic.yml");
             util.defaultFile(directory.toString() + File.separator + "config", "config", "advanced.yml");
