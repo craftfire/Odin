@@ -25,6 +25,7 @@ import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
+import com.craftfire.odin.managers.inventory.InventoryItem;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 
 import javax.swing.text.TabExpander;
@@ -40,7 +41,10 @@ public class StorageManager {
     private Map<String, String> linkedUsernames = new HashMap<String, String>();
     private Set<String> authenticatedUsers = new HashSet<String>();
     private Map<String, Long> userSessions = new HashMap<String, Long>();
+    private Map<String, String> userInventories = new HashMap<String, String>();
+    private Map<String, String> userArmor = new HashMap<String, String>();
 
+    //TODO: move inventory methods to StoredOdinUser
     public StorageManager(DataManager dataManager) {
         this.dataManager = dataManager;
         checkDatabases();
@@ -194,12 +198,12 @@ public class StorageManager {
     }
 
     public String getInfo(String info) {
-        return getDataManager().getStringField(Table.INFORMATION.getName(), "DATA", Table.INFORMATION.getPrimary() + "='" + info + "'");
+        return getDataManager().getStringField(Table.INFORMATION.getName(), "DATA", Table.INFORMATION.getPrimary() + " = '" + info + "'");
     }
 
     private void setInfo(String info, Object value) throws SQLException {
         if (exists(Table.INFORMATION, info)) {
-            getDataManager().updateField(Table.INFORMATION.getName(), "DATA", value, Table.INFORMATION.getPrimary() + "='" + info + "'");
+            getDataManager().updateField(Table.INFORMATION.getName(), "DATA", value, Table.INFORMATION.getPrimary() + " = '" + info + "'");
         } else {
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("INFO", info);
@@ -209,13 +213,17 @@ public class StorageManager {
     }
 
     public String getInventory(String username) {
-        return getDataManager().getStringField(Table.INVENTORY.getName(), "INVENTORY", Table.INVENTORY.getPrimary() + "='" + username + "'");
+        if (this.userInventories.containsKey(username)) {
+            return this.userInventories.get(username);
+        }
+        return getDataManager().getStringField(Table.INVENTORY.getName(), "INVENTORY", Table.INVENTORY.getPrimary() + " = '" + username + "'");
     }
 
     public void setInventory(String username, String inventory) {
+        this.userInventories.put(username, inventory);
         if (userExists(Table.INVENTORY, username)) {
             try {
-                getDataManager().updateField(Table.INVENTORY.getName(), "INVENTORY", inventory, Table.INVENTORY.getPrimary() + "='" + username + "'");
+                getDataManager().updateField(Table.INVENTORY.getName(), "INVENTORY", inventory, Table.INVENTORY.getPrimary() + " = '" + username + "'");
             } catch (SQLException e) {
                 OdinManager.getLogger().error("Failed updating inventory for username '" + username + "'.");
                 OdinManager.getLogger().debug("Tried updating inventory '" + inventory + "'");
@@ -226,7 +234,7 @@ public class StorageManager {
             data.put(Table.INVENTORY.getPrimary(), username);
             data.put("INVENTORY", inventory);
             try {
-                getDataManager().insertFields(data, Table.INFORMATION.getName());
+                getDataManager().insertFields(data, Table.INVENTORY.getName());
             } catch (SQLException e) {
                 OdinManager.getLogger().error("Failed inserting inventory for username '" + username + "'.");
                 OdinManager.getLogger().debug("Tried inserting inventory '" + inventory + "'");
@@ -237,10 +245,14 @@ public class StorageManager {
     }
 
     public String getArmor(String username) {
+        if (this.userArmor.containsKey(username)) {
+            return this.userArmor.get(username);
+        }
         return getDataManager().getStringField(Table.INVENTORY.getName(), "ARMOR", Table.INVENTORY.getPrimary() + "='" + username + "'");
     }
 
     public void setArmor(String username, String armor) {
+        this.userArmor.put(username, armor);
         if (userExists(Table.INVENTORY, username)) {
             try {
                 getDataManager().updateField(Table.INVENTORY.getName(), "ARMOR", armor, Table.INVENTORY.getPrimary() + "='" + username + "'");
@@ -254,7 +266,7 @@ public class StorageManager {
             data.put(Table.INVENTORY.getPrimary(), username);
             data.put("ARMOR", armor);
             try {
-                getDataManager().insertFields(data, Table.INFORMATION.getName());
+                getDataManager().insertFields(data, Table.INVENTORY.getName());
             } catch (SQLException e) {
                 OdinManager.getLogger().error("Failed inserting armor for username '" + username + "'.");
                 OdinManager.getLogger().debug("Tried inserting armor '" + armor + "'");
@@ -268,7 +280,7 @@ public class StorageManager {
         if (!getDataManager().tableExist(Table.USERS.getName())) {
             try {
                 getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.USERS.getName() + "(" +
-                                              "ID INT PRIMARY KEY, " +
+                                              "ID INT PRIMARY KEY AUTO_INCREMENT, " +
                                               "USERNAME VARCHAR(50), " +
                                               "LINKED_NAME VARCHAR(50), " +
                                               "PASSWORD VARCHAR(255), " +
@@ -289,7 +301,7 @@ public class StorageManager {
         if (!getDataManager().tableExist(Table.INVENTORY.getName())) {
             try {
                 getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.INVENTORY.getName() + "(" +
-                                              "ID INT PRIMARY KEY, " +
+                                              "ID INT PRIMARY KEY AUTO_INCREMENT, " +
                                               "USERNAME VARCHAR(50), " +
                                               "INVENTORY TEXT, " +
                                               "ARMOR TEXT)");
