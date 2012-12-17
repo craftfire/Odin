@@ -23,11 +23,14 @@ import com.craftfire.commons.database.DataRow;
 import com.craftfire.commons.database.Results;
 
 public class StoredOdinUser {
-    private final int id;
     private final String username;
     private String linkedName, password, passwordSalt, email, ipAddress;
-    private int activated, registered;
+    private int id, activated, registered;
     private long sessionTime, reloadTime;
+
+    public StoredOdinUser(String username) {
+        this.username = username;
+    }
 
     public StoredOdinUser(Results data) {
         DataRow row = data.getFirstResult();

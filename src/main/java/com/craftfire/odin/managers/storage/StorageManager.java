@@ -186,7 +186,11 @@ public class StorageManager {
     }
 
     public StoredOdinUser getUser(String username) throws SQLException {
-        return new StoredOdinUser(getDataManager().getResults("SELECT * FROM " + Table.USERS.getName() + " WHERE " + Table.USERS.getPrimary() + " = '" + username + "' LIMIT 1"));
+        if (userExists(Table.USERS, username)) {
+            return new StoredOdinUser(getDataManager().getResults("SELECT * FROM " + Table.USERS.getName() + " WHERE " + Table.USERS.getPrimary() + " = '" + username + "' LIMIT 1"));
+        } else {
+            return new StoredOdinUser(username);
+        }
     }
 
     public String getInfo(String info) {
