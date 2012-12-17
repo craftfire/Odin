@@ -21,6 +21,7 @@ package com.craftfire.odin.managers.storage;
 
 import com.craftfire.commons.database.DataRow;
 import com.craftfire.commons.database.Results;
+import com.craftfire.commons.ip.IPAddress;
 
 public class StoredOdinUser {
     private final String username;
@@ -95,6 +96,14 @@ public class StoredOdinUser {
         return this.ipAddress;
     }
 
+    public void setIPAddress(IPAddress ipAddress) {
+        if (this.ipAddress == null) {
+            this.ipAddress = "";
+        } else {
+            this.ipAddress = ipAddress.toIPv4().toString();
+        }
+    }
+
     public void setIPAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
@@ -127,12 +136,20 @@ public class StoredOdinUser {
         return this.sessionTime;
     }
 
+    public void setSessionTime() {
+        setSessionTime(System.currentTimeMillis() / 1000);
+    }
+
     public void setSessionTime(long sessionTime) {
         this.sessionTime = sessionTime;
     }
 
     public long getReloadTime() {
         return this.reloadTime;
+    }
+
+    public void setReloadTime() {
+        setReloadTime(System.currentTimeMillis() / 1000);
     }
 
     public void setReloadTime(long reloadTime) {
