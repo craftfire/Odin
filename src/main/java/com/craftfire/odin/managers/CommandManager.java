@@ -37,22 +37,38 @@ public class CommandManager {
     }
 
     public String getCommand(String node) {
-        String newNode = "Core.commands." + node.toLowerCase();
+        String newNode = "commands." + node.toLowerCase();
+        OdinManager.getLogger().debug("Getting command from commands node: '" + newNode + "'.");
         if (exist(newNode)) {
-            return this.commands.getString(newNode);
+            String value = this.commands.getString(newNode);
+            OdinManager.getLogger().debug("Found command value for node '" + newNode + "' = '" + value + "'.");
+            return value;
         } else if (existDefault(newNode)) {
-            return this.defaults.getString(newNode);
+            String value = this.defaults.getString(newNode);
+            OdinManager.getLogger().debug("Could not find a custom command node '" + newNode + "', using default command value instead = '" + value + "'.");
+            return value;
         }
+        OdinManager.getLogger().error("Could not find command node '" + newNode + "', returning null.");
+        OdinManager.getLogger().debug("Custom commands size: " + this.commands.getNodes().size());
+        OdinManager.getLogger().debug("Default commands size: " + this.defaults.getNodes().size());
         return null;
     }
 
     public String getAlias(String node) {
-        String newNode = "Core.aliases." + node.toLowerCase();
+        String newNode = "alias." + node.toLowerCase();
+        OdinManager.getLogger().debug("Getting alias from alias node: '" + newNode + "'.");
         if (exist(newNode)) {
-            return this.commands.getString(newNode);
+            String value = this.commands.getString(newNode);
+            OdinManager.getLogger().debug("Found alias value for node '" + newNode + "' = '" + value + "'.");
+            return value;
         } else if (existDefault(newNode)) {
-            return this.defaults.getString(newNode);
+            String value = this.defaults.getString(newNode);
+            OdinManager.getLogger().debug("Could not find a custom alias node '" + newNode + "', using default alias value instead = '" + value + "'.");
+            return value;
         }
+        OdinManager.getLogger().error("Could not find alias node '" + newNode + "', returning null.");
+        OdinManager.getLogger().debug("Custom alias size: " + this.commands.getNodes().size());
+        OdinManager.getLogger().debug("Default alias size: " + this.defaults.getNodes().size());
         return null;
     }
 
