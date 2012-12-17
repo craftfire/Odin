@@ -39,7 +39,7 @@ import java.util.Set;
 
 public class OdinUser {
     private final String username;
-    private final StoredOdinUser storedUser;
+    private StoredOdinUser storedUser;
     private String linkedUsername;
     private IPAddress ipAddress;
     private ScriptUser user = null;
@@ -67,6 +67,12 @@ public class OdinUser {
             throw new IllegalArgumentException("Parameter for OdinUser username cannot be null!");
         }
         this.username = username;
+        try {
+            this.storedUser = OdinManager.getStorage().getUser(username);
+        } catch (SQLException e) {
+            OdinManager.getLogger().error("Could not grab user from storage,");
+            OdinManager.getLogger().stackTrace(e);
+        }
         if (ipAddress != null) {
             new OdinUser(username, IPAddress.valueOf(ipAddress.getAddress()));
         } else {
@@ -97,7 +103,7 @@ public class OdinUser {
         this.ipAddress = ipAddress;
         this.hasBadCharacters = MainUtils.hasBadCharacters(username, OdinManager.getConfig().getString("filter.username"));
         try {
-            this.storedUser = OdinManager.getStorage().getUser(this.username);
+            this.storedUser = OdinManager.getStorage().getUser(username);
         } catch (SQLException e) {
             OdinManager.getLogger().error("Could not grab user from storage,");
             OdinManager.getLogger().stackTrace(e);
