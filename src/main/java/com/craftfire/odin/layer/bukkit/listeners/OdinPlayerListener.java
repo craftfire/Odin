@@ -162,8 +162,7 @@ public class OdinPlayerListener implements Listener {
         } else if (OdinManager.getConfig().getBoolean("register.force")) {
             player.storeInventory();
             player.sendMessage("register.welcome");
-        } else if (!OdinManager.getConfig().getBoolean("register.force") &&
-                   OdinManager.getConfig().getBoolean("register.enabled")) {
+        } else if (!OdinManager.getConfig().getBoolean("register.force") && OdinManager.getConfig().getBoolean("register.enabled")) {
             player.sendMessage("register.welcome");
         } else {
             //Authenticate?
