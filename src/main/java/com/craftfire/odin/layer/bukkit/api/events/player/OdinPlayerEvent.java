@@ -33,6 +33,11 @@ public abstract class OdinPlayerEvent extends OdinEvent {
         this.odinPlayer = Util.getPlayer(player);
     }
 
+    public OdinPlayerEvent(final OdinPlayer player) {
+        this.odinPlayer = player;
+        this.player = player.getPlayer();
+    }
+
     /**
      * Returns the player involved in this event
      *

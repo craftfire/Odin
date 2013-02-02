@@ -68,4 +68,8 @@ public enum Permissions {
     public static String getAdminNode() {
         return OdinManager.getPluginName() + ".command.admin.";
     }
+
+    public static String getNode(PermissionType type) {
+        return OdinManager.getPluginName() + ".command." + type.name();
+    }
 }

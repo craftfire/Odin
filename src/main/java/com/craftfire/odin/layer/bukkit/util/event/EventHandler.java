@@ -38,7 +38,7 @@ public class EventHandler {
     }
 
     public static OdinMessageEvent onOdinMessage(OdinPlayer player, String message) {
-        OdinMessageEvent event = new OdinMessageEvent(player.getPlayer(), message);
+        OdinMessageEvent event = new OdinMessageEvent(player, message);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }

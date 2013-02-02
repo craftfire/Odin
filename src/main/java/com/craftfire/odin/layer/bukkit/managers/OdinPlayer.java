@@ -25,12 +25,11 @@ import com.craftfire.odin.layer.bukkit.util.event.Events;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 import com.craftfire.odin.managers.Permissions;
+import com.craftfire.odin.util.PermissionType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.PlayerInventory;
-
-import java.io.IOException;
 
 public class OdinPlayer extends OdinUser {
     private Player player;
@@ -72,16 +71,20 @@ public class OdinPlayer extends OdinUser {
         return false;
     }
 
-    public boolean hasPermissions(String permission) {
-        return Odin.getPermissions().has(this.player, permission);
-    }
-
     public boolean hasPermissions(CommandSender sender, String permission) {
         return Odin.getPermissions().has(sender, permission);
     }
     
     public boolean hasPermissions(Permissions permission) {
         return Odin.getPermissions().has(this.player, permission.getNode());
+    }
+
+    public boolean hasPermissions(PermissionType type) {
+       return Odin.getPermissions().has(this.player, Permissions.getNode(type));
+    }
+
+    public boolean hasAdminPermissions() {
+        return hasPermissions(PermissionType.ADMIN);
     }
 
     public PlayerInventory getInventory() {

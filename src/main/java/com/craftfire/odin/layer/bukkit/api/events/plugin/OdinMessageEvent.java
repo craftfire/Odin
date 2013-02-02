@@ -20,6 +20,7 @@
 package com.craftfire.odin.layer.bukkit.api.events.plugin;
 
 import com.craftfire.odin.layer.bukkit.api.events.player.OdinPlayerEvent;
+import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -29,7 +30,7 @@ public class OdinMessageEvent extends OdinPlayerEvent implements Cancellable {
     private String message;
     private boolean cancel;
 
-    public OdinMessageEvent(Player receiver, String message) {
+    public OdinMessageEvent(OdinPlayer receiver, String message) {
         super(receiver);
         this.message = message;
         this.cancel = false;

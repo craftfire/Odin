@@ -19,12 +19,15 @@
  */
 package com.craftfire.odin.layer.bukkit;
 
+import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.TranslationManager;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinDisableEvent;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinEnableEvent;
 import com.craftfire.odin.layer.bukkit.listeners.OdinPlayerListener;
 import com.craftfire.odin.layer.bukkit.managers.InventoryManager;
+import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
+import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.util.MainUtils;
 import net.milkbowl.vault.chat.Chat;
@@ -70,9 +73,21 @@ public class Odin extends JavaPlugin {
         setupChat();
         setupEconomy();
         OdinManager.init(getDataFolder(), getDescription().getVersion());
-        if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
+        if (OdinManager.getConfig().getString("database.username").equalsIgnoreCase("craftfire") && OdinManager.getConfig().getString("database.username").equalsIgnoreCase("craftfire")) {
+            OdinManager.getLogger().error("The username and password in basic.yml is default, please change these settings to use Odin.");
+            Bukkit.getPluginManager().disablePlugin(this);
+        } else if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
             if (OdinManager.getDataManager().hasConnection()) {
+                //TODO: custom database
+                try {
+                    OdinManager.getLogger().info(OdinManager.getScript().getUserCount() + " user registrations in database.");
+                } catch (ScriptException e) {
+                    OdinManager.getLogger().error("Could not get the amount of registrations from the database.");
+                    OdinManager.getLogger().stackTrace(e);
+                }
+                OdinManager.getLogger().debug("Debug has been enabled, prepare for loads of information.");
                 OdinManager.getLogger().info("Odin " + getDescription().getVersion() + " enabled.");
+                OdinManager.getLogger().info("Developed by CraftFire <dev@craftfire.com>");
                 Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
             } else {
                 OdinManager.getLogger().error("Odin " + getDescription().getVersion() + " could not be enabled due to an issue with the MySQL connection.");
@@ -80,6 +95,17 @@ public class Odin extends JavaPlugin {
             }
         } else {
             OdinManager.getLogger().error("Failed loading Odin databases, check log for more information.");
+        }
+
+        for (Player p : getServer().getOnlinePlayers()) {
+            OdinPlayer player = Util.getPlayer(p);
+            OdinManager.getLogger().debug("Checking user '" + player.getName() + "' for persistence, reload time: '" + player.getReloadTime() + "'");
+            if (player.getReloadTime() + 30 > (System.currentTimeMillis() / 1000)) {
+                OdinManager.getLogger().debug("Found persistence for user '" + player.getName() + "', logging in the user.");
+                player.login();
+            } else {
+                OdinManager.getLogger().debug("Could not find persistence for user '" + player.getName() + "', doing nothing.");
+            }
         }
     }
 
