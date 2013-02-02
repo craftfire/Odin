@@ -29,6 +29,7 @@ public class Events {
     public static void quit(OdinPlayer player) {
         Bukkit.getServer().getPluginManager().callEvent(new OdinPlayerQuitEvent(player.getPlayer()));
         player.restoreInventory();
+        player.save();
         logout(player, false);
     }
 
@@ -43,7 +44,7 @@ public class Events {
     }
 
     public static boolean message(OdinPlayer player, String message) {
-        OdinMessageEvent event = new OdinMessageEvent(player.getPlayer(), message);
+        OdinMessageEvent event = new OdinMessageEvent(player, message);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             event.getPlayer().sendMessage(event.getMessage());
