@@ -10,8 +10,8 @@ database:
     type: mysql                                      # Database type/driver to use. Current options are MySQL and eBean (Bukkit persistence).
     host: localhost                                  # MySQL server hostname, domain, IP, or localhost for local connections. MySQL only.
     port: 3306                                       # Port used for connecting to your MySQL server. This is usually 3306. MySQL only.
-    username: root                                   # Username used to connect to your database. Only valid for MySQL.
-    password: root                                   # Password used to connect to your database. MySQL only.
+    username: craftfire                              # Username used to connect to your database.
+    password: craftfire                              # Password used to connect to your database.
     name: forum                                      # Name of the database you are connecting to. MySQL only.
     keepalive: false                                 # Enable/disable keeping database connection alive. Do not use if your connection limit is low. MySQL only.
     timeout: 0                                       # Amount of time before the MySQL connection should reconnect. This only works when keepalive is true.
