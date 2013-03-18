@@ -25,7 +25,7 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.Permissions;
+import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.util.MainUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -200,7 +200,7 @@ public class OdinPlayerListener implements Listener {
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
         String command = split[0];
         if (OdinManager.getCommands().equals(command, "user.link")) {
-            if (player.hasPermissions(Permissions.command_login)) {
+            if (player.hasPermissions(OdinPermission.command_login)) {
                 player.sendMessage("login.processing");
                 if (player.isAuthenticated()) {
                     player.sendMessage("login.authorized");
@@ -226,7 +226,7 @@ public class OdinPlayerListener implements Listener {
         } else if (OdinManager.getCommands().equals(command, "user.link") &&
                   !OdinManager.getConfig().getBoolean("join.restrict") &&
                    OdinManager.getConfig().getBoolean("link.enabled")) {
-            if (player.hasPermissions(Permissions.command_link)) {
+            if (player.hasPermissions(OdinPermission.command_link)) {
                 if (split.length == 3) {
                     if (!player.getName().equals(split[1])) {
                         if (!player.isRegistered()) {
@@ -277,7 +277,7 @@ public class OdinPlayerListener implements Listener {
 
         if (!player.isAuthenticated()) {
             if (OdinManager.getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
-                if (player.isRegistered() && player.hasPermissions(Permissions.command_login)) {
+                if (player.isRegistered() && player.hasPermissions(OdinPermission.command_login)) {
                     String[] split = event.getMessage().split(" ");
                     player.sendMessage("login.processing");
                     if (split.length > 1) {
