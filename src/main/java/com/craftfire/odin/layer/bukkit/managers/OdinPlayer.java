@@ -23,8 +23,8 @@ import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.layer.bukkit.util.event.Events;
 import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.managers.OdinUser;
-import com.craftfire.odin.managers.Permissions;
 import com.craftfire.odin.util.PermissionType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -75,12 +75,12 @@ public class OdinPlayer extends OdinUser {
         return Odin.getPermissions().has(sender, permission);
     }
     
-    public boolean hasPermissions(Permissions permission) {
+    public boolean hasPermissions(OdinPermission permission) {
         return Odin.getPermissions().has(this.player, permission.getNode());
     }
 
     public boolean hasPermissions(PermissionType type) {
-       return Odin.getPermissions().has(this.player, Permissions.getNode(type));
+       return Odin.getPermissions().has(this.player, OdinPermission.getNode(type));
     }
 
     public boolean hasAdminPermissions() {

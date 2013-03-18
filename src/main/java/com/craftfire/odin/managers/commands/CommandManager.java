@@ -17,11 +17,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.odin.managers;
+package com.craftfire.odin.managers.commands;
+
 import com.craftfire.commons.yaml.YamlManager;
+import com.craftfire.odin.managers.LoggingHandler;
+import com.craftfire.odin.managers.OdinManager;
 
 import java.util.Map;
-
 
 public class CommandManager {
     private YamlManager commands = new YamlManager();

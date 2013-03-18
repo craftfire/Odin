@@ -19,10 +19,9 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.util.PermissionType;
 
-public enum Permissions {
+public enum OdinPermission {
     command_register (PermissionType.USER, "register"),
     command_unregister (PermissionType.USER, "unregister"),
     command_login (PermissionType.USER, "login"),
@@ -40,7 +39,7 @@ public enum Permissions {
 
     private PermissionType type;
     private String permission;
-    Permissions(PermissionType type, String permission) {
+    OdinPermission(PermissionType type, String permission) {
         this.type = type;
         this.permission = permission;
     }
@@ -59,6 +58,10 @@ public enum Permissions {
 
     public PermissionType getType() {
         return this.type;
+    }
+
+    public String getPermission() {
+        return this.permission;
     }
 
     public static String getUserNode() {
