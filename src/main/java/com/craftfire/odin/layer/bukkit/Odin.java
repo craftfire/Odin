@@ -73,7 +73,7 @@ public class Odin extends JavaPlugin {
         setupChat();
         setupEconomy();
         OdinManager.init(getDataFolder(), getDescription().getVersion());
-        if (OdinManager.getConfig().getString("database.username").equalsIgnoreCase("craftfire") && OdinManager.getConfig().getString("database.username").equalsIgnoreCase("craftfire")) {
+        if (OdinManager.getConfig().getString("database.username").equalsIgnoreCase("odin") && OdinManager.getConfig().getString("database.username").equalsIgnoreCase("odin")) {
             OdinManager.getLogger().error("The username and password in basic.yml is default, please change these settings to use Odin.");
             Bukkit.getPluginManager().disablePlugin(this);
         } else if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
