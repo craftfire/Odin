@@ -80,10 +80,21 @@ public class Odin extends JavaPlugin {
             if (OdinManager.getDataManager().hasConnection()) {
                 //TODO: custom database
                 try {
-                    OdinManager.getLogger().info(OdinManager.getScript().getUserCount() + " user registrations in database.");
+                    int userCount = OdinManager.getScript().getUserCount();
+                    if (userCount > 0) {
+                        OdinManager.getLogger().info(OdinManager.getScript().getUserCount() + " user registrations in database.");
+                    } else {
+                        OdinManager.getLogger().error("Odin " + getDescription().getVersion() + " could not be enabled"
+                                                    + "due to an issue with the configuration: SQL query failed '"
+                                                    + OdinManager.getScript().getDataManager().getLastQuery() + "'");
+                        Bukkit.getPluginManager().disablePlugin(this);
+                        return;
+                    }
                 } catch (ScriptException e) {
-                    OdinManager.getLogger().error("Could not get the amount of registrations from the database.");
+                    OdinManager.getLogger().error("Could not get the amount of registrations from the database, disabling Odin.");
                     OdinManager.getLogger().stackTrace(e);
+                    Bukkit.getPluginManager().disablePlugin(this);
+                    return;
                 }
                 OdinManager.getLogger().debug("Debug has been enabled, prepare for loads of information.");
                 OdinManager.getLogger().info("Odin " + getDescription().getVersion() + " enabled.");
@@ -92,9 +103,11 @@ public class Odin extends JavaPlugin {
             } else {
                 OdinManager.getLogger().error("Odin " + getDescription().getVersion() + " could not be enabled due to an issue with the MySQL connection.");
                 Bukkit.getPluginManager().disablePlugin(this);
+                return;
             }
         } else {
             OdinManager.getLogger().error("Failed loading Odin databases, check log for more information.");
+            return;
         }
 
         for (Player p : getServer().getOnlinePlayers()) {
