@@ -116,8 +116,12 @@ public class OdinManager {
     }
 
     public static void disable() {
-        getStorage().getDataManager().close(true);
-        getScript().getDataManager().close(true);
+        if (getStorage() != null && getStorage().getDataManager() != null) {
+            getStorage().getDataManager().close(true);
+        }
+        if (getBifrost() != null && getScript().getDataManager() != null) {
+            getScript().getDataManager().close(true);
+        }
         clear();
     }
 
