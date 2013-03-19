@@ -72,47 +72,17 @@ public class Odin extends JavaPlugin {
         setupPermissions();
         setupChat();
         setupEconomy();
-        OdinManager.init(getDataFolder(), getDescription().getVersion());
 
-        //getCommand("CommandTest").setExecutor(new CommandTest(this));
-
-        if (OdinManager.getConfig().getString("database.username").equalsIgnoreCase("odin") && OdinManager.getConfig().getString("database.username").equalsIgnoreCase("odin")) {
-            OdinManager.getLogger().error("The username and password in basic.yml is default, please change these settings to use Odin.");
-            Bukkit.getPluginManager().disablePlugin(this);
-        } else if (loadLibraries() && OdinManager.loadDatabases(getDataFolder())) {
-            if (OdinManager.getDataManager().hasConnection()) {
-                //TODO: custom database
-                try {
-                    int userCount = OdinManager.getScript().getUserCount();
-                    if (userCount > 0) {
-                        OdinManager.getLogger().info(OdinManager.getScript().getUserCount() + " user registrations in database.");
-                    } else {
-                        OdinManager.getLogger().error("Odin " + getDescription().getVersion() + " could not be enabled"
-                                                    + "due to an issue with the configuration: SQL query failed '"
-                                                    + OdinManager.getScript().getDataManager().getLastQuery() + "'");
-                        Bukkit.getPluginManager().disablePlugin(this);
-                        return;
-                    }
-                } catch (ScriptException e) {
-                    OdinManager.getLogger().error("Could not get the amount of registrations from the database, disabling Odin.");
-                    OdinManager.getLogger().stackTrace(e);
-                    Bukkit.getPluginManager().disablePlugin(this);
-                    return;
-                }
-                OdinManager.getLogger().debug("Debug has been enabled, prepare for loads of information.");
-                OdinManager.getLogger().info("Odin " + getDescription().getVersion() + " enabled.");
-                OdinManager.getLogger().info("Developed by CraftFire <dev@craftfire.com>");
-                Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
-            } else {
-                OdinManager.getLogger().error("Odin " + getDescription().getVersion() + " could not be enabled due to an issue with the MySQL connection.");
-                Bukkit.getPluginManager().disablePlugin(this);
-                return;
-            }
-        } else {
+        if (!loadLibraries()) {
             OdinManager.getLogger().error("Failed loading Odin databases, check log for more information.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        } else if (OdinManager.init(getDataFolder(), getDescription().getVersion())) {
+            Bukkit.getServer().getPluginManager().callEvent(new OdinEnableEvent());
+        } else {
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-
         for (Player p : getServer().getOnlinePlayers()) {
             OdinPlayer player = Util.getPlayer(p);
             OdinManager.getLogger().debug("Checking user '" + player.getName() + "' for persistence, reload time: '" + player.getReloadTime() + "'");
@@ -147,15 +117,6 @@ public class Odin extends JavaPlugin {
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        Player player = null;
-        if (sender instanceof Player) {
-            player = (Player) sender;
-        }
-        return true;
     }
 
     public static Permission getPermissions() {

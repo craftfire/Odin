@@ -51,7 +51,7 @@ public class OdinManager {
 
     private OdinManager() {}
 
-    public static void init(File directory, String version) {
+    public static boolean init(File directory, String version) {
         pluginVersion = version;
         messageManager = new MessageManager();
         commandManager = new CommandManager();
@@ -59,6 +59,39 @@ public class OdinManager {
         inventoryManager = new InventoryManager();
         loadConfiguration(directory);
         submitStats();
+        if (OdinManager.getConfig().getString("database.username").equalsIgnoreCase("odin") && OdinManager.getConfig().getString("database.username").equalsIgnoreCase("odin")) {
+            OdinManager.getLogger().error("The username and password in basic.yml is default, please change these settings to use Odin.");
+            return false;
+        } else if (OdinManager.loadDatabases(directory)) {
+            if (OdinManager.getDataManager().hasConnection()) {
+                //TODO: custom database
+                try {
+                    int userCount = OdinManager.getScript().getUserCount();
+                    if (userCount > 0) {
+                        OdinManager.getLogger().info(OdinManager.getScript().getUserCount() + " user registrations in database.");
+                    } else {
+                        OdinManager.getLogger().error("Odin " + getPluginVersion() + " could not be enabled"
+                                                        + "due to an issue with the configuration: SQL query failed '"
+                                                        + OdinManager.getScript().getDataManager().getLastQuery() + "'");
+                        return false;
+                    }
+                } catch (ScriptException e) {
+                    OdinManager.getLogger().error("Could not get the amount of registrations from the database, disabling Odin.");
+                    OdinManager.getLogger().stackTrace(e);
+                    return false;
+                }
+                OdinManager.getLogger().debug("Debug has been enabled, prepare for loads of information.");
+                OdinManager.getLogger().info("Odin " + getPluginVersion() + " enabled.");
+                OdinManager.getLogger().info("Developed by CraftFire <dev@craftfire.com>");
+                return true;
+            } else {
+                OdinManager.getLogger().error("Odin " + getPluginVersion() + " could not be enabled due to an issue with the MySQL connection.");
+                return false;
+            }
+        } else {
+            OdinManager.getLogger().error("Failed loading Odin databases, check log for more information.");
+            return false;
+        }
     }
 
     public static String getPluginName() {
