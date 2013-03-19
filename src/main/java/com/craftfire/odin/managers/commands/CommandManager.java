@@ -23,6 +23,7 @@ import com.craftfire.commons.yaml.YamlManager;
 import com.craftfire.odin.managers.LoggingHandler;
 import com.craftfire.odin.managers.OdinManager;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public class CommandManager {
@@ -74,6 +75,28 @@ public class CommandManager {
         return null;
     }
 
+    public String getNode(String value) {
+        String node = this.commands.getNode(value);
+        if (node == null) {
+            node = this.defaults.getNode(value);
+        }
+        OdinManager.getLogger().debug("Returning node for value '" + value + "' = '" + node + "'.");
+        return node;
+    }
+
+    public String getCommandName(String input) {
+        String node = getNode(input);
+        if (node != null) {
+            node = node.replaceAll("aliases.user.", "")
+                       .replaceAll("aliases.admin.", "")
+                       .replaceAll("commands.user.", "")
+                       .replaceAll("commands.admin.", "");
+
+        }
+        OdinManager.getLogger().debug("Returning command name for input '" + input + "' = '" + node + "'.");
+        return node;
+    }
+
     public Map<String, Object> getNodes() {
         return this.commands.getNodes();
     }
@@ -88,6 +111,15 @@ public class CommandManager {
 
     public YamlManager getDefaults() {
         return this.defaults;
+    }
+
+    public boolean isCommand(String input) {
+        if (getNode(input) == null) {
+            OdinManager.getLogger().debug("Could not find '" + input + "' in the command list.");
+            return false;
+        } else {
+            return true;
+        }
     }
     
     public boolean equals(String command, String node) {

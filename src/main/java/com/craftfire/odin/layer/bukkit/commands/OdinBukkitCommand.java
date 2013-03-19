@@ -21,20 +21,23 @@ package com.craftfire.odin.layer.bukkit.commands;
 
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinPermission;
-import com.craftfire.odin.managers.OdinUser;
 import com.craftfire.odin.managers.commands.OdinCommand;
 
 public class OdinBukkitCommand extends OdinCommand {
-    public OdinBukkitCommand(final String commandName, final OdinPermission permission, final OdinUser user) {
-        super(commandName, permission, user);
+    public OdinBukkitCommand(String commandName, OdinPermission permission, String description) {
+        super(commandName, permission, description);
     }
 
-    @Override
-    public OdinPlayer getUser() {
-        return (OdinPlayer) this.user;
+    public boolean isPermitted(OdinPlayer player) {
+        return true;
+        //TODO: return player.hasPermissions(getPermission());
     }
 
-    public boolean isPermitted() {
-        return getUser().hasPermissions(getPermission());
+    public void execute(OdinPlayer player, String[] args) {
+        // Ignore
+    }
+
+    public void sendUsage(OdinPlayer player) {
+        player.sendMessage(getUsageNode());
     }
 }

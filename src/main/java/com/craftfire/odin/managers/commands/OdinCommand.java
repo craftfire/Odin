@@ -21,18 +21,19 @@ package com.craftfire.odin.managers.commands;
 
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
-import com.craftfire.odin.managers.OdinUser;
 
 public abstract class OdinCommand {
     protected String commandName, alias;
     private OdinPermission permission;
-    protected OdinUser user;
+    private String description, usage, usageNode;
 
-    public OdinCommand(final String commandName, final OdinPermission permission, final OdinUser user) {
-        this.commandName = commandName;
-        this.alias = OdinManager.getCommands().getAlias(commandName);
+    public OdinCommand(String commandName, OdinPermission permission, String description) {
+        this.commandName = commandName.toLowerCase();
+        this.alias = OdinManager.getCommands().getAlias(commandName.toLowerCase());
         this.permission = permission;
-        this.user = user;
+        this.description = description;
+        this.usageNode = commandName.toLowerCase() + ".usage";
+        this.usage = OdinManager.getMessages().getMessage(this.usageNode);
     }
 
     public String getName() {
@@ -47,7 +48,15 @@ public abstract class OdinCommand {
         return this.permission;
     }
 
-    public OdinUser getUser() {
-        return this.user;
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getUsage() {
+        return this.usage;
+    }
+
+    public String getUsageNode() {
+        return this.usageNode;
     }
 }
