@@ -38,6 +38,10 @@ public class MessageManager {
         getDefaults().setLoggingManager(loggingHandler);
     }
 
+    public String getMessage(String node) {
+        return getMessage(node, null);
+    }
+
     public String getMessage(String node, OdinUser user) {
         OdinManager.getLogger().debug("Getting message from node: '" + node + "'.");
         if (exist(node)) {
@@ -104,12 +108,18 @@ public class MessageManager {
     private boolean existDefault(String node) {
         return node != null && this.defaults.exist(node.toLowerCase());
     }
-    
+
+    public String replace(String message) {
+        return replace(message, null);
+    }
+
     public String replace(String message, OdinUser user) {
         if (message != null) {
             String string = message;
             //TODO string = string.replaceAll("\\{IP\\}", );
-            string = string.replaceAll("\\{PLAYER\\}", user.getUsername());
+            if (user != null) {
+                string = string.replaceAll("\\{PLAYER\\}", user.getUsername());
+            }
             //TODO string = string.replaceAll("\\{NEWPLAYER\\}", "");
             //TODO string = string.replaceAll("\\{PLAYERNEW\\}", "");
             string = string.replaceAll("&", "Â§");

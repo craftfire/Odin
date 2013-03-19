@@ -21,10 +21,7 @@ package com.craftfire.odin.managers;
 
 import com.craftfire.commons.yaml.YamlManager;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ConfigurationManager {
     private YamlManager config = new YamlManager();
@@ -116,6 +113,14 @@ public class ConfigurationManager {
         debug(node, "Custom config size: " + this.config.getNodes().size());
         debug(node, "Default config size: " + this.defaults.getNodes().size());
         return null;
+    }
+
+     public String getNode(String value) {
+        String node = this.config.getNode(value);
+        if (node == null) {
+            node = this.defaults.getNode(value);
+        }
+        return node;
     }
     
     public Map<String, Object> getNodes() {
