@@ -55,11 +55,6 @@ public class Events {
                                     + "', message is '" + message + "'.");
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            //event.getUser().getPlayer().sendMessage(event.getMessage());
-            player.getPlayer().sendMessage("Test 1");
-            player.getPlayer().sendMessage("Test 2");
-            event.getUser().getPlayer().sendMessage("Test 3");
-            event.getUser().getPlayer().sendMessage("Test 4");
             event.getUser().getPlayer().sendMessage(event.getMessage());
             OdinManager.getLogger().debug("Successfully executed the 'MESSAGE' event for user '" + event.getUser().getName()
                                         + "': '" + event.getMessage() + "'.");
