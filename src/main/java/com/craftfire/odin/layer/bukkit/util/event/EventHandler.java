@@ -26,13 +26,13 @@ import org.bukkit.Bukkit;
 
 public class EventHandler {
     public static OdinPlayerQuitEvent onOdinPlayerQuit(OdinPlayer player) {
-        OdinPlayerQuitEvent event = new OdinPlayerQuitEvent(player.getPlayer());
+        OdinPlayerQuitEvent event = new OdinPlayerQuitEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }
 
     public static OdinPlayerKickEvent onOdinPlayerKick(OdinPlayer player, String message) {
-        OdinPlayerKickEvent event = new OdinPlayerKickEvent(player.getPlayer(), message);
+        OdinPlayerKickEvent event = new OdinPlayerKickEvent(player, message);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }
@@ -44,25 +44,25 @@ public class EventHandler {
     }
 
     public static OdinPlayerLoginEvent onOdinPlayerLogin(OdinPlayer player) {
-        OdinPlayerLoginEvent event = new OdinPlayerLoginEvent(player.getPlayer());
+        OdinPlayerLoginEvent event = new OdinPlayerLoginEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }
 
     public static OdinPlayerLogoutEvent onOdinPlayerLogout(OdinPlayer player) {
-        OdinPlayerLogoutEvent event = new OdinPlayerLogoutEvent(player.getPlayer());
+        OdinPlayerLogoutEvent event = new OdinPlayerLogoutEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }
     
     public static OdinPlayerLinkEvent onOdinPlayerLink(OdinPlayer player, String name) {
-        OdinPlayerLinkEvent event = new OdinPlayerLinkEvent(player.getPlayer(), name);
+        OdinPlayerLinkEvent event = new OdinPlayerLinkEvent(player, name);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }
 
     public static OdinPlayerUnlinkEvent onOdinPlayerUnlink(OdinPlayer player) {
-        OdinPlayerUnlinkEvent event = new OdinPlayerUnlinkEvent(player.getPlayer(), player.getLinkedName());
+        OdinPlayerUnlinkEvent event = new OdinPlayerUnlinkEvent(player, player.getLinkedName());
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event;
     }

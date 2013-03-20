@@ -19,6 +19,7 @@
  */
 package com.craftfire.odin.layer.bukkit.api.events.player;
 
+import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -28,7 +29,7 @@ public class OdinPlayerKickEvent extends OdinPlayerEvent implements Cancellable 
     private String reason;
     private boolean cancel;
 
-    public OdinPlayerKickEvent(final Player player, String reason) {
+    public OdinPlayerKickEvent(OdinPlayer player, String reason) {
         super(player);
         this.reason = reason;
         this.cancel = false;

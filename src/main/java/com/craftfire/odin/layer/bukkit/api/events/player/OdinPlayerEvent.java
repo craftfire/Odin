@@ -25,26 +25,15 @@ import com.craftfire.odin.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 
 public abstract class OdinPlayerEvent extends OdinEvent {
-    private Player player;
     private OdinPlayer odinPlayer;
     
-    public OdinPlayerEvent(final Player player) {
-        this.player = player;
+    public OdinPlayerEvent(Player player) {
+        //TODO: Delete?
         this.odinPlayer = Util.getPlayer(player);
     }
 
-    public OdinPlayerEvent(final OdinPlayer player) {
-        this.odinPlayer = player;
-        this.player = player.getPlayer();
-    }
-
-    /**
-     * Returns the player involved in this event
-     *
-     * @return Player who is involved in this event
-     */
-    public final Player getPlayer() {
-        return player;
+    public OdinPlayerEvent(OdinPlayer odinPlayer) {
+        this.odinPlayer = odinPlayer;
     }
 
     /**
@@ -52,7 +41,7 @@ public abstract class OdinPlayerEvent extends OdinEvent {
      *
      * @return Odin player involved in this event
      */
-    public final OdinPlayer getOdinPlayer() {
+    public final OdinPlayer getUser() {
         return this.odinPlayer;
     }
 }
