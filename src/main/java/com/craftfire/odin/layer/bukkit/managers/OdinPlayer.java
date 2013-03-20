@@ -48,6 +48,10 @@ public class OdinPlayer extends OdinUser {
         return this.player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public String getDisplayName() {
         return this.player.getDisplayName();
     }
@@ -109,6 +113,7 @@ public class OdinPlayer extends OdinUser {
     }
     
     public void kickPlayer(String node) {
+        OdinManager.getLogger().debug("Kicking player '" + getName() + "': '" + node + "'.");
         if (isNode(node)) {
             callEvent(Event.KICK, OdinManager.getMessages().getMessage(node, this));
         } else {
@@ -118,20 +123,26 @@ public class OdinPlayer extends OdinUser {
     
     public void sendMessage(String node) {
         if (isNode(node)) {
-            callEvent(Event.MESSAGE, OdinManager.getMessages().getMessage(node, this));
+            String message = OdinManager.getMessages().getMessage(node, this);
+            OdinManager.getLogger().debug("Sending message to '" + getName() + "': '" + node + "' = '" + message + "'");
+            callEvent(Event.MESSAGE, message);
         } else {
-            callEvent(Event.MESSAGE, OdinManager.getMessages().replace(node, this));
+            String message = OdinManager.getMessages().replace(node, this);
+            OdinManager.getLogger().debug("Sending message to '" + getName() + "': '" + node + "' = '" + message + "'");
+            callEvent(Event.MESSAGE, message);
         }
     }
 
     public void sendMessage(String node, PlayerLoginEvent event) {
         //TODO: Call event?
         if (isNode(node)) {
-            OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().getMessage(node, this) + "'");
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().getMessage(node, this));
+            String message = OdinManager.getMessages().getMessage(node, this);
+            OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + message + "'");
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, message);
         } else {
-            OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + OdinManager.getMessages().replace(node, this) + "'");
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, OdinManager.getMessages().replace(node, this));
+            String message = OdinManager.getMessages().replace(node, this);
+            OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + message + "'");
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, message);
         }
     }
 
@@ -199,22 +210,7 @@ public class OdinPlayer extends OdinUser {
     }
 
     public void callEvent(Event event) {
-        switch (event) {
-            case KICK:      Events.kick(this, null);
-                break;
-            case LINK:      Events.link(this, getLinkedName());
-                break;
-            case LOGIN:     Events.login(this);
-                break;
-            case LOGOUT:    Events.logout(this, false);
-                break;
-            case UNLINK:    Events.unlink(this);
-                break;
-            case QUIT:      Events.quit(this);
-                break;
-            case MESSAGE:   Events.message(this, null);
-                break;
-        }
+        callEvent(event, null);
     }
     
     private boolean isNode(String string) {
