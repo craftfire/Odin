@@ -81,7 +81,7 @@ public class Events {
 
     public static boolean logout(OdinPlayer player, boolean storeInventory) {
         OdinPlayerLogoutEvent event = new OdinPlayerLogoutEvent(player);
-        OdinManager.getLogger().debug("Calling the 'MESSAGE' event for user '" + player.getName()
+        OdinManager.getLogger().debug("Calling the 'LOGOUT' event for user '" + player.getName()
                                     + "', storing inventory: '" + storeInventory + "'.");
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled() && player.isAuthenticated()) {
@@ -99,7 +99,7 @@ public class Events {
 
     public static boolean link(OdinPlayer player, String name) {
         OdinPlayerLinkEvent event = new OdinPlayerLinkEvent(player, name);
-        OdinManager.getLogger().debug("Calling the 'MESSAGE' event for user '" + player.getName()
+        OdinManager.getLogger().debug("Calling the 'LINK' event for user '" + player.getName()
                                     + "', linked name is '" + name + "'.");
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled() && !player.isAuthenticated() && !player.isLinked()) {
@@ -120,7 +120,7 @@ public class Events {
 
     public static boolean unlink(OdinPlayer player) {
         OdinPlayerLinkEvent event = new OdinPlayerLinkEvent(player, player.getLinkedName());
-        OdinManager.getLogger().debug("Calling the 'MESSAGE' event for user '" + player.getName() + "'.");
+        OdinManager.getLogger().debug("Calling the 'UNLINK' event for user '" + player.getName() + "'.");
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled() && player.isAuthenticated() && player.isLinked()) {
             if (logout(player, true)) {
