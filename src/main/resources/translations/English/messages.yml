@@ -59,6 +59,7 @@ link:
     duplicate: "{RED}Username is already linked to another player!"
     registered: "{RED}You cannot link as this username is already registered!"
     invaliduser: "{RED}You cannot link with yourself!"
+    disabled: "{RED}Linking is disabled!"
     renamed: "{YELLOW}{PLAYER} has been renamed to {DISPLAYNAME}."
     usage: "{YELLOW}Correct usage is: {WHITE}{LINKCMD} otherusername password"
 unlink:
