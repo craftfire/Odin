@@ -146,7 +146,7 @@ public class OdinPlayerListener implements Listener {
 
         if (allow) {
             player.setAuthenticated(true);
-            /* TODO */
+            player.sendMessage("session.valid");
         } else if (player.isRegistered()) {
             player.storeInventory();
             Odin.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Odin.getInstance(), new Runnable() {
@@ -200,9 +200,9 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String[] split = event.getMessage().split(" ");
+        String[] args = Arrays.copyOfRange(split, 1, split.length);
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
         String command = split[0];
-        String[] args = Arrays.copyOfRange(split, 1, split.length);
 
         if (OdinManager.getCommands().isCommand(command)) {
             OdinBukkitCommand bukkitCommand = BukkitCommandManager.getCommand(command);
@@ -213,7 +213,7 @@ public class OdinPlayerListener implements Listener {
             } else {
                 bukkitCommand.execute(player, args);
             }
-            event.setMessage("******");
+            event.setMessage("******"); //TODO
             event.setCancelled(true);
         }
     }
