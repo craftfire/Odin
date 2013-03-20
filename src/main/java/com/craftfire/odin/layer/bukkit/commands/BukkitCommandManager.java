@@ -25,12 +25,18 @@ public class BukkitCommandManager {
     public static OdinBukkitCommand getCommand(String command) {
         String name = OdinManager.getCommands().getCommandName(command);
         if (name != null) {
-            if (name.equalsIgnoreCase("login")) {
-                OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandLogin();
-            } else if (name.equalsIgnoreCase("link")) {
+            if (name.equalsIgnoreCase("link")) {
                 OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase() + "'.");
                 return new CommandLink();
+            } if (name.equalsIgnoreCase("login")) {
+                OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase() + "'.");
+                return new CommandLogin();
+            } else if (name.equalsIgnoreCase("logout")) {
+                OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase() + "'.");
+                return new CommandLogout();
+            } else if (name.equalsIgnoreCase("register")) {
+                OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase() + "'.");
+                return new CommandRegister();
             }
         }
         OdinManager.getLogger().debug("The command: '" + command.toLowerCase() + "' is not supported by Odin.");

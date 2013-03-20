@@ -34,7 +34,7 @@ public class CommandLogin extends OdinBukkitCommand {
     @Override
     public void execute(OdinPlayer player, String[] args) {
         player.sendMessage("login.processing");
-        if (pre(player, args)) {
+        if (preCheck(player, args)) {
             if (player.login(args[1])) {
                 if (player.callEventResults(Event.LOGIN)) {
                     player.sendMessage("login.success");
@@ -42,20 +42,24 @@ public class CommandLogin extends OdinBukkitCommand {
                     player.sendMessage("login.failure");
                 }
             } else {
-                //TODO
+                if (!OdinManager.getDataManager().hasConnection()) {
+                    player.sendMessage("login.offline");
+                } else {
+                    player.sendMessage("login.failure");
+                }
             }
             OdinManager.getLogger().debug(player.getName() + " login ********");
         }
     }
 
-    private boolean pre(OdinPlayer player, String[] args) {
+    private boolean preCheck(OdinPlayer player, String[] args) {
         if (player.isAuthenticated()) {
             player.sendMessage("login.authorized");
             return false;
         } else if (!player.isRegistered()) {
             player.sendMessage("login.notregistered");
             return false;
-        } else if (args.length < 2) {
+        } else if (args.length < 1) {
             player.sendMessage("login.usage");
             return false;
         }

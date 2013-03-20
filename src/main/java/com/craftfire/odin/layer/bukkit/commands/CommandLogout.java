@@ -25,35 +25,24 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.managers.OdinUser;
 
-public class CommandLink extends OdinBukkitCommand {
+public class CommandLogout extends OdinBukkitCommand {
 
-    public CommandLink() {
-        super("link", OdinPermission.command_link, "TODO");
+    public CommandLogout() {
+        super("logout", OdinPermission.command_logout, "TODO");
     }
 
     @Override
     public void execute(OdinPlayer player, String[] args) {
-        if (preCheck(player, args)) {
-            if (!player.isRegistered()) {
-                //TODO: Link the player.
+        player.sendMessage("logout.processing");
+        if (player.logout()) {
+            player.sendMessage("logout.success");
+            if (OdinManager.getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
+                player.sendMessage("login.prompt");
             } else {
-                player.sendMessage("login.registered");
+                player.sendMessage("login.normal");
             }
-            OdinManager.getLogger().debug(player.getName() + " link ******** ********");
+        } else {
+            player.sendMessage("logout.failure");
         }
-    }
-
-    private boolean preCheck(OdinPlayer player, String[] args) {
-        if (OdinManager.getConfig().getBoolean("join.restrict") || !OdinManager.getConfig().getBoolean("link.enabled")) {
-            player.sendMessage("link.disabled");
-            return false;
-        } else if (args.length != 2) {
-            player.sendMessage("login.usage");
-            return false;
-        } else if (!player.getName().equals(args[0])) {
-            player.sendMessage("login.invaliduser");
-            return false;
-        }
-        return true;
     }
 }
