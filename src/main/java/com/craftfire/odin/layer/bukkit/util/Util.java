@@ -29,7 +29,9 @@ public class Util {
         if (player == null) {
             throw new IllegalArgumentException("Parameter for getPlayer() cannot be null!");
         } else if (OdinManager.getStorage().isCachedUser(player.getName())) {
-            return (OdinPlayer) OdinManager.getStorage().getCachedUser(player.getName());
+            OdinPlayer odinPlayer = (OdinPlayer) OdinManager.getStorage().getCachedUser(player.getName());
+            odinPlayer.setPlayer(player);
+            return odinPlayer;
         } else {
             OdinPlayer odinPlayer = new OdinPlayer(player);
             OdinManager.getStorage().putCachedUser(odinPlayer);
