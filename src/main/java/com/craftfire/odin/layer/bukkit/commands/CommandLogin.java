@@ -35,7 +35,7 @@ public class CommandLogin extends OdinBukkitCommand {
     public void execute(OdinPlayer player, String[] args) {
         player.sendMessage("login.processing");
         if (preCheck(player, args)) {
-            if (player.login(args[1])) {
+            if (player.login(args[0])) {
                 if (player.callEventResults(Event.LOGIN)) {
                     player.sendMessage("login.success");
                 }  else {
