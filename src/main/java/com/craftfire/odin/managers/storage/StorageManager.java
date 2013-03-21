@@ -80,11 +80,13 @@ public class StorageManager {
     }
 
     public void putAuthenticated(String username) {
+        OdinManager.getLogger().debug("Adding '" + username + "' to the authenticated list.");
         this.authenticatedUsers.add(username);
     }
 
     public void removeAuthenticated(String username) {
         if (isAuthenticated(username)) {
+            OdinManager.getLogger().debug("Removing '" + username + "' from the authenticated list.");
             this.authenticatedUsers.remove(username);
         }
     }
