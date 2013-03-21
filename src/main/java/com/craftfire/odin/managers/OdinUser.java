@@ -194,15 +194,19 @@ public class OdinUser {
 
     public boolean logout() {
         if (OdinManager.getStorage().isAuthenticated(this.username)) {
+            OdinManager.getLogger().debug("User '" + getUsername() + "' is being logged out.");
             OdinManager.getStorage().removeAuthenticated(this.username);
             this.passwordAttempts = 0;
             this.timeout = 0;
+            this.authenticated = false;
             return true;
         }
+        OdinManager.getLogger().debug("User '" + getUsername() + "' was not authenticated, and was therefore not logged out.");
         return false;
     }
 
     public boolean login(String password) {
+        // TODO: Add debug
         try {
             if (!OdinManager.getStorage().isAuthenticated(this.username)) {
                 if (isLinked() && OdinManager.getScript().authenticate(getLinkedName(), password)) {
@@ -222,11 +226,13 @@ public class OdinUser {
     }
 
     public void login() {
+        // TODO: Add debug
         OdinManager.getStorage().putAuthenticated(this.username);
         this.authenticated = true;
     }
 
     public boolean unlink() {
+        // Add debug
         if (this.linkedUsername != null || OdinManager.getStorage().hasLinkedUsername(this.username)) {
             getStoredUser().setLinkedName("");
             OdinManager.getStorage().removeLinkedUsername(this.username);
@@ -253,7 +259,7 @@ public class OdinUser {
     }
 
     public boolean hasSession() {
-        //TODO
+        // TODO
         return OdinManager.getStorage().hasSession(this);
     }
     

@@ -245,6 +245,7 @@ public class OdinPlayerListener implements Listener {
 
         if (!player.isAuthenticated()) {
             if (OdinManager.getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
+                // TODO: Make sure this works
                 if (player.isRegistered() && player.hasPermissions(OdinPermission.command_login)) {
                     String[] split = event.getMessage().split(" ");
                     player.sendMessage("login.processing");
