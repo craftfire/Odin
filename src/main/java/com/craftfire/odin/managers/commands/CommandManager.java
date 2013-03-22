@@ -76,9 +76,9 @@ public class CommandManager {
     }
 
     public String getNode(String value) {
-        String node = this.commands.getNode(value);
+        String node = this.commands.getNode(value, true);
         if (node == null) {
-            node = this.defaults.getNode(value);
+            node = this.defaults.getNode(value, true);
         }
         OdinManager.getLogger().debug("Returning node for value '" + value + "' = '" + node + "'.");
         return node;
