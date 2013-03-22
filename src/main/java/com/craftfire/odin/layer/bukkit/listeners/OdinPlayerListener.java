@@ -204,14 +204,19 @@ public class OdinPlayerListener implements Listener {
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
         String command = split[0];
 
-        if (OdinManager.getCommands().isCommand(command)) {
-            OdinBukkitCommand bukkitCommand = BukkitCommandManager.getCommand(command);
+        if (OdinManager.getCommands().isCommand(event.getMessage())) {
+            OdinBukkitCommand bukkitCommand = BukkitCommandManager.getCommand(event.getMessage());
             if (bukkitCommand == null) {
                 OdinManager.getLogger().error("Something went wrong when initializing the '" + command + "' command.");
             } else if (!bukkitCommand.isPermitted(player)) {
                 player.sendMessage("protection.denied");
             } else {
-                bukkitCommand.execute(player, args);
+                try {
+                    bukkitCommand.execute(player, args);
+                } catch (IllegalAccessException e) {
+                    OdinManager.getLogger().error(e.getMessage());
+                    OdinManager.getLogger().stackTrace(e);
+                }
             }
             event.setMessage("******"); //TODO
             event.setCancelled(true);
