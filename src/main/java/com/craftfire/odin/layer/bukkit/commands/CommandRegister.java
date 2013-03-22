@@ -33,7 +33,7 @@ import java.sql.SQLException;
 public class CommandRegister extends OdinBukkitCommand {
 
     public CommandRegister() {
-        super("register", OdinPermission.command_register, "TODO");
+        super("user.register", OdinPermission.command_register, "TODO");
     }
 
     @Override

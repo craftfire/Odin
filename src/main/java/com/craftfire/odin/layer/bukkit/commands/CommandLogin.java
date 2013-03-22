@@ -28,7 +28,7 @@ import com.craftfire.odin.managers.OdinUser;
 public class CommandLogin extends OdinBukkitCommand {
 
     public CommandLogin() {
-        super("login", OdinPermission.command_login, "TODO");
+        super("user.login", OdinPermission.command_login, "TODO");
     }
 
     @Override

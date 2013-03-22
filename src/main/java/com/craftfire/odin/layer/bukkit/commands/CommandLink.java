@@ -28,7 +28,7 @@ import com.craftfire.odin.managers.OdinUser;
 public class CommandLink extends OdinBukkitCommand {
 
     public CommandLink() {
-        super("link", OdinPermission.command_link, "TODO");
+        super("user.link", OdinPermission.command_link, "TODO");
     }
 
     @Override

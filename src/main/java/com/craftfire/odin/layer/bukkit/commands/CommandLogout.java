@@ -28,7 +28,7 @@ import com.craftfire.odin.managers.OdinUser;
 public class CommandLogout extends OdinBukkitCommand {
 
     public CommandLogout() {
-        super("logout", OdinPermission.command_logout, "TODO");
+        super("user.logout", OdinPermission.command_logout, "TODO");
     }
 
     @Override
