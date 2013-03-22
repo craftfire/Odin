@@ -25,15 +25,13 @@ import com.craftfire.odin.managers.OdinPermission;
 public abstract class OdinCommand {
     protected String commandName, alias;
     private OdinPermission permission;
-    private String description, usage, usageNode;
+    private String description;
 
     public OdinCommand(String commandName, OdinPermission permission, String description) {
         this.commandName = commandName.toLowerCase();
         this.alias = OdinManager.getCommands().getAlias(commandName.toLowerCase());
         this.permission = permission;
         this.description = description;
-        this.usageNode = commandName.toLowerCase() + ".usage";
-        this.usage = OdinManager.getMessages().getMessage(this.usageNode);
     }
 
     public String getName() {
@@ -50,13 +48,5 @@ public abstract class OdinCommand {
 
     public String getDescription() {
         return this.description;
-    }
-
-    public String getUsage() {
-        return this.usage;
-    }
-
-    public String getUsageNode() {
-        return this.usageNode;
     }
 }
