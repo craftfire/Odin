@@ -26,48 +26,39 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.managers.OdinUser;
 
-public class CommandLink extends OdinBukkitCommand {
+public class CommandUnlink extends OdinBukkitCommand {
+    //TODO
 
-    public CommandLink() {
-        super("user.link", OdinPermission.command_link, "TODO");
+    public CommandUnlink() {
+        super("user.unlink", OdinPermission.command_unlink, "TODO");
     }
 
     @Override
     public void execute(OdinPlayer player, String[] args) {
-        player.sendMessage("link.processing");
+        player.sendMessage("unlink.processing");
         if (preCheck(player, args)) {
-            player.link(args[0]);
-            player.sendMessage("link.success");
-            OdinManager.getLogger().debug(player.getName() + " link ******** ********");
+            player.unlink();
+            player.sendMessage("unlink.success");
         }
     }
 
     private boolean preCheck(OdinPlayer player, String[] args) {
         try {
-            if (OdinManager.getConfig().getBoolean("join.restrict") || !OdinManager.getConfig().getBoolean("link.enabled")) {
-                player.sendMessage("link.disabled");
+            if (args.length != 2) {
+                player.sendMessage("unlink.usage");
                 return false;
-            } else if (args.length != 2) {
-                player.sendMessage("link.usage");
+            } else if (!player.isLinked()) {
+                player.sendMessage("unlink.nonexist");
                 return false;
-            } else if (player.getName().equals(args[0])) {
-                player.sendMessage("link.invaliduser");
-                return false;
-            } else if (player.isRegistered()) {
-                player.sendMessage("link.registered");
-                return false;
-            } else if (OdinManager.getStorage().hasLinkedUsername(player.getUsername())) {
-                player.sendMessage("link.exists");
-                return false;
-            } else if (OdinManager.getStorage().isLinkedUsername(args[0])) {
-                player.sendMessage("link.duplicate");
+            } else if (!args[0].equals(player.getLinkedName())) {
+                player.sendMessage("unlink.invaliduser");
                 return false;
             } else if (!OdinManager.getScript().authenticate(args[0], args[1])) {
-                player.sendMessage("link.invalidpass");
+                player.sendMessage("unlink.invalidpass");
                 return false;
             }
         } catch (ScriptException e) {
-            player.sendMessage("link.failure");
+            player.sendMessage("unlink.failure");
             OdinManager.getLogger().error("Failed to authenticate unlink '" + player.getName()
                                         + "' with linked name '" + player.getLinkedName() + "'.");
             OdinManager.getLogger().stackTrace(e);
