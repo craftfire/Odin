@@ -17,6 +17,6 @@ aliases:
         login: "/li"
         logout: "/lo"
     admin:
-        login: "/ali"
-        logout: "/alo"
-        reload: "/ar"
+        login: "/oli"
+        logout: "/olo"
+        reload: "/or"
