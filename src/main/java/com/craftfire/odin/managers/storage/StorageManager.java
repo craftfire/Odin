@@ -61,6 +61,10 @@ public class StorageManager {
         return this.linkedUsernames.containsKey(username);
     }
 
+    public boolean isLinkedUsername(String username) {
+        return this.linkedUsernames.containsValue(username);
+    }
+
     public void putLinkedUsername(String username, String linkedUsername) {
         this.linkedUsernames.put(username, linkedUsername);
     }
