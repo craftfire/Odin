@@ -23,15 +23,33 @@ import com.craftfire.commons.yaml.YamlManager;
 import com.craftfire.odin.managers.LoggingHandler;
 import com.craftfire.odin.managers.OdinManager;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class CommandManager {
     private YamlManager commands = new YamlManager();
     private YamlManager defaults = new YamlManager();
+    private Map<String, String> valueNodes = new HashMap<String, String>();
 
     public boolean isInitialized() {
         return (!commands.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+    }
+
+    public void initialize() throws IllegalAccessException {
+        for (Map.Entry<String, Object> stringObjectEntry : getNodes().entrySet()) {
+            Map.Entry pairs = (Map.Entry) stringObjectEntry;
+            if (pairs.getValue() instanceof String && pairs.getKey() instanceof String) {
+                if (this.valueNodes.containsKey(pairs.getValue())) {
+                    throw new IllegalAccessException("The command/alias '" + pairs.getValue() + "' (" + pairs.getKey() + ") "
+                                                   + "already exists under the '" + this.valueNodes.get(pairs.getKey()) + "' "
+                                                   + "node and cannot be used twice.");
+                } else {
+                    this.valueNodes.put((String) pairs.getValue(), (String) pairs.getKey());
+                }
+            }
+        }
     }
 
     public void setLoggingHandler(LoggingHandler loggingHandler) {
@@ -105,7 +123,22 @@ public class CommandManager {
     }
 
     public String getCommandName(String input) {
-        String node = getNode(input);
+        String[] array = input.split("\\s+");
+        String node = null;
+        String checkString = null;
+        int maxWords = 3;
+        for (int i = 0; array.length > i && maxWords > i; i++) {
+            if (checkString == null) {
+                checkString = array[i];
+            } else {
+                checkString += " " + array[i];
+            }
+            if (getNodes().containsValue(checkString)) {
+                node = getValueNodes().get(checkString);
+                OdinManager.getLogger().debug("Found command '" + checkString + "' in node: '" + node + "'.");
+                break;
+            }
+        }
         if (node != null) {
             node = node.replaceAll("aliases.", "")
                        .replaceAll("commands.", "");
@@ -123,6 +156,10 @@ public class CommandManager {
         return this.defaults.getNodes();
     }
 
+    public Map<String, String> getValueNodes() {
+        return this.valueNodes;
+    }
+
     public YamlManager getCommands() {
         return this.commands;
     }
@@ -132,14 +169,21 @@ public class CommandManager {
     }
 
     public boolean isCommand(String input) {
-        if (getNode(input) == null) {
+        String command = getCommandName(input);
+        if (command == null) {
             OdinManager.getLogger().debug("Could not find '" + input + "' in the command list.");
             return false;
         } else {
             return true;
         }
+        /*if (getNode(input) == null) {
+            OdinManager.getLogger().debug("Could not find '" + input + "' in the command list.");
+            return false;
+        } else {
+            return true;
+        }*/
     }
-    
+
     public boolean equals(String command, String node) {
         return command.equalsIgnoreCase(getCommand(node)) || command.equalsIgnoreCase(getAlias(node));
     }

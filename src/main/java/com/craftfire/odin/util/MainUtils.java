@@ -183,6 +183,12 @@ public class MainUtils {
             if (OdinManager.getCommands().getDefaultNodes().size() == 0) {
                 OdinManager.getLogger().error("Failed loading default commands!");
             }
+            try {
+                OdinManager.getCommands().initialize();
+            } catch (IllegalAccessException e) {
+                OdinManager.getLogger().error(e.getMessage());
+                OdinManager.getLogger().stackTrace(e);
+            }
         } else if (type.equalsIgnoreCase("messages")) {
             OdinManager.getMessages().getMessages().load(new File(dir + language + File.separator, type + ".yml"));
             OdinManager.getMessages().getDefaults().load("files/translations/English/" + type + ".yml");
