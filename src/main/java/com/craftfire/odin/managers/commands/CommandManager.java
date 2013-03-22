@@ -87,10 +87,8 @@ public class CommandManager {
     public String getCommandName(String input) {
         String node = getNode(input);
         if (node != null) {
-            node = node.replaceAll("aliases.user.", "")
-                       .replaceAll("aliases.admin.", "")
-                       .replaceAll("commands.user.", "")
-                       .replaceAll("commands.admin.", "");
+            node = node.replaceAll("aliases.", "")
+                       .replaceAll("commands.", "");
 
         }
         OdinManager.getLogger().debug("Returning command name for input '" + input + "' = '" + node + "'.");
