@@ -168,12 +168,32 @@ public class MainUtils {
             OdinManager.getLogger().info(type + " language set to " +
                                       OdinManager.getConfig().getString("plugin.language.messages"));
         }
+        OdinManager.getLogger().debug("Loading external language file for '" + type.toLowerCase() + "': "
+                                    + new File(dir + language + File.separator, type + ".yml").getPath());
+        OdinManager.getLogger().debug("Loading internal language file for '" + type.toLowerCase() + "': "
+                                    + "files/translations/English/" + type + ".yml");
         if (type.equalsIgnoreCase("commands")) {
             OdinManager.getCommands().getCommands().load(new File(dir + language + File.separator, type + ".yml"));
             OdinManager.getCommands().getDefaults().load("files/translations/English/" + type + ".yml");
+            OdinManager.getLogger().debug("Custom commands size: " + OdinManager.getCommands().getNodes().size());
+            OdinManager.getLogger().debug("Default commands size: " + OdinManager.getCommands().getDefaultNodes().size());
+            if (OdinManager.getCommands().getNodes().size() == 0) {
+                OdinManager.getLogger().error("Failed loading custom commands!");
+            }
+            if (OdinManager.getCommands().getDefaultNodes().size() == 0) {
+                OdinManager.getLogger().error("Failed loading default commands!");
+            }
         } else if (type.equalsIgnoreCase("messages")) {
             OdinManager.getMessages().getMessages().load(new File(dir + language + File.separator, type + ".yml"));
             OdinManager.getMessages().getDefaults().load("files/translations/English/" + type + ".yml");
+            OdinManager.getLogger().debug("Custom messages size: " + OdinManager.getMessages().getNodes().size());
+            OdinManager.getLogger().debug("Default messages size: " + OdinManager.getMessages().getDefaultNodes().size());
+            if (OdinManager.getMessages().getNodes().size() == 0) {
+                OdinManager.getLogger().error("Failed loading custom messages!");
+            }
+            if (OdinManager.getMessages().getDefaultNodes().size() == 0) {
+                OdinManager.getLogger().error("Failed loading default messages!");
+            }
         }
     }
 
@@ -182,7 +202,7 @@ public class MainUtils {
         File dir = new File(directory, "");
         if (!dir.exists()) {
             if (dir.mkdir()) {
-                OdinManager.getLogger().debug("Sucesfully created directory: " + dir);
+                OdinManager.getLogger().debug("Successfully created directory: " + dir);
             }
         }
         if (!actual.exists()) {

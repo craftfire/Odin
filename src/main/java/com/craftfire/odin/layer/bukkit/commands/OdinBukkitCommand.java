@@ -24,8 +24,8 @@ import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.managers.commands.OdinCommand;
 
 public class OdinBukkitCommand extends OdinCommand {
-    public OdinBukkitCommand(String commandName, OdinPermission permission, String description) {
-        super(commandName, permission, description);
+    public OdinBukkitCommand(String commandNode, OdinPermission permission, String description) {
+        super(commandNode, permission, description);
     }
 
     public boolean isPermitted(OdinPlayer player) {
@@ -34,6 +34,6 @@ public class OdinBukkitCommand extends OdinCommand {
     }
 
     public void execute(OdinPlayer player, String[] args) throws IllegalAccessException {
-        throw new IllegalAccessException("The execute method was not overwritten by Odin command '" + getName() + "'.");
+        throw new IllegalAccessException("The execute method was not overwritten by Odin command '" + getCommand() + "'.");
     }
 }

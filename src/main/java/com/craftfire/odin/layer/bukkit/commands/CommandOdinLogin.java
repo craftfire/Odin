@@ -27,6 +27,8 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.managers.OdinUser;
 
+import java.util.Arrays;
+
 public class CommandOdinLogin extends OdinBukkitCommand {
 
     public CommandOdinLogin() {

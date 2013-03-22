@@ -88,16 +88,26 @@ public class MessageManager {
         return this.defaults;
     }
 
-    public void load(YamlManager config, YamlManager defaults) {
+    public void load(YamlManager messages, YamlManager defaults) {
+        OdinManager.getLogger().debug("Adding custom messages : " + messages.getNodes().toString());
         if (this.messages == null) {
-            this.messages = config;
+            this.messages = messages;
         } else {
-            this.messages.addNodes(config);
+            this.messages.addNodes(messages);
         }
+        OdinManager.getLogger().debug("Adding default messages : " + messages.getNodes().toString());
         if (this.defaults == null) {
             this.defaults = defaults;
         } else {
             this.defaults.addNodes(defaults);
+        }
+        OdinManager.getLogger().debug("Custom messages size: " + this.messages.getNodes().size());
+        OdinManager.getLogger().debug("Default messages size: " + this.defaults.getNodes().size());
+        if (this.messages.getNodes().size() == 0) {
+            OdinManager.getLogger().error("Failed loading custom messages!");
+        }
+        if (this.defaults.getNodes().size() == 0) {
+            OdinManager.getLogger().error("Failed loading default messages!");
         }
     }
 
@@ -125,26 +135,26 @@ public class MessageManager {
             string = string.replaceAll("&", "Â§");
                 //TODO string = string.replaceAll("\\{DISPLAYNAME\\}", checkOtherName(player.getName()));
             String email = "";
-            if (OdinManager.getConfig().getBoolean("customdb.emailrequired")) {
+            if (OdinManager.getConfig().getBoolean("customdb.emailrequired", true)) {
                 email = "email";
             }
 
-            string = string.replaceAll("\\{USERMIN\\}", "" + OdinManager.getConfig().getInt("username.minimum"));
-            string = string.replaceAll("\\{USERMAX\\}", "" + OdinManager.getConfig().getInt("username.maximum"));
-            string = string.replaceAll("\\{PASSMIN\\}", "" + OdinManager.getConfig().getInt("password.minimum"));
-            string = string.replaceAll("\\{PASSMAX\\}", "" + OdinManager.getConfig().getInt("password.maximum"));
+            string = string.replaceAll("\\{USERMIN\\}", "" + OdinManager.getConfig().getInt("username.minimum", true));
+            string = string.replaceAll("\\{USERMAX\\}", "" + OdinManager.getConfig().getInt("username.maximum", true));
+            string = string.replaceAll("\\{PASSMIN\\}", "" + OdinManager.getConfig().getInt("password.minimum", true));
+            string = string.replaceAll("\\{PASSMAX\\}", "" + OdinManager.getConfig().getInt("password.maximum", true));
             string = string.replaceAll("\\{PLUGIN\\}", OdinManager.getPluginName());
             string = string.replaceAll("\\{VERSION\\}", OdinManager.getPluginVersion());
             string = string.replaceAll("\\{LOGINTIMEOUT\\}",
-                                OdinManager.getConfig().getString("login.timeout").split(" ")[0] + " " +
-                                        stringToTimeLanguage(OdinManager.getConfig().getString("login.timeout")));
+                                OdinManager.getConfig().getString("login.timeout", true).split(" ")[0] + " " +
+                                        stringToTimeLanguage(OdinManager.getConfig().getString("login.timeout", true)));
             string = string.replaceAll("\\{REGISTERTIMEOUT\\}",
-                                OdinManager.getConfig().getString("register.timeout").split(" ")[0] + " " +
-                                        stringToTimeLanguage(OdinManager.getConfig().getString("register.timeout")));
+                                OdinManager.getConfig().getString("register.timeout", true).split(" ")[0] + " " +
+                                        stringToTimeLanguage(OdinManager.getConfig().getString("register.timeout", true)));
             string = string.replaceAll("\\{USERBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                                  OdinManager.getConfig().getString("filter.username")));
+                                                                  OdinManager.getConfig().getString("filter.username", true)));
             string = string.replaceAll("\\{PASSBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                                  OdinManager.getConfig().getString("filter.password")));
+                                                                  OdinManager.getConfig().getString("filter.password", true)));
             string = string.replaceAll("\\{EMAILREQUIRED\\}", email);
             string = string.replaceAll("\\{NEWLINE\\}", System.getProperty("line.separator"));
             string = string.replaceAll("\\{newline\\}", System.getProperty("line.separator"));
@@ -153,14 +163,14 @@ public class MessageManager {
             string = string.replaceAll("\\{NL\\}", System.getProperty("line.separator"));
             string = string.replaceAll("\\{nl\\}", System.getProperty("line.separator"));
 
-            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.register") +
-                                                            " (" + OdinManager.getCommands().getAlias("user.register") + ")");
-            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.link") +
-                                                            " (" + OdinManager.getCommands().getAlias("user.link") + ")");
-            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.unlink") +
-                                                            " (" + OdinManager.getCommands().getAlias("user.unlink") + ")");
-            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.login") +
-                                                            " (" + OdinManager.getCommands().getAlias("user.login") + ")");
+            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.register", true) +
+                                                            " (" + OdinManager.getCommands().getAlias("user.register", true) + ")");
+            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.link", true) +
+                                                            " (" + OdinManager.getCommands().getAlias("user.link", true) + ")");
+            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.unlink", true) +
+                                                            " (" + OdinManager.getCommands().getAlias("user.unlink", true) + ")");
+            string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.login", true) +
+                                                            " (" + OdinManager.getCommands().getAlias("user.login", true) + ")");
 
             string = string.replaceAll("\\{BLACK\\}", "§0");
             string = string.replaceAll("\\{DARKBLUE\\}", "§1");
