@@ -200,7 +200,6 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String[] split = event.getMessage().split(" ");
-        String[] args = Arrays.copyOfRange(split, 1, split.length);
         OdinPlayer player =  Util.getPlayer(event.getPlayer());
         String command = split[0];
 
@@ -211,6 +210,16 @@ public class OdinPlayerListener implements Listener {
             } else if (!bukkitCommand.isPermitted(player)) {
                 player.sendMessage("protection.denied");
             } else {
+                String[] args;
+                if (bukkitCommand.getCommand().contains(" ") && !event.getMessage().equals(bukkitCommand.getCommand())) {
+                    args = event.getMessage().replace(bukkitCommand.getCommand() + " ", "").split(" ");
+                } else {
+                    args = event.getMessage().replace(bukkitCommand.getCommand(), "").split(" ");
+                }
+                if (args.length == 1 && args[0].isEmpty()) {
+                    // First item in the array is empty, the array should have 0 items.
+                    args = new String[0];
+                }
                 try {
                     bukkitCommand.execute(player, args);
                 } catch (IllegalAccessException e) {
