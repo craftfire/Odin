@@ -33,11 +33,7 @@ public class OdinBukkitCommand extends OdinCommand {
         //TODO: return player.hasPermissions(getPermission());
     }
 
-    public void execute(OdinPlayer player, String[] args) {
-        // Ignore
-    }
-
-    public void sendUsage(OdinPlayer player) {
-        player.sendMessage(getUsageNode());
+    public void execute(OdinPlayer player, String[] args) throws IllegalAccessException {
+        throw new IllegalAccessException("The execute method was not overwritten by Odin command '" + getName() + "'.");
     }
 }
