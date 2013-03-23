@@ -43,6 +43,9 @@ public class BukkitCommandManager {
             } else if (name.equalsIgnoreCase("admin.login")) {
                 OdinManager.getLogger().debug("Found supported Odin Admin Bukkit command: '" + command.toLowerCase() + "'.");
                 return new CommandOdinLogin();
+            } else if (name.equalsIgnoreCase("admin.logout")) {
+                OdinManager.getLogger().debug("Found supported Odin Admin Bukkit command: '" + command.toLowerCase() + "'.");
+                return new CommandOdinLogout();
             }
         }
         OdinManager.getLogger().debug("The command: '" + command.toLowerCase() + "' is not supported by Odin.");

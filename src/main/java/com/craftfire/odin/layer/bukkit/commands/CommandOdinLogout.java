@@ -24,34 +24,34 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.managers.OdinPermission;
 
-public class CommandOdinLogin extends OdinBukkitCommand {
+public class CommandOdinLogout extends OdinBukkitCommand {
 
-    public CommandOdinLogin() {
-        super("admin.login", OdinPermission.command_admin_login, "TODO");
+    public CommandOdinLogout() {
+        super("admin.logout", OdinPermission.command_admin_logout, "TODO");
     }
 
     @Override
     public void execute(OdinPlayer adminPlayer, String[] args) {
-        adminPlayer.sendMessage("login.processing");
+        adminPlayer.sendMessage("logout.processing");
         if (preCheck(adminPlayer, args)) {
             OdinPlayer player = Util.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
-            player.login();
-            adminPlayer.sendMessage("login.adminsuccess");
-            player.sendMessage("login.admin");
+            player.logout();
+            adminPlayer.sendMessage("logout.adminsuccess");
+            player.sendMessage("logout.admin");
         }
     }
 
     private boolean preCheck(OdinPlayer adminPlayer, String[] args) {
         if (args.length != 1) {
-            adminPlayer.sendMessage("login.adminusage");
+            adminPlayer.sendMessage("logout.adminusage");
             return false;
         } else if (Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
-            adminPlayer.sendMessage("login.adminnotfound");
+            adminPlayer.sendMessage("logout.adminnotfound");
             return false;
         }
         OdinPlayer player = Util.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
-        if (player.isLoggedIn()) {
-            adminPlayer.sendMessage("login.adminfailure");
+        if (!player.isLoggedIn()) {
+            adminPlayer.sendMessage("logout.adminfailure");
             return false;
         }
         return true;
