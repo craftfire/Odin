@@ -23,10 +23,8 @@ import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.util.Util;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
-import com.craftfire.odin.managers.OdinUser;
 
 import java.sql.SQLException;
 

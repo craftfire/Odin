@@ -20,10 +20,8 @@
 package com.craftfire.odin.layer.bukkit.commands;
 
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
-import com.craftfire.odin.managers.OdinUser;
 
 public class CommandLogout extends OdinBukkitCommand {
 
