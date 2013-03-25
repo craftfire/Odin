@@ -23,18 +23,21 @@ import com.craftfire.odin.util.PermissionType;
 
 public enum OdinPermission {
     command_register (PermissionType.USER, "register"),
-    command_unregister (PermissionType.USER, "unregister"),
+    command_delete (PermissionType.USER, "delete"),
     command_login (PermissionType.USER, "login"),
     command_logout (PermissionType.USER, "logout"),
     command_link (PermissionType.USER, "link"),
     command_unlink (PermissionType.USER, "unlink"),
-    command_password (PermissionType.USER, "password"),
-    command_email (PermissionType.USER, "email"),
-    command_users (PermissionType.USER, "users"),
-    command_admin_unregister (PermissionType.ADMIN, "unregister"),
+    command_password (PermissionType.USER, "changepassword"),
+    command_email (PermissionType.USER, "changeemail"),
+    command_admin_users (PermissionType.ADMIN, "users"),
+    command_admin_register (PermissionType.ADMIN, "register"),
+    command_admin_delete (PermissionType.ADMIN, "delete"),
     command_admin_login (PermissionType.ADMIN, "login"),
     command_admin_logout (PermissionType.ADMIN, "logout"),
-    command_admin_password (PermissionType.ADMIN, "password"),
+    command_admin_password (PermissionType.ADMIN, "changepassword"),
+    command_admin_email (PermissionType.ADMIN, "changeemail"),
+    command_admin_activate (PermissionType.ADMIN, "activate"),
     command_admin_reload (PermissionType.ADMIN, "reload");
 
     private PermissionType type;
