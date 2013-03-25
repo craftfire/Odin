@@ -22,10 +22,10 @@ package com.craftfire.odin.layer.bukkit.commands;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinPermission;
 
-public class CommandOdinActivate extends OdinBukkitCommand {
+public class CommandOdinDeactivate extends OdinBukkitCommand {
 
-    public CommandOdinActivate() {
-        super("admin.activate", OdinPermission.command_admin_activate, "TODO");
+    public CommandOdinDeactivate() {
+        super("admin.deactivate", OdinPermission.command_admin_deactivate, "TODO");
     }
 
     @Override

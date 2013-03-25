@@ -28,16 +28,17 @@ public enum OdinPermission {
     command_logout (PermissionType.USER, "logout"),
     command_link (PermissionType.USER, "link"),
     command_unlink (PermissionType.USER, "unlink"),
-    command_password (PermissionType.USER, "changepassword"),
-    command_email (PermissionType.USER, "changeemail"),
+    command_password (PermissionType.USER, "password"),
+    command_email (PermissionType.USER, "email"),
     command_admin_users (PermissionType.ADMIN, "users"),
     command_admin_register (PermissionType.ADMIN, "register"),
     command_admin_delete (PermissionType.ADMIN, "delete"),
     command_admin_login (PermissionType.ADMIN, "login"),
     command_admin_logout (PermissionType.ADMIN, "logout"),
-    command_admin_password (PermissionType.ADMIN, "changepassword"),
-    command_admin_email (PermissionType.ADMIN, "changeemail"),
+    command_admin_password (PermissionType.ADMIN, "password"),
+    command_admin_email (PermissionType.ADMIN, "email"),
     command_admin_activate (PermissionType.ADMIN, "activate"),
+    command_admin_deactivate (PermissionType.ADMIN, "deactivate"),
     command_admin_reload (PermissionType.ADMIN, "reload");
 
     private PermissionType type;

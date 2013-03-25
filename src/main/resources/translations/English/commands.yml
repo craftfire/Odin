@@ -11,6 +11,7 @@ commands:
     admin:
         register: "/odin register"
         activate: "/odin activate"
+        deactivate: "/odin deactivate"
         delete: "/odin delete"
         login: "/odin login"
         logout: "/odin logout"
@@ -31,7 +32,8 @@ aliases:
     admin:
         register: "/oreg"
         activate: "/oa"
-        delete: "/od"
+        deactivate: "/od"
+        delete: "/odel"
         login: "/oli"
         logout: "/olo"
         password: "/opw"
