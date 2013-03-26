@@ -25,27 +25,30 @@ public class BukkitCommandManager {
     public static OdinBukkitCommand getCommand(String command) {
         String name = OdinManager.getCommands().getCommandName(command);
         if (name != null) {
+            OdinBukkitCommand bukkitCommand = null;
             if (name.equalsIgnoreCase("user.link")) {
-                OdinManager.getLogger().debug("Found supported Odin User Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandLink();
+                bukkitCommand = new CommandLink();
             } if (name.equalsIgnoreCase("user.login")) {
-                OdinManager.getLogger().debug("Found supported Odin User Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandLogin();
+                bukkitCommand = new CommandLogin();
             } else if (name.equalsIgnoreCase("user.logout")) {
-                OdinManager.getLogger().debug("Found supported Odin User Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandLogout();
+                bukkitCommand = new CommandLogout();
             } else if (name.equalsIgnoreCase("user.register")) {
-                OdinManager.getLogger().debug("Found supported Odin User Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandRegister();
+                bukkitCommand = new CommandRegister();
             } else if (name.equalsIgnoreCase("user.unlink")) {
-                OdinManager.getLogger().debug("Found supported Odin User Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandUnlink();
+                bukkitCommand = new CommandUnlink();
+            } else if (name.equalsIgnoreCase("admin.activate")) {
+                bukkitCommand = new CommandOdinActivate();
+            } else if (name.equalsIgnoreCase("admin.deactivate")) {
+                bukkitCommand = new CommandOdinDeactivate();
             } else if (name.equalsIgnoreCase("admin.login")) {
-                OdinManager.getLogger().debug("Found supported Odin Admin Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandOdinLogin();
+                bukkitCommand = new CommandOdinLogin();
             } else if (name.equalsIgnoreCase("admin.logout")) {
-                OdinManager.getLogger().debug("Found supported Odin Admin Bukkit command: '" + command.toLowerCase() + "'.");
-                return new CommandOdinLogout();
+                bukkitCommand = new CommandOdinLogout();
+            }
+            if (bukkitCommand != null) {
+                OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase()
+                                            + "' (" + name.toLowerCase() + ").");
+                return bukkitCommand;
             }
         }
         OdinManager.getLogger().debug("The command: '" + command.toLowerCase() + "' is not supported by Odin.");
