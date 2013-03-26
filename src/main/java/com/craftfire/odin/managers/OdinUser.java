@@ -231,6 +231,20 @@ public class OdinUser {
         this.authenticated = true;
     }
 
+    public boolean isActivated() {
+        return getUser().isActivated();
+    }
+
+    public void activate() {
+        OdinManager.getLogger().debug("Activating user: '" + getUsername() + "'.");
+        getUser().setActivated(true);
+    }
+
+    public void deactivate() {
+        OdinManager.getLogger().debug("Deactivating user: '" + getUsername() + "'.");
+        getUser().setActivated(false);
+    }
+
     public boolean unlink() {
         // Add debug
         if (this.linkedUsername != null || OdinManager.getStorage().hasLinkedUsername(this.username)) {

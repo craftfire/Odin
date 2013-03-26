@@ -52,7 +52,7 @@ public class MessageManager {
             return message;
         } else if (existDefault(node)) {
             String message = replace(this.defaults.getString(node), user);
-            OdinManager.getLogger().debug("Could not find message for node '" + node + "', using default instead.");
+            OdinManager.getLogger().error("Could not find message for node '" + node + "', using default node instead.");
             OdinManager.getLogger().debug("Raw message (" + node + "): '" + this.defaults.getString(node) + "'.");
             OdinManager.getLogger().debug("Formatted message (" + node + "): '" + message + "'.");
             return message;

@@ -45,6 +45,12 @@ public class ConfigurationManager {
         }
     }
 
+    private void error(String node, String string, boolean ignoreLogging) {
+        if (!this.ignoredNodes.contains(node) && !node.startsWith("database.") && !ignoreLogging) {
+            OdinManager.getLogger().error(string);
+        }
+    }
+
     public boolean getBoolean(String node) {
         return getBoolean(node, false);
     }
@@ -59,7 +65,7 @@ public class ConfigurationManager {
             return value;
         } else if (existDefault(node)) {
             boolean value = this.defaults.getBoolean(node);
-            debug(node, "Could not find a custom config node '" + node + "', using default Boolean instead = '" + value + "'.", ignoreLogging);
+            error(node, "Could not find a custom config node '" + node + "', using default Boolean instead = '" + value + "'.", ignoreLogging);
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning false.");
@@ -80,7 +86,7 @@ public class ConfigurationManager {
             return value;
         } else if (existDefault(node)) {
             String value = this.defaults.getString(node);
-            debug(node, "Could not find a custom config node '" + node + "', using default String instead = '" + value + "'.", ignoreLogging);
+            error(node, "Could not find a custom config node '" + node + "', using default String instead = '" + value + "'.", ignoreLogging);
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning null.");
@@ -101,7 +107,7 @@ public class ConfigurationManager {
             return value;
         } else if (existDefault(node)) {
             int value = this.defaults.getInt(node);
-            debug(node, "Could not find a custom config node '" + node + "', using default Integer instead = '" + value + "'.", ignoreLogging);
+            error(node, "Could not find a custom config node '" + node + "', using default Integer instead = '" + value + "'.", ignoreLogging);
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning 0.");
@@ -122,7 +128,7 @@ public class ConfigurationManager {
             return value;
         } else if (existDefault(node)) {
             long value = this.defaults.getLong(node);
-            debug(node, "Could not find a custom config node '" + node + "', using default Long instead = '" + value + "'.", ignoreLogging);
+            error(node, "Could not find a custom config node '" + node + "', using default Long instead = '" + value + "'.", ignoreLogging);
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning null.");

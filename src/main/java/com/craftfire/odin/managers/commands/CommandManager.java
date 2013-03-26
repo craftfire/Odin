@@ -75,7 +75,7 @@ public class CommandManager {
         } else if (existDefault(newNode)) {
             String value = this.defaults.getString(newNode);
             if (!ignoreLogging) {
-                OdinManager.getLogger().debug("Could not find a custom command node '" + newNode + "', using default command value instead = '" + value + "'.");
+                OdinManager.getLogger().error("Could not find a custom command node '" + newNode + "', using default command value instead = '" + value + "'.");
             }
             return value;
         }
@@ -103,7 +103,7 @@ public class CommandManager {
         } else if (existDefault(newNode)) {
             String value = this.defaults.getString(newNode);
             if (!ignoreLogging) {
-                OdinManager.getLogger().debug("Could not find a custom alias node '" + newNode + "', using default alias value instead = '" + value + "'.");
+                OdinManager.getLogger().error("Could not find a custom alias node '" + newNode + "', using default alias value instead = '" + value + "'.");
             }
             return value;
         }

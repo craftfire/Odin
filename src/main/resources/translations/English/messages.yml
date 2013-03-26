@@ -26,6 +26,20 @@ register:
     disabled: "{RED}Registration is disabled!"
     timeout: "Kicked because you failed to register within {REGISTERTIMEOUT}."
     usage: "{YELLOW}Correct usage is: {WHITE}{REGISTERCMD} password email"
+activate:
+    processing: "{YELLOW}Processing activation..."
+    admin: "Your user have been activated by an admin."
+    adminsuccess: "Successfully activated player, {PLAYER}."
+    adminfailure: "You cannot activate player {PLAYER}! That player is already activated."
+    adminnotfound: "Could not find player, {PLAYER}! Please try again."
+    adminusage: "{YELLOW}Correct usage is: {WHITE}{ADMINACTIVATECMD} username"
+deactivate:
+    processing: "{YELLOW}Processing deactivation..."
+    admin: "Your user have been deactivated by an admin."
+    adminsuccess: "Successfully deactivated player, {PLAYER}."
+    adminfailure: "You cannot deactivate player {PLAYER}! That player is already deactivated."
+    adminnotfound: "Could not find player, {PLAYER}! Please try again."
+    adminusage: "{YELLOW}Correct usage is: {WHITE}{ADMINDEACTIVATECMD} username"
 login:
     normal: "{YELLOW}Welcome back {WHITE}{PLAYER}{YELLOW}! Please use {LOGINCMD} password"
     prompt: "{WHITE}Welcome {TEAL}{PLAYER}{WHITE}! Please enter your password:"

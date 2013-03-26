@@ -19,7 +19,9 @@
  */
 package com.craftfire.odin.layer.bukkit.commands;
 
+import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
+import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.managers.OdinPermission;
 
 public class CommandOdinActivate extends OdinBukkitCommand {
@@ -29,14 +31,29 @@ public class CommandOdinActivate extends OdinBukkitCommand {
     }
 
     @Override
-    public void execute(OdinPlayer player, String[] args) {
-        if (preCheck(player, args)) {
-
+    public void execute(OdinPlayer adminPlayer, String[] args) {
+        adminPlayer.sendMessage("activate.processing");
+        if (preCheck(adminPlayer, args)) {
+            OdinPlayer player = Util.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+            player.activate();
+            adminPlayer.sendMessage("activate.adminsuccess");
+            player.sendMessage("activate.admin");
         }
     }
 
-    private boolean preCheck(OdinPlayer player, String[] args) {
-        //TODO
-        return false;
+    private boolean preCheck(OdinPlayer adminPlayer, String[] args) {
+        if (args.length != 1) {
+            adminPlayer.sendMessage("activate.adminusage");
+            return false;
+        } else if (Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
+            adminPlayer.sendMessage("activate.adminnotfound");
+            return false;
+        }
+        OdinPlayer player = Util.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+        if (player.isActivated()) {
+            adminPlayer.sendMessage("activate.adminfailure");
+            return false;
+        }
+        return true;
     }
 }
