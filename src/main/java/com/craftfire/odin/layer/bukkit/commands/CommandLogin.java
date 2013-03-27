@@ -35,6 +35,7 @@ public class CommandLogin extends OdinBukkitCommand {
         player.sendMessage("login.processing");
         if (preCheck(player, args)) {
             if (player.login(args[0])) {
+                // TODO: Make sure this works.
                 if (player.callEventResults(Event.LOGIN)) {
                     player.sendMessage("login.success");
                 }  else {

@@ -30,13 +30,6 @@ public class CommandOdinUsers extends OdinBukkitCommand {
 
     @Override
     public void execute(OdinPlayer player, String[] args) {
-        if (preCheck(player, args)) {
-
-        }
-    }
-
-    private boolean preCheck(OdinPlayer player, String[] args) {
-        //TODO
-        return false;
+        player.sendMessage("database.users");
     }
 }

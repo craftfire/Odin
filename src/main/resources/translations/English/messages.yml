@@ -10,6 +10,7 @@ time:
     day: day
     days: days
 database:
+    users: "{BRIGHTGREEN}There are {USERCOUNT} users registered."
     failure: "{RED}Database connection failed! Access is denied! Contact the server admin."
 reload:
     success: "Odin has successfully reloaded!"
