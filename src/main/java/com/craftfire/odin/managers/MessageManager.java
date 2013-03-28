@@ -254,33 +254,33 @@ public class MessageManager {
         int integer = Integer.parseInt(length);
         if (unit.equals(TimeUtil.TimeUnit.DAY)) {
             if (integer > 1) {
-                return getString("Core.time.days");
+                return getString("time.days");
             } else {
-                return getString("Core.time.day");
+                return getString("time.day");
             }
         } else if (unit.equals(TimeUtil.TimeUnit.HOUR)) {
             if (integer > 1) {
-                return getString("Core.time.hours");
+                return getString("time.hours");
             } else {
-                return getString("Core.time.hour");
+                return getString("time.hour");
             }
         } else if (unit.equals(TimeUtil.TimeUnit.MINUTE)) {
             if (integer > 1) {
-                return getString("Core.time.minutes");
+                return getString("time.minutes");
             } else {
-                return getString("Core.time.minute");
+                return getString("time.minute");
             }
         } else if (unit.equals(TimeUtil.TimeUnit.SECOND)) {
             if (integer > 1) {
-                return getString("Core.time.seconds");
+                return getString("time.seconds");
             } else {
-                return getString("Core.time.second");
+                return getString("time.second");
             }
         } else if (unit.equals(TimeUtil.TimeUnit.MILLISECOND)) {
             if (integer > 1) {
-                return getString("Core.time.milliseconds");
+                return getString("time.milliseconds");
             } else {
-                return getString("Core.time.millisecond");
+                return getString("time.millisecond");
             }
         }
         return unit.getName();
