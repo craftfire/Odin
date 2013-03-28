@@ -31,22 +31,35 @@ import java.util.Map;
 public class CommandManager {
     private YamlManager commands = new YamlManager();
     private YamlManager defaults = new YamlManager();
-    private Map<String, String> valueNodes = new HashMap<String, String>();
+    private Map<String, String> customValueNodes = new HashMap<String, String>();
+    private Map<String, String> defaultValueNodes = new HashMap<String, String>();
 
     public boolean isInitialized() {
         return (!commands.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
     }
 
     public void initialize() throws IllegalAccessException {
+        for (Map.Entry<String, Object> stringObjectEntry : getDefaultNodes().entrySet()) {
+            Map.Entry pairs = (Map.Entry) stringObjectEntry;
+            if (pairs.getValue() instanceof String && pairs.getKey() instanceof String) {
+                if (this.defaultValueNodes.containsKey(pairs.getValue())) {
+                    throw new IllegalAccessException("The command/alias '" + pairs.getValue() + "' (" + pairs.getKey() + ") "
+                                                    + "already exists under the '" + this.defaultValueNodes.get(pairs.getKey()) + "' "
+                                                    + "node and cannot be used twice.");
+                } else {
+                    this.defaultValueNodes.put((String) pairs.getValue(), (String) pairs.getKey());
+                }
+            }
+        }
         for (Map.Entry<String, Object> stringObjectEntry : getNodes().entrySet()) {
             Map.Entry pairs = (Map.Entry) stringObjectEntry;
             if (pairs.getValue() instanceof String && pairs.getKey() instanceof String) {
-                if (this.valueNodes.containsKey(pairs.getValue())) {
+                if (this.customValueNodes.containsKey(pairs.getValue())) {
                     throw new IllegalAccessException("The command/alias '" + pairs.getValue() + "' (" + pairs.getKey() + ") "
-                                                   + "already exists under the '" + this.valueNodes.get(pairs.getKey()) + "' "
+                                                   + "already exists under the '" + this.customValueNodes.get(pairs.getKey()) + "' "
                                                    + "node and cannot be used twice.");
                 } else {
-                    this.valueNodes.put((String) pairs.getValue(), (String) pairs.getKey());
+                    this.customValueNodes.put((String) pairs.getValue(), (String) pairs.getKey());
                 }
             }
         }
@@ -137,12 +150,15 @@ public class CommandManager {
                 node = getValueNodes().get(checkString);
                 OdinManager.getLogger().debug("Found command '" + checkString + "' in node: '" + node + "'.");
                 break;
+            } else if (getDefaultNodes().containsValue(checkString)) {
+                node = getDefaultValueNodes().get(checkString);
+                OdinManager.getLogger().error("Could not find a custom node for '" + checkString + "', using default node instead: '" + node + "'.");
+                break;
             }
         }
         if (node != null) {
             node = node.replaceAll("aliases.", "")
                        .replaceAll("commands.", "");
-
         }
         OdinManager.getLogger().debug("Returning command name for input '" + input + "' = '" + node + "'.");
         return node;
@@ -157,7 +173,11 @@ public class CommandManager {
     }
 
     public Map<String, String> getValueNodes() {
-        return this.valueNodes;
+        return this.customValueNodes;
+    }
+
+    public Map<String, String> getDefaultValueNodes() {
+        return this.defaultValueNodes;
     }
 
     public YamlManager getCommands() {
