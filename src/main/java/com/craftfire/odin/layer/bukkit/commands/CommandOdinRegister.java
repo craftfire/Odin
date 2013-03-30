@@ -44,7 +44,7 @@ public class CommandOdinRegister extends OdinBukkitCommand {
         if (preCheck(adminPlayer, args, true)) {
             ScriptUser user = OdinManager.getScript().newScriptUser(args[0], args[1]);
             //TODO: Make it so people have to activate their account
-            user.setActivated(true);
+            user.setActivated(OdinManager.getConfig().getBoolean("register.activate"));
             user.setEmail(args[2]);
             //user.setRegIP(player.getIP().toIPv4().toString());
             List<Player> craftPlayer = Odin.getInstance().getServer().matchPlayer(args[0]);

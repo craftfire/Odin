@@ -46,7 +46,8 @@ public class CommandRegister extends OdinBukkitCommand {
         }*/
         if (preCheck(player, args, true)) { //TODO: email check
             ScriptUser user = OdinManager.getScript().newScriptUser(player.getUsername(), args[0]);
-            user.setActivated(true); //TODO: Make it so people have to activate their account
+            //TODO: Make it so people have to activate their account
+            user.setActivated(OdinManager.getConfig().getBoolean("register.activate"));
             user.setEmail(args[1]);
             user.setRegIP(player.getIP().toIPv4().toString());
             try {
