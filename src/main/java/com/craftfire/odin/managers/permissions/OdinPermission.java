@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.craftfire.odin.managers;
+package com.craftfire.odin.managers.permissions;
 
-import com.craftfire.odin.util.PermissionType;
+import com.craftfire.odin.managers.OdinManager;
 
 public enum OdinPermission {
     command_register (PermissionType.USER, "register"),

@@ -19,8 +19,6 @@
  */
 package com.craftfire.odin.layer.bukkit.listeners;
 
-import java.util.Arrays;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -33,7 +31,7 @@ import com.craftfire.odin.layer.bukkit.commands.OdinBukkitCommand;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinPermission;
+import com.craftfire.odin.managers.permissions.OdinPermission;
 import com.craftfire.odin.util.MainUtils;
 
 public class OdinPlayerListener implements Listener {

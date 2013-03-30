@@ -21,7 +21,7 @@ package com.craftfire.odin.layer.bukkit.commands;
 
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.managers.OdinPermission;
+import com.craftfire.odin.managers.permissions.OdinPermission;
 
 public class CommandOdinLogin extends OdinBukkitCommand {
     public CommandOdinLogin() {

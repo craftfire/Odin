@@ -20,7 +20,7 @@
 package com.craftfire.odin.managers.commands;
 
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinPermission;
+import com.craftfire.odin.managers.permissions.OdinPermission;
 
 public abstract class OdinCommand {
     protected String commandNode, command, alias;

@@ -22,7 +22,7 @@ package com.craftfire.odin.layer.bukkit.commands;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinPermission;
+import com.craftfire.odin.managers.permissions.OdinPermission;
 
 public class CommandUnlink extends OdinBukkitCommand {
     // TODO

@@ -28,9 +28,9 @@ import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.layer.bukkit.util.event.Events;
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinPermission;
+import com.craftfire.odin.managers.permissions.OdinPermission;
 import com.craftfire.odin.managers.OdinUser;
-import com.craftfire.odin.util.PermissionType;
+import com.craftfire.odin.managers.permissions.PermissionType;
 
 public class OdinPlayer extends OdinUser {
     private Player player;

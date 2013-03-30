@@ -30,7 +30,7 @@ import com.craftfire.commons.util.Util;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinPermission;
+import com.craftfire.odin.managers.permissions.OdinPermission;
 
 public class CommandOdinRegister extends OdinBukkitCommand {
     public CommandOdinRegister() {
