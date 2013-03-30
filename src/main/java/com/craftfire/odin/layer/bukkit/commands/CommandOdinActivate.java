@@ -33,7 +33,7 @@ public class CommandOdinActivate extends OdinBukkitCommand {
     public void execute(OdinPlayer adminPlayer, String[] args) {
         adminPlayer.sendMessage("activate.processing");
         if (preCheck(adminPlayer, args)) {
-            OdinPlayer player = OdinBukkitUtils.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+            OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
             player.activate();
             adminPlayer.sendMessage("activate.adminsuccess");
             player.sendMessage("activate.admin");
@@ -48,7 +48,7 @@ public class CommandOdinActivate extends OdinBukkitCommand {
             adminPlayer.sendMessage("activate.adminnotfound");
             return false;
         }
-        OdinPlayer player = OdinBukkitUtils.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+        OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
         if (player.isActivated()) {
             adminPlayer.sendMessage("activate.adminfailure");
             return false;

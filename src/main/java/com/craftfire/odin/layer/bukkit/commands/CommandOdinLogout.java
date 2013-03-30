@@ -21,7 +21,6 @@ package com.craftfire.odin.layer.bukkit.commands;
 
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.managers.OdinPermission;
 
 public class CommandOdinLogout extends OdinBukkitCommand {
@@ -34,7 +33,7 @@ public class CommandOdinLogout extends OdinBukkitCommand {
     public void execute(OdinPlayer adminPlayer, String[] args) {
         adminPlayer.sendMessage("logout.processing");
         if (preCheck(adminPlayer, args)) {
-            OdinPlayer player = Util.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+            OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
             player.logout();
             adminPlayer.sendMessage("logout.adminsuccess");
             player.sendMessage("logout.admin");
@@ -49,7 +48,7 @@ public class CommandOdinLogout extends OdinBukkitCommand {
             adminPlayer.sendMessage("logout.adminnotfound");
             return false;
         }
-        OdinPlayer player = Util.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+        OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
         if (!player.isLoggedIn()) {
             adminPlayer.sendMessage("logout.adminfailure");
             return false;

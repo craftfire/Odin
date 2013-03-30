@@ -24,7 +24,6 @@ import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.util.Util;
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.layer.bukkit.util.OdinUtil;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 import org.bukkit.entity.Player;
@@ -51,7 +50,7 @@ public class CommandOdinRegister extends OdinBukkitCommand {
             try {
                 OdinManager.getScript().createUser(user);
                 if (!Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
-                    OdinPlayer player = OdinUtil.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
+                    OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
                     player.login();
                     player.sendMessage("register.admin");
                 }
