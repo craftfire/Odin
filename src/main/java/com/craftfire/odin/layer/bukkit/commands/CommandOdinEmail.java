@@ -29,13 +29,13 @@ public class CommandOdinEmail extends OdinBukkitCommand {
     }
 
     @Override
-    public void execute(OdinPlayer player, String[] args) {
-        if (preCheck(player, args)) {
+    public void execute(OdinPlayer adminPlayer, String[] args) {
+        if (preCheck(adminPlayer, args)) {
 
         }
     }
 
-    private boolean preCheck(OdinPlayer player, String[] args) {
+    private boolean preCheck(OdinPlayer adminPlayer, String[] args) {
         //TODO
         return false;
     }

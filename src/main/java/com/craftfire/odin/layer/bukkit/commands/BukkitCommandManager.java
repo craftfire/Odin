@@ -44,6 +44,8 @@ public class BukkitCommandManager {
                 bukkitCommand = new CommandOdinLogin();
             } else if (name.equalsIgnoreCase("admin.logout")) {
                 bukkitCommand = new CommandOdinLogout();
+            } else if (name.equalsIgnoreCase("admin.register")) {
+                bukkitCommand = new CommandOdinRegister();
             } else if (name.equalsIgnoreCase("admin.users")) {
                 bukkitCommand = new CommandOdinUsers();
             }

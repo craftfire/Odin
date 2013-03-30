@@ -27,7 +27,7 @@ register:
     disabled: "{RED}Registration is disabled!"
     timeout: "Kicked because you failed to register within {REGISTER_TIMEOUT}."
     usage: "{YELLOW}Correct usage is: {WHITE}{CMD_USER_REGISTER} password email"
-    admin: "You have been logged in by an admin."
+    admin: "You have been registered by an admin."
     adminsuccess: "Successfully registered player, {PLAYER}."
     adminfailure: "You cannot register player {PLAYER}! That player is already registered."
     adminusage: "{YELLOW}Correct usage is: {WHITE}{CMD_ADMIN_REGISTER} username password email"

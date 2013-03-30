@@ -24,7 +24,7 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
 import org.bukkit.entity.Player;
 
-public class Util {
+public class OdinUtil {
     public static OdinPlayer getPlayer(Player player) {
         if (player == null) {
             throw new IllegalArgumentException("Parameter for getPlayer() cannot be null!");

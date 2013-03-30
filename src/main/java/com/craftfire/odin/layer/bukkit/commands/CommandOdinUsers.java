@@ -29,7 +29,7 @@ public class CommandOdinUsers extends OdinBukkitCommand {
     }
 
     @Override
-    public void execute(OdinPlayer player, String[] args) {
-        player.sendMessage("database.users");
+    public void execute(OdinPlayer adminPlayer, String[] args) {
+        adminPlayer.sendMessage("database.users");
     }
 }
