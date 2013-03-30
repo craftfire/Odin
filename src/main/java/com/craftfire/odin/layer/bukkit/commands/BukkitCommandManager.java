@@ -53,6 +53,10 @@ public class BukkitCommandManager {
                 OdinManager.getLogger().debug("Found supported Odin Bukkit command: '" + command.toLowerCase()
                                             + "' (" + name.toLowerCase() + ").");
                 return bukkitCommand;
+            } else {
+                OdinManager.getLogger().error("Found supported Odin Bukkit command: '" + command.toLowerCase()
+                                            + "' (" + name.toLowerCase() + "), but it was not implemented into the "
+                                            + "BukkitCommandManager.");
             }
         }
         OdinManager.getLogger().debug("The command: '" + command.toLowerCase() + "' is not supported by Odin.");
