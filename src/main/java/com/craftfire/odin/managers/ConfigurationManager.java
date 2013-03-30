@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,9 +19,9 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.commons.yaml.YamlManager;
-
 import java.util.*;
+
+import com.craftfire.commons.yaml.YamlManager;
 
 public class ConfigurationManager {
     private YamlManager config = new YamlManager();
@@ -144,11 +144,11 @@ public class ConfigurationManager {
         }
         return node;
     }
-    
+
     public Map<String, Object> getNodes() {
         return this.config.getNodes();
     }
-    
+
     public Map<String, Object> getDefaultNodes() {
         return this.defaults.getNodes();
     }
@@ -160,7 +160,7 @@ public class ConfigurationManager {
     public YamlManager getDefaults() {
         return this.defaults;
     }
-    
+
     public void load(YamlManager config, YamlManager defaults) {
         if (this.config == null) {
             this.config = config;
@@ -181,7 +181,7 @@ public class ConfigurationManager {
             OdinManager.getLogger().error("Failed loading default config!");
         }
     }
-    
+
     private boolean exist(String node) {
         return node != null && this.config.exist(node.toLowerCase());
     }

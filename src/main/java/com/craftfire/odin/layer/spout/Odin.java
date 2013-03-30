@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,11 +19,12 @@
  */
 package com.craftfire.odin.layer.spout;
 
-import com.craftfire.odin.layer.spout.listeners.OdinPlayerListener;
+import java.util.logging.Logger;
+
 import org.spout.api.plugin.CommonPlugin;
 import org.spout.api.util.Named;
 
-import java.util.logging.Logger;
+import com.craftfire.odin.layer.spout.listeners.OdinPlayerListener;
 
 public class Odin extends CommonPlugin implements Named {
     private static final Logger logger = Logger.getLogger("Minecraft.Odin");

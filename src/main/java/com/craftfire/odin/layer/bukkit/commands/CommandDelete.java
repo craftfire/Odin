@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinPermission;
 
 public class CommandDelete extends OdinBukkitCommand {
-
     public CommandDelete() {
         super("user.delete", OdinPermission.command_delete, "TODO");
     }
@@ -31,12 +30,11 @@ public class CommandDelete extends OdinBukkitCommand {
     @Override
     public void execute(OdinPlayer player, String[] args) {
         if (preCheck(player, args)) {
-
         }
     }
 
     private boolean preCheck(OdinPlayer player, String[] args) {
-        //TODO
+        // TODO
         return false;
     }
 }

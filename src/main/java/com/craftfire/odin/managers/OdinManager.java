@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  */
 package com.craftfire.odin.managers;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.craftfire.bifrost.Bifrost;
 import com.craftfire.bifrost.ScriptAPI;
 import com.craftfire.bifrost.classes.general.ScriptHandle;
@@ -32,11 +37,6 @@ import com.craftfire.odin.managers.commands.CommandManager;
 import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.managers.storage.StorageManager;
 import com.craftfire.odin.util.MainUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class OdinManager {
     private static Bifrost bifrost;
@@ -64,7 +64,7 @@ public class OdinManager {
             return false;
         } else if (OdinManager.loadDatabases(directory)) {
             if (OdinManager.getDataManager().hasConnection()) {
-                //TODO: custom database
+                // TODO: Custom database
                 try {
                     int userCount = OdinManager.getScript().getUserCount();
                     if (userCount > 0) {
@@ -174,7 +174,7 @@ public class OdinManager {
                                                          "odin",
                                                          "odin");
         storageDataManager.setLoggingManager(getLogger());
-        //TODO storageDataManager.getLogging().setPrefix("[Odin] [Storage]");
+        // TODO: storageDataManager.getLogging().setPrefix("[Odin] [Storage]");
         storageDataManager.setKeepAlive(true);
         storageDataManager.setDirectory(directory + File.separator + "data" + File.separator);
         storageDataManager.setDatabase("OdinStorage");
@@ -235,6 +235,7 @@ public class OdinManager {
             System.out.println("Could not find required H2 driver.");
             System.out.println("Starting download for the H2 driver. Please wait...");
             Set<String> urls = new HashSet<String>();
+            // TODO: Set H2 version dynamically from pom version
             urls.add("http://hsql.sourceforge.net/m2-repo/com/h2database/h2/1.3.169/h2-1.3.169.jar");
             urls.add("http://repo2.maven.org/maven2/com/h2database/h2/1.3.169/h2-1.3.169.jar");
             if (!MainUtils.downloadLibrary(h2Driver, urls)) {
@@ -250,7 +251,7 @@ public class OdinManager {
                                                                  OdinManager.getPluginName(),
                                                                  OdinManager.getPluginVersion());
         analyticsManager.setLoggingManager(OdinManager.getLogger());
-        //TODO: analyticsManager.submitVoid();
+        // TODO: analyticsManager.submitVoid();
         //getLogging().info(analyticsManager.getParameters());
     }
 }

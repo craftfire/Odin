@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  */
 package com.craftfire.odin.layer.bukkit.managers;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.inventory.PlayerInventory;
+
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.layer.bukkit.util.event.Events;
@@ -26,10 +31,6 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.managers.OdinUser;
 import com.craftfire.odin.util.PermissionType;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 public class OdinPlayer extends OdinUser {
     private Player player;
@@ -43,7 +44,7 @@ public class OdinPlayer extends OdinUser {
         super(player.getName(), player.getAddress());
         this.player = player;
     }
-    
+
     public Player getPlayer() {
         return this.player;
     }
@@ -55,7 +56,7 @@ public class OdinPlayer extends OdinUser {
     public String getDisplayName() {
         return this.player.getDisplayName();
     }
-    
+
     public void setDisplayName(String name) {
         this.player.setDisplayName(name);
     }
@@ -78,7 +79,7 @@ public class OdinPlayer extends OdinUser {
     public boolean hasPermissions(CommandSender sender, String permission) {
         return Odin.getPermissions().has(sender, permission);
     }
-    
+
     public boolean hasPermissions(OdinPermission permission) {
         return Odin.getPermissions().has(this.player, permission.getNode());
     }
@@ -111,7 +112,7 @@ public class OdinPlayer extends OdinUser {
     public void restoreInventory() {
         Odin.getInstance().getInventoryManager().setInventoryFromStorage(this.player);
     }
-    
+
     public void kickPlayer(String node) {
         OdinManager.getLogger().debug("Kicking player '" + getName() + "': '" + node + "'.");
         if (isNode(node)) {
@@ -120,7 +121,7 @@ public class OdinPlayer extends OdinUser {
             callEvent(Event.KICK, OdinManager.getMessages().replace(node, this));
         }
     }
-    
+
     public void sendMessage(String node) {
         if (isNode(node)) {
             String message = OdinManager.getMessages().getMessage(node, this);
@@ -134,7 +135,7 @@ public class OdinPlayer extends OdinUser {
     }
 
     public void sendMessage(String node, PlayerLoginEvent event) {
-        //TODO: Call event?
+        // TODO: Call event?
         if (isNode(node)) {
             String message = OdinManager.getMessages().getMessage(node, this);
             OdinManager.getLogger().debug("Sending disallow message to '" + getName() + "': '" + node + "' = '" + message + "'");
@@ -212,7 +213,7 @@ public class OdinPlayer extends OdinUser {
     public void callEvent(Event event) {
         callEvent(event, null);
     }
-    
+
     private boolean isNode(String string) {
         for (int i = 0; i < string.length(); i++) {
             if (Character.isWhitespace(string.charAt(i))) {

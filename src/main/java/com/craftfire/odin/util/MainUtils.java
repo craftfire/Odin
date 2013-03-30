@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,18 +19,18 @@
  */
 package com.craftfire.odin.util;
 
-import com.craftfire.commons.FileDownloader;
-import com.craftfire.commons.TimeUtil;
-import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinUser;
-
 import java.io.*;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import com.craftfire.commons.FileDownloader;
+import com.craftfire.commons.TimeUtil;
+import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
+import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.managers.OdinUser;
 
 public class MainUtils {
     public static OdinUser getUser(String username) {
@@ -73,7 +73,7 @@ public class MainUtils {
             for (int a = 0; a < filter.length(); a++) {
                 char2 = filter.charAt(a);
                 if (char1 == char2 || char1 == '\'' || char1 == '\"') {
-                    /* TODO Logging */
+                    // TODO: Logging
                     return true;
                 }
                 a++;
@@ -238,5 +238,4 @@ public class MainUtils {
             }
         }
     }
-
 }

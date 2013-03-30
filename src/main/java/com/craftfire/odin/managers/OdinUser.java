@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,8 +19,16 @@
  */
 package com.craftfire.odin.managers;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
+import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.inventory.InventoryItem;
@@ -28,14 +36,6 @@ import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.managers.inventory.ItemEnchantment;
 import com.craftfire.odin.managers.storage.StoredOdinUser;
 import com.craftfire.odin.util.MainUtils;
-import com.craftfire.commons.CraftCommons;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class OdinUser {
     private final String username;
@@ -111,7 +111,7 @@ public class OdinUser {
             OdinManager.getLogger().stackTrace(e);
         }
         if (OdinManager.getStorage().isCachedUser(username)) {
-            /* TODO */
+            // TODO
             OdinUser user = OdinManager.getStorage().getCachedUser(username);
             this.user = user.getUser();
             this.status = user.getStatus();
@@ -126,18 +126,18 @@ public class OdinUser {
         OdinManager.getLogger().debug("Saving username '" + this.username + "'.");
         OdinManager.getStorage().putCachedUser(this);
         getStoredUser().save();
-        //TODO
+        // TODO
     }
 
     public void sync() {
         OdinManager.getLogger().debug("Running sync for username '" + this.username + "'.");
-        //TODO
+        // TODO
     }
 
     public StoredOdinUser getStoredUser() {
         return this.storedUser;
     }
-    
+
     public String getUsername() {
         return this.username;
     }
@@ -145,11 +145,11 @@ public class OdinUser {
     public String getName() {
         return this.username;
     }
-    
+
     public ScriptUser getUser() {
         return this.user;
     }
-    
+
     public void setUser() {
         try {
             this.user = OdinManager.getScript().getUser(this.username);
@@ -246,7 +246,7 @@ public class OdinUser {
     }
 
     public boolean unlink() {
-        // Add debug
+        // TODO: Add debug
         if (this.linkedUsername != null || OdinManager.getStorage().hasLinkedUsername(this.username)) {
             getStoredUser().setLinkedName("");
             OdinManager.getStorage().removeLinkedUsername(this.username);
@@ -257,7 +257,7 @@ public class OdinUser {
     }
 
     public void link(String name) {
-        //TODO: link
+        // TODO: Link
     }
 
     public IPAddress getIP() {
@@ -267,7 +267,7 @@ public class OdinUser {
             return this.ipAddress;
         }
     }
-    
+
     public void setIP(String ip) {
         this.ipAddress = IPAddress.valueOf(ip);
     }
@@ -276,14 +276,14 @@ public class OdinUser {
         // TODO
         return OdinManager.getStorage().hasSession(this);
     }
-    
+
     public long getSessionTime() {
         if (OdinManager.getConfig().getBoolean("session.enabled") && hasSession()) {
             return OdinManager.getStorage().getSessionTime(this);
         }
         return 0;
     }
-    
+
     public void setSession() {
         getStoredUser().setSessionTime();
         if (OdinManager.getConfig().getBoolean("session.enabled")) {
@@ -365,11 +365,11 @@ public class OdinUser {
                                       "'" + (this.username.length() > OdinManager.getConfig().getInt("username.maximum")) + "'");
         return this.username.length() < OdinManager.getConfig().getInt("username.maximum");
     }
-    
+
     public long getJoinTime() {
         return this.joinTime;
     }
-    
+
     public void setJoinTime() {
         this.joinTime = System.currentTimeMillis();
     }
@@ -377,7 +377,7 @@ public class OdinUser {
     public void setJoinTime(long time) {
         this.joinTime = time;
     }
-    
+
     public int getPasswordAttempts() {
         return this.passwordAttempts;
     }
@@ -393,11 +393,11 @@ public class OdinUser {
     public void increasePasswordAttempts() {
         this.passwordAttempts++;
     }
-    
+
     public boolean hasBadCharacters() {
         return this.hasBadCharacters;
     }
-    
+
     public boolean isFilterWhitelisted() {
         return OdinManager.getConfig().getString("filter.whitelist").contains(getUsername());
     }

@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,15 +19,14 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.commons.util.LoggingManager;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class LoggingHandler extends LoggingManager {
+import com.craftfire.commons.util.LoggingManager;
 
+public class LoggingHandler extends LoggingManager {
     public LoggingHandler(String logger, String prefix) {
         super(logger, prefix);
     }

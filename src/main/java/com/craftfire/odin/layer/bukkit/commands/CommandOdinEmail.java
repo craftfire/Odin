@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinPermission;
 
 public class CommandOdinEmail extends OdinBukkitCommand {
-
     public CommandOdinEmail() {
         super("admin.email", OdinPermission.command_admin_email, "TODO");
     }
@@ -31,12 +30,11 @@ public class CommandOdinEmail extends OdinBukkitCommand {
     @Override
     public void execute(OdinPlayer adminPlayer, String[] args) {
         if (preCheck(adminPlayer, args)) {
-
         }
     }
 
     private boolean preCheck(OdinPlayer adminPlayer, String[] args) {
-        //TODO
+        // TODO
         return false;
     }
 }

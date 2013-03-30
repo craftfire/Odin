@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,19 @@
  */
 package com.craftfire.odin.layer.bukkit;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.PluginClassLoader;
+
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinDisableEvent;
 import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinEnableEvent;
@@ -26,17 +39,6 @@ import com.craftfire.odin.layer.bukkit.listeners.OdinPlayerListener;
 import com.craftfire.odin.layer.bukkit.managers.InventoryManager;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.PluginClassLoader;
-
-import java.io.File;
-import java.net.MalformedURLException;
 
 public class Odin extends JavaPlugin {
     private static Permission permission = null;

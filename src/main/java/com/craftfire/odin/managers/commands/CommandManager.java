@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,14 +19,14 @@
  */
 package com.craftfire.odin.managers.commands;
 
-import com.craftfire.commons.yaml.YamlManager;
-import com.craftfire.odin.managers.LoggingHandler;
-import com.craftfire.odin.managers.OdinManager;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.craftfire.commons.yaml.YamlManager;
+import com.craftfire.odin.managers.LoggingHandler;
+import com.craftfire.odin.managers.OdinManager;
 
 public class CommandManager {
     private YamlManager commands = new YamlManager();
@@ -196,6 +196,7 @@ public class CommandManager {
         } else {
             return true;
         }
+        // TODO: Do something with this
         /*if (getNode(input) == null) {
             OdinManager.getLogger().debug("Could not find '" + input + "' in the command list.");
             return false;

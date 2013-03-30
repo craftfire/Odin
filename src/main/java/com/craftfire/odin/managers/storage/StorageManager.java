@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,13 @@
  */
 package com.craftfire.odin.managers.storage;
 
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.text.TabExpander;
+
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.encryption.Encryption;
@@ -27,13 +34,6 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 import com.craftfire.odin.managers.inventory.InventoryItem;
 import com.craftfire.odin.managers.inventory.InventoryManager;
-
-import javax.swing.text.TabExpander;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class StorageManager {
     private final DataManager dataManager;
@@ -44,7 +44,7 @@ public class StorageManager {
     private Map<String, String> userInventories = new HashMap<String, String>();
     private Map<String, String> userArmor = new HashMap<String, String>();
 
-    //TODO: move inventory methods to StoredOdinUser
+    // TODO: move inventory methods to StoredOdinUser
     public StorageManager(DataManager dataManager) {
         this.dataManager = dataManager;
         checkDatabases();
@@ -182,7 +182,7 @@ public class StorageManager {
     public String getString(Table table, String field, String where) {
         return getDataManager().getStringField(table.getName(), field, where);
     }
-    
+
     public boolean exists(Table table, String value) {
         return getDataManager().exist(table.getName(), table.getPrimary(), value);
     }

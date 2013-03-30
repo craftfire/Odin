@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,10 +19,11 @@
  */
 package com.craftfire.odin.layer.bukkit.api.events.player;
 
-import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
+
+import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 
 public class OdinPlayerLogoutEvent extends OdinPlayerEvent implements Cancellable {
     private boolean cancel;

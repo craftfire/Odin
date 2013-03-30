@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@
  */
 package com.craftfire.odin.layer.spout.listeners;
 
-import com.craftfire.odin.layer.spout.Odin;
 import org.spout.api.event.EventHandler;
 import org.spout.api.event.Listener;
 import org.spout.api.event.Order;
@@ -28,6 +27,8 @@ import org.spout.api.event.player.PlayerInteractEvent;
 import org.spout.api.event.player.PlayerJoinEvent;
 import org.spout.api.event.player.PlayerLeaveEvent;
 import org.spout.api.event.server.PreCommandEvent;
+
+import com.craftfire.odin.layer.spout.Odin;
 
 public class OdinPlayerListener implements Listener {
     private Odin plugin;

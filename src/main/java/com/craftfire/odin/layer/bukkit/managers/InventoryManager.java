@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,23 +19,22 @@
  */
 package com.craftfire.odin.layer.bukkit.managers;
 
-import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.inventory.InventoryItem;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
-import com.craftfire.odin.managers.inventory.InventoryType;
-import com.craftfire.odin.managers.inventory.ItemEnchantment;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.managers.inventory.InventoryItem;
+import com.craftfire.odin.managers.inventory.InventoryType;
+import com.craftfire.odin.managers.inventory.ItemEnchantment;
 
 public class InventoryManager {
-
     public void setInventoryFromStorage(Player player) {
         ItemStack[] inv = getInventory(player);
         if (inv != null) {

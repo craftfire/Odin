@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,11 +19,11 @@
  */
 package com.craftfire.odin.managers;
 
-import com.craftfire.commons.TimeUtil;
-import com.craftfire.commons.yaml.YamlManager;
-
 import java.util.Map;
 import java.util.regex.Matcher;
+
+import com.craftfire.commons.TimeUtil;
+import com.craftfire.commons.yaml.YamlManager;
 
 public class MessageManager {
     private YamlManager messages = new YamlManager();
@@ -126,14 +126,14 @@ public class MessageManager {
     public String replace(String message, OdinUser user) {
         if (message != null) {
             String string = message;
-            //TODO string = string.replaceAll("\\{IP\\}", );
+            // TODO: string = string.replaceAll("\\{IP\\}", );
             if (user != null) {
                 string = string.replaceAll("\\{PLAYER\\}", user.getUsername());
             }
-            //TODO string = string.replaceAll("\\{NEWPLAYER\\}", "");
-            //TODO string = string.replaceAll("\\{PLAYERNEW\\}", "");
+            // TODO: string = string.replaceAll("\\{NEWPLAYER\\}", "");
+            // TODO: string = string.replaceAll("\\{PLAYERNEW\\}", "");
             string = string.replaceAll("&", "Â§");
-                //TODO string = string.replaceAll("\\{DISPLAYNAME\\}", checkOtherName(player.getName()));
+            // TODO: string = string.replaceAll("\\{DISPLAYNAME\\}", checkOtherName(player.getName()));
             String email = "";
             if (OdinManager.getConfig().getBoolean("customdb.emailrequired", true)) {
                 email = "email";

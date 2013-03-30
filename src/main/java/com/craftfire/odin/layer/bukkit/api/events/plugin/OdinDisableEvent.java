@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,8 +19,9 @@
  */
 package com.craftfire.odin.layer.bukkit.api.events.plugin;
 
-import com.craftfire.odin.layer.bukkit.api.events.OdinEvent;
 import org.bukkit.event.HandlerList;
+
+import com.craftfire.odin.layer.bukkit.api.events.OdinEvent;
 
 public class OdinDisableEvent extends OdinEvent {
     private static final HandlerList handlers = new HandlerList();

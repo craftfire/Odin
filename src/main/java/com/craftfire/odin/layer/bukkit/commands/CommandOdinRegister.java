@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,11 @@
  */
 package com.craftfire.odin.layer.bukkit.commands;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import org.bukkit.entity.Player;
+
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.util.Util;
@@ -26,13 +31,8 @@ import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
-import org.bukkit.entity.Player;
-
-import java.sql.SQLException;
-import java.util.List;
 
 public class CommandOdinRegister extends OdinBukkitCommand {
-
     public CommandOdinRegister() {
         super("admin.register", OdinPermission.command_admin_register, "TODO");
     }
@@ -42,7 +42,7 @@ public class CommandOdinRegister extends OdinBukkitCommand {
         // TODO: email check
         if (preCheck(adminPlayer, args, true)) {
             ScriptUser user = OdinManager.getScript().newScriptUser(args[0], args[1]);
-            //TODO: Make it so people have to activate their account
+            // TODO: Make it so people have to activate their account
             user.setActivated(OdinManager.getConfig().getBoolean("register.activate"));
             user.setEmail(args[2]);
             //user.setRegIP(player.getIP().toIPv4().toString());
@@ -93,13 +93,12 @@ public class CommandOdinRegister extends OdinBukkitCommand {
             OdinManager.getLogger().error("Failed to register username '" + args[0] + "' with email '" + args[2] + "'.");
             OdinManager.getLogger().stackTrace(e);
         }
-        /*
-        TODO: Register IP limit
-        if (Config.register_limit > 0
+
+        // TODO: Register IP limit
+        /*if (Config.register_limit > 0
             && EBean.getAmount("ip", player.getAddress().getAddress().toString().substring(1)) > Config.register_limit) {
             Messages.sendMessage(Message.register_limit, player, null);
-        }
-         */
+        }*/
         return args.length >= 3 || (!emailRequired && args.length >= 2);
     }
 }

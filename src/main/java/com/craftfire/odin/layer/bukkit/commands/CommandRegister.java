@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  */
 package com.craftfire.odin.layer.bukkit.commands;
 
+import java.sql.SQLException;
+
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.util.Util;
@@ -26,10 +28,7 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 
-import java.sql.SQLException;
-
 public class CommandRegister extends OdinBukkitCommand {
-
     public CommandRegister() {
         super("user.register", OdinPermission.command_register, "TODO");
     }
@@ -37,6 +36,7 @@ public class CommandRegister extends OdinBukkitCommand {
     @Override
     public void execute(OdinPlayer player, String[] args) {
         player.sendMessage("register.processing");
+        // TODO: Do something with this
         /*Boolean email = true;
         if (Config.custom_enabled) {
             email = Config.custom_emailrequired;
@@ -44,9 +44,9 @@ public class CommandRegister extends OdinBukkitCommand {
                 email = false;
             }
         }*/
-        if (preCheck(player, args, true)) { //TODO: email check
+        if (preCheck(player, args, true)) { // TODO: Email check
             ScriptUser user = OdinManager.getScript().newScriptUser(player.getUsername(), args[0]);
-            //TODO: Make it so people have to activate their account
+            // TODO: Make it so people have to activate their account
             user.setActivated(OdinManager.getConfig().getBoolean("register.activate"));
             user.setEmail(args[1]);
             user.setRegIP(player.getIP().toIPv4().toString());
@@ -86,13 +86,12 @@ public class CommandRegister extends OdinBukkitCommand {
             player.sendMessage("email.invalid");
             return false;
         }
-        /*
-        TODO: Register IP limit
-        if (Config.register_limit > 0
+
+        // TODO: Register IP limit
+        /*if (Config.register_limit > 0
             && EBean.getAmount("ip", player.getAddress().getAddress().toString().substring(1)) > Config.register_limit) {
             Messages.sendMessage(Message.register_limit, player, null);
-        }
-         */
+        }*/
         return args.length >= 2 || (!emailRequired && args.length >= 1);
     }
 }

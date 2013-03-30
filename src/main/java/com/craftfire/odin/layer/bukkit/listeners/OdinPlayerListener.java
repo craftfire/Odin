@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,6 +19,14 @@
  */
 package com.craftfire.odin.layer.bukkit.listeners;
 
+import java.util.Arrays;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
+
 import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.commands.BukkitCommandManager;
 import com.craftfire.odin.layer.bukkit.commands.OdinBukkitCommand;
@@ -27,16 +35,8 @@ import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
 import com.craftfire.odin.util.MainUtils;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.*;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
 
 public class OdinPlayerListener implements Listener {
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
         OdinPlayer player = Odin.getPlayer(event.getPlayer());
@@ -167,7 +167,7 @@ public class OdinPlayerListener implements Listener {
         } else if (!OdinManager.getConfig().getBoolean("register.force") && OdinManager.getConfig().getBoolean("register.enabled")) {
             player.sendMessage("register.welcome");
         } else {
-            //Authenticate?
+            //TODOL: Authenticate?
         }
     }
 
@@ -182,11 +182,11 @@ public class OdinPlayerListener implements Listener {
         if (OdinManager.getConfig().getBoolean("session.enabled") &&
                 OdinManager.getConfig().getString("session.start").equalsIgnoreCase("logoff") &&
                 player.isAuthenticated()) {
-            /* TODO */
-            //this.plugin.Odin_Sessions.put(Encryption.md5(player.getName() + Util.craftFirePlayer.getIP(player)), thetimestamp);
-            //EBean EBeanClass = EBean.checkPlayer(player, true);
-           // EBeanClass.setSessiontime(thetimestamp);
-            //this.plugin.Odin_AuthTime.put(player.getName(), thetimestamp);
+            // TODO
+            /*this.plugin.Odin_Sessions.put(Encryption.md5(player.getName() + Util.craftFirePlayer.getIP(player)), thetimestamp);
+            EBean EBeanClass = EBean.checkPlayer(player, true);
+            EBeanClass.setSessiontime(thetimestamp);
+            this.plugin.Odin_AuthTime.put(player.getName(), thetimestamp);*/
         }
 
         if (!OdinManager.getConfig().getBoolean("guest.inventory") && !player.isRegistered()) {
@@ -226,7 +226,7 @@ public class OdinPlayerListener implements Listener {
                     OdinManager.getLogger().stackTrace(e);
                 }
             }
-            event.setMessage("******"); //TODO
+            event.setMessage("******"); // TODO
             event.setCancelled(true);
         }
     }

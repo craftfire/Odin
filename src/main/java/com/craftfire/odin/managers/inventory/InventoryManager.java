@@ -1,7 +1,7 @@
 /*
  * This file is part of Odin.
  *
- * Copyright (c) 2011-2012, CraftFire <http://www.craftfire.com/>
+ * Copyright (c) 2011 CraftFire <http://www.craftfire.com/>
  * Odin is licensed under the GNU Lesser General Public License.
  *
  * Odin is free software: you can redistribute it and/or modify
@@ -19,11 +19,11 @@
  */
 package com.craftfire.odin.managers.inventory;
 
-import com.craftfire.odin.managers.OdinManager;
-import com.craftfire.odin.managers.OdinUser;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.craftfire.odin.managers.OdinManager;
+import com.craftfire.odin.managers.OdinUser;
 
 public class InventoryManager {
     private Map<String, InventoryItem[]> inventories = new HashMap<String, InventoryItem[]>();
@@ -55,12 +55,12 @@ public class InventoryManager {
     }
 
     public Map<String, InventoryItem[]> getStoredInventories() {
-        //TODO
+        // TODO
         return null;
     }
 
     public Map<String, InventoryItem[]> getStoredArmor() {
-        //TODO
+        // TODO
         return null;
     }
 
@@ -169,7 +169,7 @@ public class InventoryManager {
     }
 
     public static String itemArrayToString(InventoryItem[] items) {
-        //TODO: Add a check to see if it's a real set?
+        // TODO: Add a check to see if it's a real set?
         StringBuilder itemsString = new StringBuilder();
         for (InventoryItem item : items) {
             String enchantments = "0";
@@ -190,7 +190,7 @@ public class InventoryManager {
     }
 
     public static InventoryItem[] itemStringToArray(String items) {
-        //TODO: Add a check to see if it's real? Also go through and make sure it works.
+        // TODO: Add a check to see if it's real? Also go through and make sure it works.
         if (items != null && ! items.isEmpty()) {
             String[] inv = items.split(getItemDelimiter());
             InventoryItem[] inventory = new InventoryItem[inv.length];
