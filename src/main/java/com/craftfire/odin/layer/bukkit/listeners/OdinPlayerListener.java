@@ -23,7 +23,6 @@ import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.commands.BukkitCommandManager;
 import com.craftfire.odin.layer.bukkit.commands.OdinBukkitCommand;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.layer.bukkit.util.Util;
 import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinPermission;
@@ -40,7 +39,7 @@ public class OdinPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        OdinPlayer player = Odin.getPlayer(event.getPlayer());
         if (!OdinManager.getDataManager().hasConnection() ) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
                     "You cannot join when the server has no database connection.");
@@ -83,7 +82,7 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         boolean allow = false;
-        final OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        final OdinPlayer player = Odin.getPlayer(event.getPlayer());
         player.setJoinTime();
 
         if (OdinManager.getConfig().getBoolean("link.rename") && player.isLinked()) {
@@ -174,7 +173,7 @@ public class OdinPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        OdinPlayer player = Odin.getPlayer(event.getPlayer());
 
         if (OdinManager.getConfig().getBoolean("link.rename") && player.isLinked()) {
             event.setQuitMessage(event.getQuitMessage().replaceAll(player.getName(), player.getDisplayName()));
@@ -200,7 +199,7 @@ public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String[] split = event.getMessage().split(" ");
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        OdinPlayer player = Odin.getPlayer(event.getPlayer());
         String command = split[0];
 
         if (OdinManager.getCommands().isCommand(event.getMessage())) {
@@ -238,7 +237,7 @@ public class OdinPlayerListener implements Listener {
             return;
         }
 
-        OdinPlayer player = Util.getPlayer(event.getPlayer());
+        OdinPlayer player = Odin.getPlayer(event.getPlayer());
         if (!player.isAuthenticated() && player.getJoinTime() != 0 && !OdinManager.getConfig().getBoolean("guest.movement")) {
             if (OdinManager.getConfig().getBoolean("protection.freeze.enabled") &&
                     (player.getJoinTime() + OdinManager.getConfig().getInt("protection.freeze.delay")) <
@@ -255,7 +254,7 @@ public class OdinPlayerListener implements Listener {
             return;
         }
 
-        OdinPlayer player = Util.getPlayer(event.getPlayer());
+        OdinPlayer player = Odin.getPlayer(event.getPlayer());
 
         if (!player.isAuthenticated()) {
             if (OdinManager.getConfig().getString("login.method").equalsIgnoreCase("prompt")) {
@@ -288,7 +287,7 @@ public class OdinPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        OdinPlayer player = Odin.getPlayer(event.getPlayer());
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
@@ -300,7 +299,7 @@ public class OdinPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        OdinPlayer player =  Odin.getPlayer(event.getPlayer());
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
@@ -313,7 +312,7 @@ public class OdinPlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        OdinPlayer player =  Util.getPlayer(event.getPlayer());
+        OdinPlayer player =  Odin.getPlayer(event.getPlayer());
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);

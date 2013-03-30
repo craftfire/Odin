@@ -19,9 +19,9 @@
  */
 package com.craftfire.odin.layer.bukkit.api.events.player;
 
+import com.craftfire.odin.layer.bukkit.Odin;
 import com.craftfire.odin.layer.bukkit.api.events.OdinEvent;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
-import com.craftfire.odin.layer.bukkit.util.Util;
 import org.bukkit.entity.Player;
 
 public abstract class OdinPlayerEvent extends OdinEvent {
@@ -29,7 +29,7 @@ public abstract class OdinPlayerEvent extends OdinEvent {
     
     public OdinPlayerEvent(Player player) {
         //TODO: Delete?
-        this.odinPlayer = Util.getPlayer(player);
+        this.odinPlayer = Odin.getPlayer(player);
     }
 
     public OdinPlayerEvent(OdinPlayer odinPlayer) {
