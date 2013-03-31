@@ -4,5 +4,5 @@ description: ${project.description}
 website: ${project.url}
 author: ${project.organization.name}
 
-main: ${project.groupId}.${project.artifactId}.layer.bukkit.${project.artifactName}
+main: ${project.groupId}.${project.artifactId}.layer.bukkit.${project.name}
 load: startup
