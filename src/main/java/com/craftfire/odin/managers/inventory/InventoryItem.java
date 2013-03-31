@@ -31,12 +31,17 @@ public class InventoryItem {
     public InventoryItem(String string) {
         String[] options = string.split(":");
         if (options.length == 5) {
-            setID(Integer.valueOf(options[0]));
-            setAmount(Integer.valueOf(options[1]));
-            setMaterial(Integer.valueOf(options[2]));
-            setDurability(Short.valueOf(options[3]));
+            this.id = Integer.valueOf(options[0]);
+            this.amount = Integer.valueOf(options[1]);
+            this.material = (byte) (int) Integer.valueOf(options[2]);
+            this .durability = Short.valueOf(options[3]);
             if (!options[4].equals("0")) {
-                setEnchantments(options[4].split("-"));
+                String[] enchantments = options[4].split("-");
+                for (String enchantment : enchantments) {
+                    String[] enchantmentOptions = enchantment.split("=");
+                    this.enchantments.add(new ItemEnchantment(Integer.parseInt(enchantmentOptions[0]),
+                                                              Integer.parseInt(enchantmentOptions[1])));
+                }
             }
         }
     }

@@ -50,8 +50,9 @@ public class LoggingHandler extends LoggingManager {
             map.put(8, "Custom username field: " + OdinManager.getConfig().getString("customdb.userfield"));
             map.put(9, "Custom encryption: " + OdinManager.getConfig().getString("customdb.encryption"));
             map.put(10, "Custom table schema:");
+            ResultSet rs = null;
             try {
-                ResultSet rs = OdinManager.getScript().getDataManager().getResultSet(
+                rs = OdinManager.getScript().getDataManager().getResultSet(
                                     "SELECT * FROM `" + OdinManager.getConfig().getString("customdb.table") + "` LIMIT 1");
                 ResultSetMetaData metaData = rs.getMetaData();
                 int rowCount = metaData.getColumnCount();
@@ -65,6 +66,14 @@ public class LoggingHandler extends LoggingManager {
                 }
             } catch (SQLException a) {
                 error("Failed while getting MySQL table schema.");
+            } finally {
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e1) {
+                        error("Failed while trying to close ResultSet.");
+                    }
+                }
             }
         } else {
             if (OdinManager.getBifrost() != null && OdinManager.getScript() != null) {

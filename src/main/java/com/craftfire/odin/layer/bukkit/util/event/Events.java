@@ -26,7 +26,10 @@ import com.craftfire.odin.layer.bukkit.api.events.plugin.OdinMessageEvent;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
 
+// TODO: make sure this class is being used
 public class Events {
+    private Events() {  }
+
     public static void quit(OdinPlayer player) {
         OdinManager.getLogger().debug("Calling the 'QUIT' event for user '" + player.getName() + "'.");
         Bukkit.getServer().getPluginManager().callEvent(new OdinPlayerQuitEvent(player));

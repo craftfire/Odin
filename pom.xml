@@ -17,7 +17,7 @@
         <bifrostVersion>0.0.1-SNAPSHOT</bifrostVersion>
         <bukkitVersion>1.5.1-R0.1-SNAPSHOT</bukkitVersion>
         <spoutVersion>dev-SNAPSHOT</spoutVersion>
-        <vaultVersion>1.2.24-SNAPSHOT</vaultVersion>
+        <vaultVersion>1.2.25-SNAPSHOT</vaultVersion>
         <buildNumber>0</buildNumber>
     </properties>
 

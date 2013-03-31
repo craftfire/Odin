@@ -22,18 +22,11 @@ package com.craftfire.odin.managers;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
-import com.craftfire.commons.CraftCommons;
-import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.inventory.InventoryItem;
-import com.craftfire.odin.managers.inventory.InventoryManager;
-import com.craftfire.odin.managers.inventory.ItemEnchantment;
 import com.craftfire.odin.managers.storage.StoredOdinUser;
 import com.craftfire.odin.util.MainUtils;
 
@@ -112,13 +105,13 @@ public class OdinUser {
         }
         if (OdinManager.getStorage().isCachedUser(username)) {
             // TODO
-            OdinUser user = OdinManager.getStorage().getCachedUser(username);
-            this.user = user.getUser();
-            this.status = user.getStatus();
-            if (user.getIP() != null) {
-                this.ipAddress = user.getIP();
+            OdinUser cachedUser = OdinManager.getStorage().getCachedUser(username);
+            this.user = cachedUser.getUser();
+            this.status = cachedUser.getStatus();
+            if (cachedUser.getIP() != null) {
+                this.ipAddress = cachedUser.getIP();
             }
-            this.storedUser = user.getStoredUser();
+            this.storedUser = cachedUser.getStoredUser();
         }
     }
 
@@ -166,9 +159,7 @@ public class OdinUser {
 
     public String getLinkedName() {
         if (this.linkedUsername == null && OdinManager.getStorage().hasLinkedUsername(this.username)) {
-            String linkedUsername = OdinManager.getStorage().getLinkedUsername(this.username);
-            this.linkedUsername = linkedUsername;
-            return linkedUsername;
+            this.linkedUsername = OdinManager.getStorage().getLinkedUsername(this.username);
         }
         return this.linkedUsername;
     }

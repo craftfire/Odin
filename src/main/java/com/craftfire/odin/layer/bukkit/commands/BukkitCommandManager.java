@@ -21,7 +21,9 @@ package com.craftfire.odin.layer.bukkit.commands;
 
 import com.craftfire.odin.managers.OdinManager;
 
-public class BukkitCommandManager {
+final class BukkitCommandManager {
+    private BukkitCommandManager() {  }
+
     public static OdinBukkitCommand getCommand(String command) {
         String name = OdinManager.getCommands().getCommandName(command);
         if (name != null) {

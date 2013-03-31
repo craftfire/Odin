@@ -38,7 +38,7 @@ import com.craftfire.odin.managers.inventory.InventoryManager;
 import com.craftfire.odin.managers.storage.StorageManager;
 import com.craftfire.odin.util.MainUtils;
 
-public class OdinManager {
+public final class OdinManager {
     private static Bifrost bifrost;
     private static StorageManager storageManager;
     private static ConfigurationManager configurationManager;
@@ -228,18 +228,18 @@ public class OdinManager {
     public static boolean loadLibraries(File directory) {
         File outputDirectory = new File(directory.toString() + File.separator + "lib");
         if (!outputDirectory.exists() && !outputDirectory.mkdir()) {
-            System.out.println("Could not create " + outputDirectory.toString());
+            getLogger().error("Could not create " + outputDirectory.toString());
         }
         File h2Driver = new File(outputDirectory.toString() + File.separator + "h2.jar");
         if (!CraftCommons.hasClass("org.h2.Driver") && !h2Driver.exists()) {
-            System.out.println("Could not find required H2 driver.");
-            System.out.println("Starting download for the H2 driver. Please wait...");
+            getLogger().info("Could not find required H2 driver.");
+            getLogger().info("Starting download for the H2 driver. Please wait...");
             Set<String> urls = new HashSet<String>();
             // TODO: Set H2 version dynamically from pom version
             urls.add("http://hsql.sourceforge.net/m2-repo/com/h2database/h2/1.3.169/h2-1.3.169.jar");
             urls.add("http://repo2.maven.org/maven2/com/h2database/h2/1.3.169/h2-1.3.169.jar");
             if (!MainUtils.downloadLibrary(h2Driver, urls)) {
-                System.out.println("Could not download H2 driver, see log for more information.");
+                getLogger().error("Could not download H2 driver, see log for more information.");
                 return false;
             }
         }

@@ -24,16 +24,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.text.TabExpander;
 
 import com.craftfire.commons.CraftCommons;
 import com.craftfire.commons.database.DataManager;
 import com.craftfire.commons.encryption.Encryption;
-import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
-import com.craftfire.odin.managers.inventory.InventoryItem;
-import com.craftfire.odin.managers.inventory.InventoryManager;
 
 public class StorageManager {
     private final DataManager dataManager;
@@ -282,7 +278,7 @@ public class StorageManager {
         }
     }
 
-    private void checkDatabases() {
+    protected final void checkDatabases() {
         if (!getDataManager().tableExist(Table.USERS.getName())) {
             try {
                 getDataManager().executeQuery("CREATE TABLE IF NOT EXISTS " + Table.USERS.getName() + "(" +

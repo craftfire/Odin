@@ -46,7 +46,6 @@ public class CommandOdinRegister extends OdinBukkitCommand {
             user.setActivated(OdinManager.getConfig().getBoolean("register.activate"));
             user.setEmail(args[2]);
             //user.setRegIP(player.getIP().toIPv4().toString());
-            List<Player> craftPlayer = Odin.getInstance().getServer().matchPlayer(args[0]);
             try {
                 OdinManager.getScript().createUser(user);
                 if (!Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
