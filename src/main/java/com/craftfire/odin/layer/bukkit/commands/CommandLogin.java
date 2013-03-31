@@ -57,7 +57,7 @@ public class CommandLogin extends OdinBukkitCommand {
             player.sendMessage("login.authorized");
             return false;
         } else if (!player.isRegistered()) {
-            player.sendMessage("login.notregistered");
+            player.sendMessage("general.notregistered");
             return false;
         } else if (args.length < 1) {
             player.sendMessage("login.usage");

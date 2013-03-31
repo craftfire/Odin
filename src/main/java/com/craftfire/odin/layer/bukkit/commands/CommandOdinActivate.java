@@ -44,7 +44,7 @@ public class CommandOdinActivate extends OdinBukkitCommand {
             adminPlayer.sendMessage("activate.adminusage");
             return false;
         } else if (Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
-            adminPlayer.sendMessage("activate.adminnotfound");
+            adminPlayer.sendMessage("general.notfound");
             return false;
         }
         OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));

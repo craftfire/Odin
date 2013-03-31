@@ -9,6 +9,9 @@ time:
     hours: hours
     day: day
     days: days
+general:
+    notregistered: "{RED}You are not registered yet!"
+    notfound: "Could not find player, {PLAYER}! Please try again."
 database:
     users: "{BRIGHT_GREEN}There are {USER_COUNT} users registered."
     failure: "{RED}Database connection failed! Access is denied! Contact the server admin."
@@ -36,14 +39,12 @@ activate:
     admin: "Your user have been activated by an admin."
     adminsuccess: "Successfully activated player, {PLAYER}."
     adminfailure: "You cannot activate player {PLAYER}! That player is already activated."
-    adminnotfound: "Could not find player, {PLAYER}! Please try again."
     adminusage: "{YELLOW}Correct usage is: {WHITE}{CMD_ADMIN_ACTIVATE} username"
 deactivate:
     processing: "{YELLOW}Processing deactivation..."
     admin: "Your user have been deactivated by an admin."
     adminsuccess: "Successfully deactivated player, {PLAYER}."
     adminfailure: "You cannot deactivate player {PLAYER}! That player is already deactivated."
-    adminnotfound: "Could not find player, {PLAYER}! Please try again."
     adminusage: "{YELLOW}Correct usage is: {WHITE}{CMD_ADMIN_DEACTIVATE} username"
 login:
     normal: "{YELLOW}Welcome back {WHITE}{PLAYER}{YELLOW}! Please use {CMD_USER_LOGIN} password"
@@ -53,13 +54,11 @@ login:
     failure: "{RED}Password incorrect, please try again."
     offline: "{RED}Database is unavailable. Unable to verify password!"
     authorized: "{RED}You are already logged in!"
-    notregistered: "{RED}You are not registered yet!"
     timeout: "Kicked because you failed to login within {LOGIN_TIMEOUT}."
     usage: "{YELLOW}Correct usage is: {WHITE}{CMD_USER_LOGIN} password"
     admin: "You have been logged in by an admin."
     adminsuccess: "Successfully logged in player, {PLAYER}."
     adminfailure: "You cannot login player {PLAYER}! That player is already logged in."
-    adminnotfound: "Could not find player, {PLAYER}! Please try again."
     adminusage: "{YELLOW}Correct usage is: {WHITE}{CMD_ADMIN_LOGIN} username"
 logout:
     processing: "{YELLOW}Attempting to logout..."
@@ -69,7 +68,6 @@ logout:
     admin: "You have been logged out by an admin."
     adminsuccess: "Successfully logged out player, {PLAYER}."
     adminfailure: "You cannot logout player, {PLAYER}! That player is not logged in."
-    adminnotfound: "Could not find player, {PLAYER}! Please try again."
     adminusage: "{YELLOW}Correct usage is: {WHITE}{CMD_ADMIN_LOGOUT} username"
 link:
     welcome: "{NEWLINE}or {CMD_USER_LINK} otherusername password"
@@ -94,6 +92,15 @@ unlink:
     renamed: "{YELLOW}{DISPLAYNAME} has been renamed to {PLAYER}."
     usage: "{YELLOW}Correct usage is: {WHITE}{CMD_USER_UNLINK} otherusername password"
 email:
+    processing: "{YELLOW}Attempting to change email..."
+    success: "{BRIGHT_GREEN}Email change successfully!. Your email is now {USER_EMAIL}."
+    failure: "{RED}Email change failed!"
+    duplicate: "{RED}Your email is already {USER_EMAIL}!"
+    usage: "{YELLOW}Correct usage is: {WHITE}{CMD_USER_EMAIL}"
+    admin: "Your email has changed to {USER_EMAIL} by an admin."
+    adminsuccess: "Successfully changed the email of {USER} to {USER_EMAIL}."
+    adminduplicate: "{USER}'s email is already {USER_EMAIL}."
+    adminusage: "{YELLOW}Correct usage is: {WHITE}{CMD_ADMIN_EMAIL} username email"
     required: "{RED}Email required for registration!"
     invalid: "{RED}Email invalid! Please try again!"
     badcharacters: "{RED}Email contains bad characters! {BAD_CHARACTERS}!"

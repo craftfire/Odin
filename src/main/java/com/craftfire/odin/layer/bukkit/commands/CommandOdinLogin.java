@@ -45,7 +45,7 @@ public class CommandOdinLogin extends OdinBukkitCommand {
             adminPlayer.sendMessage("login.adminusage");
             return false;
         } else if (Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
-            adminPlayer.sendMessage("login.adminnotfound");
+            adminPlayer.sendMessage("general.notfound");
             return false;
         }
         OdinPlayer player = Odin.getPlayer(Odin.getInstance().getServer().matchPlayer(args[0]).get(0));
