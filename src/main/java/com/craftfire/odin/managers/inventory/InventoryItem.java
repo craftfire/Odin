@@ -36,8 +36,8 @@ public class InventoryItem {
             this.material = (byte) (int) Integer.valueOf(options[2]);
             this .durability = Short.valueOf(options[3]);
             if (!options[4].equals("0")) {
-                String[] enchantments = options[4].split("-");
-                for (String enchantment : enchantments) {
+                String[] splitEnchantments = options[4].split("-");
+                for (String enchantment : splitEnchantments) {
                     String[] enchantmentOptions = enchantment.split("=");
                     this.enchantments.add(new ItemEnchantment(Integer.parseInt(enchantmentOptions[0]),
                                                               Integer.parseInt(enchantmentOptions[1])));
@@ -53,7 +53,7 @@ public class InventoryItem {
 
     public InventoryItem(int id, int material) {
         this.id = id;
-        setMaterial(material);
+        this.material = (byte) material;
     }
 
     public int getID() {

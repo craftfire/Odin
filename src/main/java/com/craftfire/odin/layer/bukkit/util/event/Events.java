@@ -27,7 +27,7 @@ import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.OdinManager;
 
 // TODO: make sure this class is being used
-public class Events {
+public final class Events {
     private Events() {  }
 
     public static void quit(OdinPlayer player) {
