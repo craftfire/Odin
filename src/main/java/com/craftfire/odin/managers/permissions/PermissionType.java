@@ -20,5 +20,5 @@
 package com.craftfire.odin.managers.permissions;
 
 public enum PermissionType {
-    USER, ADMIN
+    GUEST, USER, ADMIN
 }

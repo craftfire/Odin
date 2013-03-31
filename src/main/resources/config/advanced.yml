@@ -41,20 +41,6 @@ session:
     start: login                                     # When to start the player's session. Options are login and logoff.
     length: 1 hour                                   # Length of the player's session. Can be any number of seconds, minutes, hours, or days.
     protect: true                                    # Enable/disable protecting player from being logged out from another location.
-guest:
-    commands: false                                  # Enable/disable guest commands.
-    chat: false                                      # Enable/disable guest chat.
-    building: false                                  # Enable/disable guest building.
-    destruction: false                               # Enable/disable guest destruction.
-    movement: false                                  # Enable/disable guest movement.
-    interactions: false                              # Enable/disable guest interactions with objects.
-    inventory: false                                 # Enable/disable guest inventory usage.
-    drop: false                                      # Enable/disable guest being able to drop items.
-    pickup: false                                    # Enable/disable guest being able to pickup items.
-    health: false                                    # Enable/disable guest getting hurt.
-    pvp: false                                       # Enable/disable guest hurting players.
-    mobtargeting: false                              # Enable/disable mobs targeting guest.
-    mobdamage: false                                 # Enable/disable mob damage from guest.
 protection:
     freeze:
         enabled: true                                # Enable/disable freezing players on join to prevent movement.

@@ -39,7 +39,20 @@ public enum OdinPermission {
     command_admin_email (PermissionType.ADMIN, "email"),
     command_admin_activate (PermissionType.ADMIN, "activate"),
     command_admin_deactivate (PermissionType.ADMIN, "deactivate"),
-    command_admin_reload (PermissionType.ADMIN, "reload");
+    command_admin_reload (PermissionType.ADMIN, "reload"),
+    guest_commands (PermissionType.GUEST, "commands"),
+    guest_chat (PermissionType.GUEST, "chat"),
+    guest_building (PermissionType.GUEST, "building"),
+    guest_destruction (PermissionType.GUEST, "destruction"),
+    guest_movement (PermissionType.GUEST, "movement"),
+    guest_interactions (PermissionType.GUEST, "interactions"),
+    guest_inventory (PermissionType.GUEST, "inventory"),
+    guest_drop (PermissionType.GUEST, "drop"),
+    guest_pickup (PermissionType.GUEST, "pickup"),
+    guest_health (PermissionType.GUEST, "health"),
+    guest_pvp (PermissionType.GUEST, "pvp"),
+    guest_mobtargeting (PermissionType.GUEST, "mobtargeting"),
+    guest_mobdamage (PermissionType.GUEST, "mobdamage");
 
     private PermissionType type;
     private String permission;
@@ -49,7 +62,18 @@ public enum OdinPermission {
     }
 
     public String getNode() {
-        return (isUserNode() ? getUserNode() + this.permission : getAdminNode() + this.permission);
+        switch (getType()) {
+            case USER:
+                return getUserNode() + this.permission;
+            case ADMIN:
+                return getAdminNode() + this.permission;
+            default:
+                return getGuestNode() + this.permission;
+        }
+    }
+
+    public boolean isGuestNode() {
+        return getType().equals(PermissionType.GUEST);
     }
 
     public boolean isUserNode() {
@@ -68,6 +92,10 @@ public enum OdinPermission {
         return this.permission;
     }
 
+    public static String getGuestNode() {
+        return OdinManager.getPluginName() + ".guest.";
+    }
+
     public static String getUserNode() {
         return OdinManager.getPluginName() + ".command.user.";
     }
@@ -77,6 +105,10 @@ public enum OdinPermission {
     }
 
     public static String getNode(PermissionType type) {
-        return OdinManager.getPluginName() + ".command." + type.name();
+        if (type.equals(PermissionType.GUEST)) {
+            return OdinManager.getPluginName() + ".guest.";
+        } else {
+            return OdinManager.getPluginName() + ".command." + type.name();
+        }
     }
 }

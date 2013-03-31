@@ -187,7 +187,7 @@ public class OdinPlayerListener implements Listener {
             this.plugin.Odin_AuthTime.put(player.getName(), thetimestamp);*/
         }
 
-        if (!OdinManager.getConfig().getBoolean("guest.inventory") && !player.isRegistered()) {
+        if (!player.hasPermissions(OdinPermission.guest_inventory) && !player.isRegistered()) {
             player.getInventory().setContents(new ItemStack[36]);
         }
 
@@ -236,7 +236,7 @@ public class OdinPlayerListener implements Listener {
         }
 
         OdinPlayer player = Odin.getPlayer(event.getPlayer());
-        if (!player.isAuthenticated() && player.getJoinTime() != 0 && !OdinManager.getConfig().getBoolean("guest.movement")) {
+        if (!player.isAuthenticated() && player.getJoinTime() != 0 && !player.hasPermissions(OdinPermission.guest_movement)) {
             if (OdinManager.getConfig().getBoolean("protection.freeze.enabled") &&
                     (player.getJoinTime() + OdinManager.getConfig().getInt("protection.freeze.delay")) <
                             System.currentTimeMillis() / 1000) {
@@ -277,7 +277,7 @@ public class OdinPlayerListener implements Listener {
                 }
             }
 
-            if (player.isGuest() && !OdinManager.getConfig().getBoolean("guest.chat")) {
+            if (player.isGuest() && !player.hasPermissions(OdinPermission.guest_chat)) {
                 event.setCancelled(true);
             }
         }
@@ -289,7 +289,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && ! OdinManager.getConfig().getBoolean("guest.interactions")) {
+            } else if (player.isGuest() && !player.hasPermissions(OdinPermission.guest_interactions)) {
                 event.setCancelled(true);
             }
         }
@@ -301,7 +301,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && !OdinManager.getConfig().getBoolean("guest.pickup")) {
+            } else if (player.isGuest() && !player.hasPermissions(OdinPermission.guest_pickup)) {
                 event.setCancelled(true);
             }
         }
@@ -314,7 +314,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.isAuthenticated()) {
             if (player.isRegistered()) {
                 event.setCancelled(true);
-            } else if (player.isGuest() && !OdinManager.getConfig().getBoolean("guest.drop")) {
+            } else if (player.isGuest() && !player.hasPermissions(OdinPermission.guest_drop)) {
                 event.setCancelled(true);
             }
         }
