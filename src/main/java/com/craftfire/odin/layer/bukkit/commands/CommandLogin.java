@@ -24,6 +24,7 @@ import com.craftfire.odin.layer.bukkit.util.event.Event;
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.permissions.OdinPermission;
 
+// TODO: check if account is activated, do not login if not activated.
 public class CommandLogin extends OdinBukkitCommand {
     public CommandLogin() {
         super("user.login", OdinPermission.command_login, "TODO");
