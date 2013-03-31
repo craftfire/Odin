@@ -39,13 +39,14 @@ public class CommandOdinRegister extends OdinBukkitCommand {
 
     @Override
     public void execute(OdinPlayer adminPlayer, String[] args) {
+        adminPlayer.sendMessage("register.processing");
         // TODO: email check
         if (preCheck(adminPlayer, args, true)) {
             ScriptUser user = OdinManager.getScript().newScriptUser(args[0], args[1]);
             // TODO: Make it so people have to activate their account
             user.setActivated(OdinManager.getConfig().getBoolean("register.activate"));
             user.setEmail(args[2]);
-            //user.setRegIP(player.getIP().toIPv4().toString());
+            user.setRegIP("127.0.0.1");
             try {
                 OdinManager.getScript().createUser(user);
                 if (!Odin.getInstance().getServer().matchPlayer(args[0]).isEmpty()) {
@@ -55,12 +56,12 @@ public class CommandOdinRegister extends OdinBukkitCommand {
                 }
                 adminPlayer.sendMessage("register.adminsuccess");
             } catch (SQLException e) {
-                adminPlayer.sendMessage("register.adminfailure");
+                adminPlayer.sendMessage("register.failure");
                 OdinManager.getLogger().error("Could not register user '" + args[0]
                                             + "' due to error: " + e.getMessage());
                 OdinManager.getLogger().stackTrace(e);
             } catch (ScriptException e) {
-                adminPlayer.sendMessage("register.adminfailure");
+                adminPlayer.sendMessage("register.failure");
                 OdinManager.getLogger().error("Could not register user '" + args[0]
                                              + "' due to error: " + e.getMessage());
                 OdinManager.getLogger().stackTrace(e);
