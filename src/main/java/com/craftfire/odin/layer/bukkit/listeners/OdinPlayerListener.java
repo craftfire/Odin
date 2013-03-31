@@ -34,6 +34,8 @@ import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.permissions.OdinPermission;
 import com.craftfire.odin.util.MainUtils;
 
+import java.util.Arrays;
+
 public class OdinPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLogin(PlayerLoginEvent event) {
@@ -67,7 +69,7 @@ public class OdinPlayerListener implements Listener {
         if (!player.hasMinLength()) {
             player.sendMessage("username.minimum", event);
             return;
-        } else if (! player.hasMaxLength()) {
+        } else if (!player.hasMaxLength()) {
             player.sendMessage("username.maximum", event);
             return;
         }
@@ -208,10 +210,10 @@ public class OdinPlayerListener implements Listener {
                 player.sendMessage("protection.denied");
             } else {
                 String[] args;
-                if (bukkitCommand.getCommand().matches(".*\\s+.*") && !event.getMessage().equals(bukkitCommand.getCommand())) {
-                    args = event.getMessage().replace(bukkitCommand.getCommand() + " ", "").split(" ");
+                if (!event.getMessage().equalsIgnoreCase(bukkitCommand.getCommand())) {
+                    args = event.getMessage().replace(bukkitCommand.getCommand() + " ", "").split("\\s+");
                 } else {
-                    args = event.getMessage().replace(bukkitCommand.getCommand(), "").split(" ");
+                    args = event.getMessage().replace(bukkitCommand.getCommand(), "").split("\\s+");
                 }
                 if (args.length == 1 && args[0].isEmpty()) {
                     // First item in the array is empty, the array should have 0 items.
