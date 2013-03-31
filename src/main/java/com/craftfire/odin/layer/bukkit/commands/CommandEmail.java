@@ -19,8 +19,11 @@
  */
 package com.craftfire.odin.layer.bukkit.commands;
 
+import com.craftfire.commons.util.Util;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.permissions.OdinPermission;
+
+import java.util.Arrays;
 
 public class CommandEmail extends OdinBukkitCommand {
     public CommandEmail() {
@@ -29,12 +32,28 @@ public class CommandEmail extends OdinBukkitCommand {
 
     @Override
     public void execute(OdinPlayer player, String[] args) {
+        player.sendMessage("email.processing");
         if (preCheck(player, args)) {
+            player.setEmail(args[0]);
+            player.sendMessage("email.success");
         }
     }
 
     private boolean preCheck(OdinPlayer player, String[] args) {
-        // TODO
-        return false;
+        player.sendMessage(Arrays.toString(args) + " - " + args.length);
+        if (args.length != 1) {
+            player.sendMessage("email.usage");
+            return false;
+        } else if (!player.isRegistered()) {
+            player.sendMessage("general.notregistered");
+            return false;
+        } else if (!Util.isEmail(args[0])) {
+            player.sendMessage("email.invalid");
+            return false;
+        } else if (player.getEmail().equalsIgnoreCase(args[0])) {
+            player.sendMessage("email.duplicate");
+            return false;
+        }
+        return true;
     }
 }

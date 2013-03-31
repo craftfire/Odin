@@ -208,7 +208,7 @@ public class OdinPlayerListener implements Listener {
                 player.sendMessage("protection.denied");
             } else {
                 String[] args;
-                if (bukkitCommand.getCommand().contains(" ") && !event.getMessage().equals(bukkitCommand.getCommand())) {
+                if (bukkitCommand.getCommand().matches(".*\\s+.*") && !event.getMessage().equals(bukkitCommand.getCommand())) {
                     args = event.getMessage().replace(bukkitCommand.getCommand() + " ", "").split(" ");
                 } else {
                     args = event.getMessage().replace(bukkitCommand.getCommand(), "").split(" ");

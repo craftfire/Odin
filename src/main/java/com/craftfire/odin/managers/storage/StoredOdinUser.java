@@ -49,7 +49,7 @@ public class StoredOdinUser {
     }
 
     public void save() {
-        // TODO
+        // TODO: sync with script database
     }
 
     public int getID() {

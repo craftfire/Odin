@@ -28,9 +28,11 @@ public final class BukkitCommandManager {
         String name = OdinManager.getCommands().getCommandName(command);
         if (name != null) {
             OdinBukkitCommand bukkitCommand = null;
-            if (name.equalsIgnoreCase("user.link")) {
+            if (name.equalsIgnoreCase("user.email")) {
+                bukkitCommand = new CommandEmail();
+            } else if (name.equalsIgnoreCase("user.link")) {
                 bukkitCommand = new CommandLink();
-            } if (name.equalsIgnoreCase("user.login")) {
+            } else if (name.equalsIgnoreCase("user.login")) {
                 bukkitCommand = new CommandLogin();
             } else if (name.equalsIgnoreCase("user.logout")) {
                 bukkitCommand = new CommandLogout();

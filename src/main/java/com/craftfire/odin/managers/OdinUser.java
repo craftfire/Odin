@@ -139,6 +139,14 @@ public class OdinUser {
         return this.username;
     }
 
+    public String getEmail() {
+        return this.storedUser.getEmail();
+    }
+
+    public void setEmail(String email) {
+        this.storedUser.setEmail(email);
+    }
+
     public ScriptUser getUser() {
         return this.user;
     }
