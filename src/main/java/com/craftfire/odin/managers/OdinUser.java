@@ -124,6 +124,34 @@ public class OdinUser {
 
     public void sync() {
         OdinManager.getLogger().debug("Running sync for username '" + this.username + "'.");
+        try {
+            ScriptUser user = OdinManager.getScript().getUser(this.username);
+            if (this.storedUser == null) {
+                OdinManager.getLogger().debug("Could not find a stored user for '" + this.username + "'.");
+                return;
+            }
+            if (!this.storedUser.getEmail().equalsIgnoreCase(user.getEmail())) {
+                OdinManager.getLogger().debug("Syncing the email from the database to local storage for user '"
+                                             + this.username + "'.");
+                this.storedUser.setEmail(user.getEmail());
+            }
+            if (!this.storedUser.getPassword().equalsIgnoreCase(user.getPassword())) {
+                OdinManager.getLogger().debug("Syncing the password from the database to local storage for user '"
+                                            + this.username + "'.");
+                this.storedUser.setEmail(user.getEmail());
+            }
+            if (!this.storedUser.getPasswordSalt().equalsIgnoreCase(user.getPasswordSalt())) {
+                OdinManager.getLogger().debug("Syncing the password salt from the database to local storage for user '"
+                                            + this.username + "'.");
+                this.storedUser.setEmail(user.getEmail());
+            }
+        } catch (ScriptException e) {
+            OdinManager.getLogger().error("Failed to sync user '" + this.username + "': " + e.getMessage());
+            OdinManager.getLogger().stackTrace(e);
+        } catch (SQLException e) {
+            OdinManager.getLogger().error("Failed to sync user '" + this.username + "': " + e.getMessage());
+            OdinManager.getLogger().stackTrace(e);
+        }
         // TODO
     }
 
