@@ -119,7 +119,7 @@ public class OdinUser {
         OdinManager.getLogger().debug("Saving username '" + this.username + "'.");
         OdinManager.getStorage().putCachedUser(this);
         getStoredUser().save();
-        // TODO
+        // TODO: save the stored user to the script database.
     }
 
     public void sync() {
