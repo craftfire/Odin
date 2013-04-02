@@ -36,6 +36,8 @@ public final class BukkitCommandManager {
                 bukkitCommand = new CommandLogin();
             } else if (name.equalsIgnoreCase("user.logout")) {
                 bukkitCommand = new CommandLogout();
+            } else if (name.equalsIgnoreCase("user.password")) {
+                bukkitCommand = new CommandPassword();
             } else if (name.equalsIgnoreCase("user.register")) {
                 bukkitCommand = new CommandRegister();
             } else if (name.equalsIgnoreCase("user.unlink")) {

@@ -19,8 +19,11 @@
  */
 package com.craftfire.odin.layer.bukkit.commands;
 
+import com.craftfire.commons.util.Util;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
 import com.craftfire.odin.managers.permissions.OdinPermission;
+
+import java.util.Arrays;
 
 public class CommandPassword extends OdinBukkitCommand {
     public CommandPassword() {
@@ -29,12 +32,25 @@ public class CommandPassword extends OdinBukkitCommand {
 
     @Override
     public void execute(OdinPlayer player, String[] args) {
+        player.sendMessage("password.processing");
         if (preCheck(player, args)) {
+            player.setEmail(args[0]);
+            player.sendMessage("password.success");
         }
     }
 
     private boolean preCheck(OdinPlayer player, String[] args) {
-        // TODO
-        return false;
+        // TODO: add a command for password confirmation.
+        if (args.length != 1) {
+            player.sendMessage("password.usage");
+            return false;
+        } else if (!player.isRegistered()) {
+            player.sendMessage("general.notregistered");
+            return false;
+        } else if (player.getEmail().equalsIgnoreCase(args[0])) {
+            player.sendMessage("email.duplicate");
+            return false;
+        }
+        return true;
     }
 }
