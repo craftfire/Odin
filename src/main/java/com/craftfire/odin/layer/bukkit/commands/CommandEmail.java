@@ -40,7 +40,6 @@ public class CommandEmail extends OdinBukkitCommand {
     }
 
     private boolean preCheck(OdinPlayer player, String[] args) {
-        player.sendMessage(Arrays.toString(args) + " - " + args.length);
         if (args.length != 1) {
             player.sendMessage("email.usage");
             return false;
