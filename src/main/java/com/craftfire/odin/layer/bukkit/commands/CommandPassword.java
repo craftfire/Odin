@@ -19,8 +19,12 @@
  */
 package com.craftfire.odin.layer.bukkit.commands;
 
+import com.craftfire.bifrost.exceptions.ScriptException;
+import com.craftfire.commons.CraftCommons;
+import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.util.Util;
 import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
+import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.permissions.OdinPermission;
 
 import java.util.Arrays;
@@ -34,21 +38,37 @@ public class CommandPassword extends OdinBukkitCommand {
     public void execute(OdinPlayer player, String[] args) {
         player.sendMessage("password.processing");
         if (preCheck(player, args)) {
-            player.setEmail(args[0]);
-            player.sendMessage("password.success");
+            if (player.getTempPassword() == null) {
+                player.setTempPassword(args[0]);
+                player.sendMessage("password.retype");
+            } else {
+                player.setPassword(args[0]);
+                player.sendMessage("password.success");
+                player.setTempPassword(null);
+            }
         }
     }
 
     private boolean preCheck(OdinPlayer player, String[] args) {
-        // TODO: add a command for password confirmation.
         if (args.length != 1) {
             player.sendMessage("password.usage");
             return false;
         } else if (!player.isRegistered()) {
             player.sendMessage("general.notregistered");
             return false;
-        } else if (player.getEmail().equalsIgnoreCase(args[0])) {
-            player.sendMessage("email.duplicate");
+        } else if (player.getTempPassword() != null
+                && !player.getTempPassword().equalsIgnoreCase(CraftCommons.encrypt(Encryption.MD5, args[0]))) {
+            player.sendMessage("password.nomatch");
+            return false;
+        } else try {
+            if (player.getPassword().equalsIgnoreCase(OdinManager.getScript().hashPassword(player.getName(), args[0]))) {
+                player.sendMessage("password.duplicate");
+                return false;
+            }
+        } catch (ScriptException e) {
+            player.sendMessage("password.failure");
+            OdinManager.getLogger().error("Failed hashing password for user '" + player.getName() + "'.");
+            OdinManager.getLogger().stackTrace(e);
             return false;
         }
         return true;

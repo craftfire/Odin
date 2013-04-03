@@ -52,6 +52,11 @@ public class StoredOdinUser {
         // TODO: sync with script database
     }
 
+    public boolean authenticate(String password) {
+        // TODO: make it possible to authenticate with the local database.
+        return false;
+    }
+
     public int getID() {
         return this.id;
     }

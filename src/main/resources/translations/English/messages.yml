@@ -113,6 +113,8 @@ password:
     failure: "{RED}Password change failed!"
     duplicate: "{RED}Your password is already the same!"
     usage: "{YELLOW}Correct usage is: {WHITE}{CMD_USER_PASSWORD}"
+    retype: "{ORANGE}Retype the new password to change it."
+    nomatch: "{RED}Passwords do not match, please try again."
     admin: "Your password has been changed by an admin."
     adminsuccess: "Successfully changed the password of {USER}."
     adminduplicate: "{USER}'s password is already the same!"

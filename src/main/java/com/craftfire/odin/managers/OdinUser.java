@@ -25,6 +25,8 @@ import java.sql.SQLException;
 
 import com.craftfire.bifrost.classes.general.ScriptUser;
 import com.craftfire.bifrost.exceptions.ScriptException;
+import com.craftfire.commons.CraftCommons;
+import com.craftfire.commons.encryption.Encryption;
 import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.inventory.InventoryItem;
 import com.craftfire.odin.managers.storage.StoredOdinUser;
@@ -33,7 +35,7 @@ import com.craftfire.odin.util.MainUtils;
 public class OdinUser {
     private final String username;
     private StoredOdinUser storedUser;
-    private String linkedUsername;
+    private String linkedUsername, tempPassword;
     private IPAddress ipAddress;
     private ScriptUser user = null;
     private Status status;
@@ -175,6 +177,20 @@ public class OdinUser {
     public void setEmail(String email) {
         this.storedUser.setEmail(email);
     }
+
+    public String getPassword() {
+        return this.storedUser.getPassword();
+    }
+
+    public void setPassword(String password) {
+        try {
+            this.storedUser.setPassword(OdinManager.getScript().hashPassword(getUsername(), password));
+        } catch (ScriptException e) {
+            OdinManager.getLogger().error("Failed hashing password for user '" + getName() + "'.");
+            OdinManager.getLogger().stackTrace(e);
+        }
+    }
+
 
     public ScriptUser getUser() {
         return this.user;
@@ -424,6 +440,14 @@ public class OdinUser {
 
     public boolean hasBadCharacters() {
         return this.hasBadCharacters;
+    }
+
+    public String getTempPassword() {
+        return this.tempPassword;
+    }
+
+    public void setTempPassword(String password) {
+        this.tempPassword = (password == null) ? null : CraftCommons.encrypt(Encryption.MD5, password);
     }
 
     public boolean isFilterWhitelisted() {

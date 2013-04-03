@@ -75,6 +75,7 @@ public class CommandManager {
     }
 
     public String getCommand(String node, boolean ignoreLogging) {
+        // TODO: Ignore logging if the string contains private information, ie.  password.
         String newNode = "commands." + node.toLowerCase();
         if (!ignoreLogging) {
             OdinManager.getLogger().debug("Getting command from commands node: '" + newNode + "'.");
