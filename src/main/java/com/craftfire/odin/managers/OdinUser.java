@@ -183,12 +183,7 @@ public class OdinUser {
     }
 
     public void setPassword(String password) {
-        try {
-            this.storedUser.setPassword(OdinManager.getScript().hashPassword(getUsername(), password));
-        } catch (ScriptException e) {
-            OdinManager.getLogger().error("Failed hashing password for user '" + getName() + "'.");
-            OdinManager.getLogger().stackTrace(e);
-        }
+        this.storedUser.setPassword(password);
     }
 
 
@@ -251,20 +246,16 @@ public class OdinUser {
 
     public boolean login(String password) {
         // TODO: Add debug
-        try {
-            if (!OdinManager.getStorage().isAuthenticated(this.username)) {
-                if (isLinked() && OdinManager.getScript().authenticate(getLinkedName(), password)) {
-                    OdinManager.getStorage().putAuthenticated(this.username);
-                    this.authenticated = true;
-                    return true;
-                } else if (OdinManager.getScript().authenticate(this.username, password)) {
-                    OdinManager.getStorage().putAuthenticated(this.username);
-                    this.authenticated = true;
-                    return true;
-                }
+        if (!OdinManager.getStorage().isAuthenticated(this.username)) {
+            if (isLinked() && this.storedUser.authenticate(password)) {
+                OdinManager.getStorage().putAuthenticated(this.username);
+                this.authenticated = true;
+                return true;
+            } else if (this.storedUser.authenticate(password)) {
+                OdinManager.getStorage().putAuthenticated(this.username);
+                this.authenticated = true;
+                return true;
             }
-        } catch (ScriptException e) {
-            OdinManager.getLogger().stackTrace(e);
         }
         return false;
     }

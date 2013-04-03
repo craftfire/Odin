@@ -19,9 +19,11 @@
  */
 package com.craftfire.odin.managers.storage;
 
+import com.craftfire.bifrost.exceptions.ScriptException;
 import com.craftfire.commons.database.DataRow;
 import com.craftfire.commons.database.Results;
 import com.craftfire.commons.ip.IPAddress;
+import com.craftfire.odin.managers.OdinManager;
 
 public class StoredOdinUser {
     private final String username;
@@ -53,7 +55,12 @@ public class StoredOdinUser {
     }
 
     public boolean authenticate(String password) {
-        // TODO: make it possible to authenticate with the local database.
+        try {
+            return OdinManager.getScript().hashPassword(getUsername(), password).equalsIgnoreCase(getPassword());
+        } catch (ScriptException e) {
+            OdinManager.getLogger().error("Failed authenticating user '" + getUsername() + "'.");
+            OdinManager.getLogger().stackTrace(e);
+        }
         return false;
     }
 
@@ -78,7 +85,12 @@ public class StoredOdinUser {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            this.password = OdinManager.getScript().hashPassword(getUsername(), password);
+        } catch (ScriptException e) {
+            OdinManager.getLogger().error("Failed hashing password for user '" + getUsername() + "'.");
+            OdinManager.getLogger().stackTrace(e);
+        }
     }
 
     public String getPasswordSalt() {
