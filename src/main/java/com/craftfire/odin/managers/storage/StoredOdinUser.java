@@ -52,7 +52,7 @@ public class StoredOdinUser {
         // TODO: sync with script database
         Map<String, Object> saveData = new HashMap<String, Object>();
         for (OdinUserField field : OdinUserField.values()) {
-            if (!this.original.get(field).equals(this.data.get(field))) {
+            if (this.original.containsKey(field) && !this.original.get(field).equals(this.data.get(field))) {
                 saveData.put(field.getName(), this.data.get(field));
             }
         }
