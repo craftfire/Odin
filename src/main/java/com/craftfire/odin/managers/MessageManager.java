@@ -23,14 +23,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import com.craftfire.commons.TimeUtil;
+import com.craftfire.commons.yaml.YamlCombiner;
 import com.craftfire.commons.yaml.YamlManager;
 
 public class MessageManager {
-    private YamlManager messages = new YamlManager();
-    private YamlManager defaults = new YamlManager();
+    private YamlCombiner messages = new YamlCombiner();
+    private YamlCombiner defaults = new YamlCombiner();
 
     public boolean isInitialized() {
-        return (!messages.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+        return (this.messages.getFinalNodeCount() != 0 && this.defaults.getFinalNodeCount() != 0);
     }
 
     public void setLoggingHandler(LoggingHandler loggingHandler) {
@@ -58,8 +59,8 @@ public class MessageManager {
             return message;
         }
         OdinManager.getLogger().error("Could not find a message for node '" + node + "', returning null.");
-        OdinManager.getLogger().debug("Custom messages size: " + this.messages.getNodes().size());
-        OdinManager.getLogger().debug("Default messages size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom messages size: " + this.messages.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default messages size: " + this.defaults.getFinalNodeCount());
         return null;
     }
 
@@ -80,33 +81,25 @@ public class MessageManager {
         return this.defaults.getNodes();
     }
 
-    public YamlManager getMessages() {
+    public YamlCombiner getMessages() {
         return this.messages;
     }
 
-    public YamlManager getDefaults() {
+    public YamlCombiner getDefaults() {
         return this.defaults;
     }
 
     public void load(YamlManager messages, YamlManager defaults) {
         OdinManager.getLogger().debug("Adding custom messages : " + messages.getNodes().toString());
-        if (this.messages == null) {
-            this.messages = messages;
-        } else {
-            this.messages.addNodes(messages);
-        }
+        this.messages.addYamlManager(messages);
         OdinManager.getLogger().debug("Adding default messages : " + messages.getNodes().toString());
-        if (this.defaults == null) {
-            this.defaults = defaults;
-        } else {
-            this.defaults.addNodes(defaults);
-        }
-        OdinManager.getLogger().debug("Custom messages size: " + this.messages.getNodes().size());
-        OdinManager.getLogger().debug("Default messages size: " + this.defaults.getNodes().size());
-        if (this.messages.getNodes().size() == 0) {
+        this.defaults.addYamlManager(defaults);
+        OdinManager.getLogger().debug("Custom messages size: " + this.messages.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default messages size: " + this.defaults.getFinalNodeCount());
+        if (this.messages.getFinalNodeCount() == 0) {
             OdinManager.getLogger().error("Failed loading custom messages!");
         }
-        if (this.defaults.getNodes().size() == 0) {
+        if (this.defaults.getFinalNodeCount() == 0) {
             OdinManager.getLogger().error("Failed loading default messages!");
         }
     }
@@ -146,15 +139,15 @@ public class MessageManager {
             string = string.replaceAll("\\{PLUGIN\\}", OdinManager.getPluginName());
             string = string.replaceAll("\\{VERSION\\}", OdinManager.getPluginVersion());
             string = string.replaceAll("\\{LOGINTIMEOUT\\}",
-                                OdinManager.getConfig().getString("login.timeout", true).split(" ")[0] + " " +
-                                        stringToTimeLanguage(OdinManager.getConfig().getString("login.timeout", true)));
+                    OdinManager.getConfig().getString("login.timeout", true).split(" ")[0] + " " +
+                            stringToTimeLanguage(OdinManager.getConfig().getString("login.timeout", true)));
             string = string.replaceAll("\\{REGISTERTIMEOUT\\}",
-                                OdinManager.getConfig().getString("register.timeout", true).split(" ")[0] + " " +
-                                        stringToTimeLanguage(OdinManager.getConfig().getString("register.timeout", true)));
+                    OdinManager.getConfig().getString("register.timeout", true).split(" ")[0] + " " +
+                            stringToTimeLanguage(OdinManager.getConfig().getString("register.timeout", true)));
             string = string.replaceAll("\\{USERBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                                  OdinManager.getConfig().getString("filter.username", true)));
+                    OdinManager.getConfig().getString("filter.username", true)));
             string = string.replaceAll("\\{PASSBADCHARACTERS\\}", Matcher.quoteReplacement(
-                                                                  OdinManager.getConfig().getString("filter.password", true)));
+                    OdinManager.getConfig().getString("filter.password", true)));
             string = string.replaceAll("\\{EMAILREQUIRED\\}", email);
             string = string.replaceAll("\\{NEWLINE\\}", System.getProperty("line.separator"));
             string = string.replaceAll("\\{newline\\}", System.getProperty("line.separator"));
@@ -164,13 +157,13 @@ public class MessageManager {
             string = string.replaceAll("\\{nl\\}", System.getProperty("line.separator"));
 
             string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.register", true) +
-                                                            " (" + OdinManager.getCommands().getAlias("user.register", true) + ")");
+                    " (" + OdinManager.getCommands().getAlias("user.register", true) + ")");
             string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.link", true) +
-                                                            " (" + OdinManager.getCommands().getAlias("user.link", true) + ")");
+                    " (" + OdinManager.getCommands().getAlias("user.link", true) + ")");
             string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.unlink", true) +
-                                                            " (" + OdinManager.getCommands().getAlias("user.unlink", true) + ")");
+                    " (" + OdinManager.getCommands().getAlias("user.unlink", true) + ")");
             string = string.replaceAll("\\{REGISTERCMD\\}", OdinManager.getCommands().getCommand("user.login", true) +
-                                                            " (" + OdinManager.getCommands().getAlias("user.login", true) + ")");
+                    " (" + OdinManager.getCommands().getAlias("user.login", true) + ")");
 
             string = string.replaceAll("\\{BLACK\\}", "§0");
             string = string.replaceAll("\\{DARKBLUE\\}", "§1");

@@ -19,45 +19,45 @@
  */
 package com.craftfire.odin.managers.commands;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
+import com.craftfire.commons.yaml.YamlCombiner;
 import com.craftfire.commons.yaml.YamlManager;
+
 import com.craftfire.odin.managers.LoggingHandler;
 import com.craftfire.odin.managers.OdinManager;
 
 public class CommandManager {
-    private YamlManager commands = new YamlManager();
-    private YamlManager defaults = new YamlManager();
+    private YamlCombiner commands = new YamlCombiner();
+    private YamlCombiner defaults = new YamlCombiner();
     private Map<String, String> customValueNodes = new HashMap<String, String>();
     private Map<String, String> defaultValueNodes = new HashMap<String, String>();
 
     public boolean isInitialized() {
-        return (!commands.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+        return (this.commands.getFinalNodeCount() != 0 && this.defaults.getFinalNodeCount() != 0);
     }
 
     public void initialize() throws IllegalAccessException {
         for (Map.Entry<String, Object> stringObjectEntry : getDefaultNodes().entrySet()) {
-            Map.Entry pairs = (Map.Entry) stringObjectEntry;
+            Map.Entry pairs = stringObjectEntry;
             if (pairs.getValue() instanceof String && pairs.getKey() instanceof String) {
                 if (this.defaultValueNodes.containsKey(pairs.getValue())) {
                     throw new IllegalAccessException("The command/alias '" + pairs.getValue() + "' (" + pairs.getKey() + ") "
-                                                    + "already exists under the '" + this.defaultValueNodes.get(pairs.getKey()) + "' "
-                                                    + "node and cannot be used twice.");
+                            + "already exists under the '" + this.defaultValueNodes.get(pairs.getKey()) + "' "
+                            + "node and cannot be used twice.");
                 } else {
                     this.defaultValueNodes.put((String) pairs.getValue(), (String) pairs.getKey());
                 }
             }
         }
         for (Map.Entry<String, Object> stringObjectEntry : getNodes().entrySet()) {
-            Map.Entry pairs = (Map.Entry) stringObjectEntry;
+            Map.Entry pairs = stringObjectEntry;
             if (pairs.getValue() instanceof String && pairs.getKey() instanceof String) {
                 if (this.customValueNodes.containsKey(pairs.getValue())) {
                     throw new IllegalAccessException("The command/alias '" + pairs.getValue() + "' (" + pairs.getKey() + ") "
-                                                   + "already exists under the '" + this.customValueNodes.get(pairs.getKey()) + "' "
-                                                   + "node and cannot be used twice.");
+                            + "already exists under the '" + this.customValueNodes.get(pairs.getKey()) + "' "
+                            + "node and cannot be used twice.");
                 } else {
                     this.customValueNodes.put((String) pairs.getValue(), (String) pairs.getKey());
                 }
@@ -75,7 +75,7 @@ public class CommandManager {
     }
 
     public String getCommand(String node, boolean ignoreLogging) {
-        // TODO: Ignore logging if the string contains private information, ie.  password.
+        // TODO: Ignore logging if the string contains private information, ie. password.
         String newNode = "commands." + node.toLowerCase();
         if (!ignoreLogging) {
             OdinManager.getLogger().debug("Getting command from commands node: '" + newNode + "'.");
@@ -94,8 +94,8 @@ public class CommandManager {
             return value;
         }
         OdinManager.getLogger().error("Could not find command node '" + newNode + "', returning null.");
-        OdinManager.getLogger().debug("Custom commands size: " + this.commands.getNodes().size());
-        OdinManager.getLogger().debug("Default commands size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom commands size: " + this.commands.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default commands size: " + this.defaults.getFinalNodeCount());
         return null;
     }
 
@@ -122,18 +122,9 @@ public class CommandManager {
             return value;
         }
         OdinManager.getLogger().error("Could not find alias node '" + newNode + "', returning null.");
-        OdinManager.getLogger().debug("Custom alias size: " + this.commands.getNodes().size());
-        OdinManager.getLogger().debug("Default alias size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom alias size: " + this.commands.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default alias size: " + this.defaults.getFinalNodeCount());
         return null;
-    }
-
-    public String getNode(String value) {
-        String node = this.commands.getNode(value, true);
-        if (node == null) {
-            node = this.defaults.getNode(value, true);
-        }
-        OdinManager.getLogger().debug("Returning node for value '" + value + "' = '" + node + "'.");
-        return node;
     }
 
     public String getCommandName(String input) {
@@ -159,7 +150,7 @@ public class CommandManager {
         }
         if (node != null) {
             node = node.replaceAll("aliases.", "")
-                       .replaceAll("commands.", "");
+                    .replaceAll("commands.", "");
         }
         OdinManager.getLogger().debug("Returning command name for input '" + input + "' = '" + node + "'.");
         return node;
@@ -181,11 +172,11 @@ public class CommandManager {
         return this.defaultValueNodes;
     }
 
-    public YamlManager getCommands() {
+    public YamlCombiner getCommands() {
         return this.commands;
     }
 
-    public YamlManager getDefaults() {
+    public YamlCombiner getDefaults() {
         return this.defaults;
     }
 
@@ -211,22 +202,14 @@ public class CommandManager {
     }
 
     public void load(YamlManager config, YamlManager defaults) {
-        if (this.commands == null) {
-            this.commands = config;
-        } else {
-            this.commands.addNodes(config);
-        }
-        if (this.defaults == null) {
-            this.defaults = defaults;
-        } else {
-            this.defaults.addNodes(defaults);
-        }
-        OdinManager.getLogger().debug("Custom commands size: " + this.commands.getNodes().size());
-        OdinManager.getLogger().debug("Default commands size: " + this.defaults.getNodes().size());
-        if (this.commands.getNodes().size() == 0) {
+        this.commands.addYamlManager(config);
+        this.defaults.addYamlManager(defaults);
+        OdinManager.getLogger().debug("Custom commands size: " + this.commands.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default commands size: " + this.defaults.getFinalNodeCount());
+        if (this.commands.getFinalNodeCount() == 0) {
             OdinManager.getLogger().error("Failed loading custom commands!");
         }
-        if (this.defaults.getNodes().size() == 0) {
+        if (this.defaults.getFinalNodeCount() == 0) {
             OdinManager.getLogger().error("Failed loading default commands!");
         }
     }

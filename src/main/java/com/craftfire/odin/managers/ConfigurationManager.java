@@ -19,19 +19,23 @@
  */
 package com.craftfire.odin.managers;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import com.craftfire.commons.yaml.YamlCombiner;
 import com.craftfire.commons.yaml.YamlManager;
 
 public class ConfigurationManager {
-    private YamlManager config = new YamlManager();
-    private YamlManager defaults = new YamlManager();
-    private final Set<String> ignoredNodes = new HashSet<String>(Arrays.asList(new String[]{"protection.freeze.enabled",
-                                                                                       "protection.freeze.delay",
-                                                                                       "guest.movement"}));
+    private YamlCombiner config = new YamlCombiner();
+    private YamlCombiner defaults = new YamlCombiner();
+    private final Set<String> ignoredNodes = new HashSet<String>(Arrays.asList(new String[] { "protection.freeze.enabled",
+            "protection.freeze.delay",
+            "guest.movement" }));
 
     public boolean isInitialized() {
-        return (!config.getNodes().isEmpty() && !defaults.getNodes().isEmpty());
+        return (this.config.getFinalNodeCount() != 0 && this.defaults.getFinalNodeCount() != 0);
     }
 
     public void setLoggingHandler(LoggingHandler loggingHandler) {
@@ -69,8 +73,8 @@ public class ConfigurationManager {
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning false.");
-        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
-        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getFinalNodeCount());
         return false;
     }
 
@@ -90,8 +94,8 @@ public class ConfigurationManager {
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning null.");
-        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
-        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getFinalNodeCount());
         return null;
     }
 
@@ -111,8 +115,8 @@ public class ConfigurationManager {
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning 0.");
-        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
-        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getFinalNodeCount());
         return 0;
     }
 
@@ -132,17 +136,9 @@ public class ConfigurationManager {
             return value;
         }
         OdinManager.getLogger().error("Could not find config node '" + node + "', returning null.");
-        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
-        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getFinalNodeCount());
         return null;
-    }
-
-     public String getNode(String value) {
-        String node = this.config.getNode(value);
-        if (node == null) {
-            node = this.defaults.getNode(value);
-        }
-        return node;
     }
 
     public Map<String, Object> getNodes() {
@@ -153,31 +149,23 @@ public class ConfigurationManager {
         return this.defaults.getNodes();
     }
 
-    public YamlManager getConfig() {
+    public YamlCombiner getConfig() {
         return this.config;
     }
 
-    public YamlManager getDefaults() {
+    public YamlCombiner getDefaults() {
         return this.defaults;
     }
 
     public void load(YamlManager config, YamlManager defaults) {
-        if (this.config == null) {
-            this.config = config;
-        } else {
-            this.config.addNodes(config);
-        }
-        if (this.defaults == null) {
-            this.defaults = defaults;
-        } else {
-            this.defaults.addNodes(defaults);
-        }
-        OdinManager.getLogger().debug("Custom config size: " + this.config.getNodes().size());
-        OdinManager.getLogger().debug("Default config size: " + this.defaults.getNodes().size());
-        if (this.config.getNodes().size() == 0) {
+        this.config.addYamlManager(config);
+        this.defaults.addYamlManager(defaults);
+        OdinManager.getLogger().debug("Custom config size: " + this.config.getFinalNodeCount());
+        OdinManager.getLogger().debug("Default config size: " + this.defaults.getFinalNodeCount());
+        if (this.config.getFinalNodeCount() == 0) {
             OdinManager.getLogger().error("Failed loading custom config!");
         }
-        if (this.defaults.getNodes().size() == 0) {
+        if (this.defaults.getFinalNodeCount() == 0) {
             OdinManager.getLogger().error("Failed loading default config!");
         }
     }

@@ -19,16 +19,22 @@
  */
 package com.craftfire.odin.util;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSource;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.craftfire.commons.FileDownloader;
 import com.craftfire.commons.TimeUtil;
-import com.craftfire.odin.layer.bukkit.managers.OdinPlayer;
+
 import com.craftfire.odin.managers.OdinManager;
 import com.craftfire.odin.managers.OdinUser;
 
@@ -47,8 +53,8 @@ public class MainUtils {
                 downloader.download();
                 if (downloader.wasSuccessful()) {
                     OdinManager.getLogger().info("Successfully downloaded " + outputFile.getName() + ". Downloaded "
-                                                 + downloader.getFileSize() + " bytes in "
-                                                 + downloader.getElapsedSeconds() + " seconds.");
+                            + downloader.getFileSize() + " bytes in "
+                            + downloader.getElapsedSeconds() + " seconds.");
                     return true;
                 }
             } else {
@@ -56,7 +62,7 @@ public class MainUtils {
             }
         } catch (IOException e1) {
             OdinManager.getLogger().error("Could not download " + outputFile.getName() +
-                                           ", see log for more information.");
+                    ", see log for more information.");
             OdinManager.getLogger().stackTrace(e1);
         }
         return false;
@@ -86,13 +92,14 @@ public class MainUtils {
         CodeSource src = getClass().getProtectionDomain().getCodeSource();
         String language = "English";
         File allLanguages = new File(dir);
-        if(!allLanguages.exists()) {
+        if (!allLanguages.exists()) {
             if (allLanguages.mkdir()) {
-               OdinManager.getLogger().debug("Sucesfully created directory: " + allLanguages);
+                OdinManager.getLogger().debug("Sucesfully created directory: " + allLanguages);
             }
         }
         boolean set = false;
         FileFilter fileFilter = new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 return file.isDirectory();
             }
@@ -105,23 +112,23 @@ public class MainUtils {
                 ZipEntry ze = null;
                 while ((ze = zip.getNextEntry()) != null) {
                     String directory = ze.getName();
-                    if (directory.startsWith("files" + File.separator + "translations" + File.separator) && !directory.endsWith(".yml"))  {
+                    if (directory.startsWith("files" + File.separator + "translations" + File.separator) && !directory.endsWith(".yml")) {
                         directory = directory.replace("files" + File.separator + "translations" + File.separator, "");
                         directory = directory.replace(File.separator, "");
                         if (!directory.equals("")) {
                             OdinManager.getLogger().debug("Directory: " + directory);
                             File f = new File(dir + File.separator + directory + File.separator + type + ".yml");
-                            if (! f.exists()) {
+                            if (!f.exists()) {
                                 OdinManager.getLogger().debug(type + ".yml" + " could not be found in " + dir + File.separator +
-                                                            directory + File.separator + "! Creating " + type + ".yml");
+                                        directory + File.separator + "! Creating " + type + ".yml");
                                 defaultFile(dir + directory + File.separator, "translations" + File.separator + directory, type + ".yml");
                             }
                             if (type.equals("commands") &&
-                                OdinManager.getConfig().getString("plugin.language.commands").equalsIgnoreCase(directory)) {
+                                    OdinManager.getConfig().getString("plugin.language.commands").equalsIgnoreCase(directory)) {
                                 set = true;
                                 language = directory;
                             } else if (type.equals("messages") &&
-                                OdinManager.getConfig().getString("plugin.language.messages").equalsIgnoreCase(directory)) {
+                                    OdinManager.getConfig().getString("plugin.language.messages").equalsIgnoreCase(directory)) {
                                 set = true;
                                 language = directory;
                             }
@@ -143,11 +150,11 @@ public class MainUtils {
         if (!set) {
             for (File file : files) {
                 if (type.equalsIgnoreCase("commands") &&
-                    OdinManager.getConfig().getString("plugin.language.commands").equalsIgnoreCase(file.getName()))  {
+                        OdinManager.getConfig().getString("plugin.language.commands").equalsIgnoreCase(file.getName())) {
                     set = true;
                     language = file.getName();
                 } else if (type.equalsIgnoreCase("messages") &&
-                    OdinManager.getConfig().getString("plugin.language.messages").equalsIgnoreCase(file.getName()))  {
+                        OdinManager.getConfig().getString("plugin.language.messages").equalsIgnoreCase(file.getName())) {
                     set = true;
                     language = file.getName();
                 }
@@ -159,19 +166,19 @@ public class MainUtils {
                             OdinManager.getConfig().getString("plugin.language.commands") + ", defaulting to " + language);
         } else if (!set && type.equalsIgnoreCase("messages")) {
             OdinManager.getLogger().info(
-                            "Could not find translation files for " +
+                    "Could not find translation files for " +
                             OdinManager.getConfig().getString("plugin.language.messages") + ", defaulting to " + language);
         } else if (type.equalsIgnoreCase("commands")) {
             OdinManager.getLogger().info(type + " language set to " +
-                                      OdinManager.getConfig().getString("plugin.language.commands"));
+                    OdinManager.getConfig().getString("plugin.language.commands"));
         } else if (type.equalsIgnoreCase("messages")) {
             OdinManager.getLogger().info(type + " language set to " +
-                                      OdinManager.getConfig().getString("plugin.language.messages"));
+                    OdinManager.getConfig().getString("plugin.language.messages"));
         }
         OdinManager.getLogger().debug("Loading external language file for '" + type.toLowerCase() + "': "
-                                    + new File(dir + language + File.separator, type + ".yml").getPath());
+                + new File(dir + language + File.separator, type + ".yml").getPath());
         OdinManager.getLogger().debug("Loading internal language file for '" + type.toLowerCase() + "': "
-                                    + "files/translations/English/" + type + ".yml");
+                + "files/translations/English/" + type + ".yml");
         if (type.equalsIgnoreCase("commands")) {
             OdinManager.getCommands().getCommands().load(new File(dir + language + File.separator, type + ".yml"));
             OdinManager.getCommands().getDefaults().load("files/translations/English/" + type + ".yml");
@@ -186,19 +193,19 @@ public class MainUtils {
             if (OdinManager.getCommands().getDefaultNodes().size() > OdinManager.getCommands().getNodes().size()) {
                 Set<String> missingNodes = new TreeSet<String>();
                 OdinManager.getLogger().info("You are missing "
-                                            + (OdinManager.getCommands().getDefaultNodes().size()
-                                                - OdinManager.getCommands().getNodes().size())
-                                            + " command nodes "
-                                            + "(" + OdinManager.getCommands().getDefaultNodes().size()
-                                            + " > "
-                                            + OdinManager.getCommands().getNodes().size() + ")"
-                                            + ((OdinManager.getConfig().getBoolean("plugin.debugmode")) ? "."
-                                                : ", enable debug to see which."));
+                        + (OdinManager.getCommands().getDefaultNodes().size()
+                        - OdinManager.getCommands().getNodes().size())
+                        + " command nodes "
+                        + "(" + OdinManager.getCommands().getDefaultNodes().size()
+                        + " > "
+                        + OdinManager.getCommands().getNodes().size() + ")"
+                        + ((OdinManager.getConfig().getBoolean("plugin.debugmode")) ? "."
+                                : ", enable debug to see which."));
                 OdinManager.getLogger().debug("You are missing the following command nodes ("
-                                            + (OdinManager.getCommands().getDefaultNodes().size()
-                                                - OdinManager.getCommands().getNodes().size()) + "):");
+                        + (OdinManager.getCommands().getDefaultNodes().size()
+                        - OdinManager.getCommands().getNodes().size()) + "):");
                 for (Map.Entry<String, Object> stringObjectEntry : OdinManager.getCommands().getDefaultNodes().entrySet()) {
-                    Map.Entry pairs = (Map.Entry) stringObjectEntry;
+                    Map.Entry pairs = stringObjectEntry;
                     if (OdinManager.getCommands().getNodes().containsKey(pairs.getKey())) {
                         missingNodes.add((String) pairs.getKey());
                     }
@@ -207,8 +214,8 @@ public class MainUtils {
                     OdinManager.getLogger().debug("* " + node);
                 }
                 OdinManager.getLogger().debug("Finished listing all of the "
-                                            + (OdinManager.getCommands().getDefaultNodes().size()
-                                            - OdinManager.getCommands().getNodes().size()) + " missing command nodes.");
+                        + (OdinManager.getCommands().getDefaultNodes().size()
+                        - OdinManager.getCommands().getNodes().size()) + " missing command nodes.");
             }
             try {
                 OdinManager.getCommands().initialize();
@@ -219,30 +226,30 @@ public class MainUtils {
         } else if (type.equalsIgnoreCase("messages")) {
             OdinManager.getMessages().getMessages().load(new File(dir + language + File.separator, type + ".yml"));
             OdinManager.getMessages().getDefaults().load("files/translations/English/" + type + ".yml");
-            OdinManager.getLogger().debug("Custom messages size: " + OdinManager.getMessages().getNodes().size());
-            OdinManager.getLogger().debug("Default messages size: " + OdinManager.getMessages().getDefaultNodes().size());
-            if (OdinManager.getMessages().getNodes().size() == 0) {
+            OdinManager.getLogger().debug("Custom messages size: " + OdinManager.getMessages().getMessages().getFinalNodeCount());
+            OdinManager.getLogger().debug("Default messages size: " + OdinManager.getMessages().getDefaults().getFinalNodeCount());
+            if (OdinManager.getMessages().getMessages().getFinalNodeCount() == 0) {
                 OdinManager.getLogger().error("Failed loading custom messages!");
             }
-            if (OdinManager.getMessages().getDefaultNodes().size() == 0) {
+            if (OdinManager.getMessages().getDefaults().getFinalNodeCount() == 0) {
                 OdinManager.getLogger().error("Failed loading default messages!");
             }
             if (OdinManager.getMessages().getDefaultNodes().size() > OdinManager.getMessages().getNodes().size()) {
                 Set<String> missingNodes = new TreeSet<String>();
                 OdinManager.getLogger().info("You are missing "
-                                            + (OdinManager.getMessages().getDefaultNodes().size()
-                                                - OdinManager.getMessages().getNodes().size())
-                                            + " message nodes "
-                                            + "(" + OdinManager.getMessages().getDefaultNodes().size()
-                                            + " > "
-                                            + OdinManager.getMessages().getNodes().size() + ")"
-                                            + ((OdinManager.getConfig().getBoolean("plugin.debugmode")) ? "."
-                                                : ", enable debug to see which."));
+                        + (OdinManager.getMessages().getDefaultNodes().size()
+                        - OdinManager.getMessages().getNodes().size())
+                        + " message nodes "
+                        + "(" + OdinManager.getMessages().getDefaultNodes().size()
+                        + " > "
+                        + OdinManager.getMessages().getNodes().size() + ")"
+                        + ((OdinManager.getConfig().getBoolean("plugin.debugmode")) ? "."
+                                : ", enable debug to see which."));
                 OdinManager.getLogger().debug("You are missing the following message nodes ("
-                                            + (OdinManager.getMessages().getDefaultNodes().size()
-                                                - OdinManager.getMessages().getNodes().size()) + "):");
+                        + (OdinManager.getMessages().getDefaultNodes().size()
+                        - OdinManager.getMessages().getNodes().size()) + "):");
                 for (Map.Entry<String, Object> stringObjectEntry : OdinManager.getMessages().getDefaultNodes().entrySet()) {
-                    Map.Entry pairs = (Map.Entry) stringObjectEntry;
+                    Map.Entry pairs = stringObjectEntry;
                     if (OdinManager.getMessages().getNodes().containsKey(pairs.getKey())) {
                         missingNodes.add((String) pairs.getKey());
                     }
