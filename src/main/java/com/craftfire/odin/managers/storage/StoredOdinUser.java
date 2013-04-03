@@ -72,7 +72,7 @@ public class StoredOdinUser {
     }
 
     public int getID() {
-        return (Integer) this.data.get(OdinUserField.ID);
+        return this.data.containsKey(OdinUserField.ID) ? (Integer) this.data.get(OdinUserField.ID) : 0;
     }
 
     public String getUsername() {
@@ -80,7 +80,7 @@ public class StoredOdinUser {
     }
 
     public String getLinkedName() {
-        return (String) this.data.get(OdinUserField.LINKED_NAME);
+        return this.data.containsKey(OdinUserField.LINKED_NAME) ? (String) this.data.get(OdinUserField.LINKED_NAME) : null;
     }
 
     public void setLinkedName(String linkedName) {
@@ -88,7 +88,7 @@ public class StoredOdinUser {
     }
 
     public String getPassword() {
-        return (String) this.data.get(OdinUserField.PASSWORD);
+        return this.data.containsKey(OdinUserField.PASSWORD) ? (String) this.data.get(OdinUserField.PASSWORD) : null;
     }
 
     public void setPassword(String password) {
@@ -101,7 +101,7 @@ public class StoredOdinUser {
     }
 
     public String getPasswordSalt() {
-        return (String) this.data.get(OdinUserField.PASSWORD_SALT);
+        return this.data.containsKey(OdinUserField.PASSWORD_SALT) ? (String) this.data.get(OdinUserField.PASSWORD_SALT) : null;
     }
 
     public void setPasswordSalt(String passwordSalt) {
@@ -109,7 +109,7 @@ public class StoredOdinUser {
     }
 
     public String getEmail() {
-        return (String) this.data.get(OdinUserField.EMAIL);
+        return this.data.containsKey(OdinUserField.EMAIL) ? (String) this.data.get(OdinUserField.EMAIL) : null;
     }
 
     public void setEmail(String email) {
@@ -117,7 +117,7 @@ public class StoredOdinUser {
     }
 
     public String getIPAddress() {
-        return (String) this.data.get(OdinUserField.IP_ADDRESS);
+        return this.data.containsKey(OdinUserField.IP_ADDRESS) ? (String) this.data.get(OdinUserField.IP_ADDRESS) : null;
     }
 
     public void setIPAddress(IPAddress ipAddress) {
@@ -133,7 +133,7 @@ public class StoredOdinUser {
     }
 
     public boolean isActivated() {
-        return ((Integer) this.data.get(OdinUserField.ACTIVATED)) == 1;
+        return (this.data.containsKey(OdinUserField.ACTIVATED) ? (Integer) this.data.get(OdinUserField.ACTIVATED) : 0) == 1;
     }
 
     public void setActivated(boolean activated) {
@@ -145,7 +145,7 @@ public class StoredOdinUser {
     }
 
     public boolean isRegistered() {
-        return ((Integer) this.data.get(OdinUserField.REGISTERED)) == 1;
+        return (this.data.containsKey(OdinUserField.REGISTERED) ? (Integer) this.data.get(OdinUserField.REGISTERED) : 0) == 1;
     }
 
     public void setRegistered(boolean registered) {
@@ -157,7 +157,7 @@ public class StoredOdinUser {
     }
 
     public long getSessionTime() {
-        return (Long) this.data.get(OdinUserField.SESSION_TIME);
+        return this.data.containsKey(OdinUserField.SESSION_TIME) ? (Long) this.data.get(OdinUserField.SESSION_TIME) : 0;
     }
 
     public void setSessionTime() {
@@ -169,7 +169,7 @@ public class StoredOdinUser {
     }
 
     public long getReloadTime() {
-        return (Long) this.data.get(OdinUserField.RELOAD_TIME);
+        return this.data.containsKey(OdinUserField.SESSION_TIME) ? (Long) this.data.get(OdinUserField.RELOAD_TIME) : 0;
     }
 
     public void setReloadTime() {
