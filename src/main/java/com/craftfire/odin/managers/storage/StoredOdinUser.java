@@ -25,11 +25,15 @@ import com.craftfire.commons.database.Results;
 import com.craftfire.commons.ip.IPAddress;
 import com.craftfire.odin.managers.OdinManager;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public class StoredOdinUser {
     private final String username;
-    private String linkedName, password, passwordSalt, email, ipAddress;
-    private int id, activated, registered;
-    private long sessionTime, reloadTime;
+    private Map<OdinUserField, Object> original = new HashMap<OdinUserField, Object>(),
+                                       data = new HashMap<OdinUserField, Object>();
 
     public StoredOdinUser(String username) {
         this.username = username;
@@ -37,21 +41,20 @@ public class StoredOdinUser {
 
     public StoredOdinUser(Results data) {
         DataRow row = data.getFirstResult();
-        this.id = row.getIntField("ID");
         this.username = row.getStringField("USERNAME");
-        this.linkedName = row.getStringField("LINKED_NAME");
-        this.password = row.getStringField("PASSWORD");
-        this.passwordSalt = row.getStringField("PASSWORD_SALT");
-        this.email = row.getStringField("EMAIL");
-        this.ipAddress = row.getStringField("IP_ADDRESS");
-        this.activated = row.getIntField("ACTIVATED");
-        this.registered = row.getIntField("REGISTERED");
-        this.sessionTime = row.getLongField("SESSION_TIME");
-        this.reloadTime = row.getLongField("RELOAD_TIME");
+        for (OdinUserField field : OdinUserField.values()) {
+            this.original.put(field, row.getIntField(field.getName()));
+        }
+        this.data = this.original;
     }
 
     public void save() {
         // TODO: sync with script database
+        for (OdinUserField field : OdinUserField.values()) {
+            if (!this.original.get(field).equals(this.data.get(field))) {
+                // TODO: do something with the modified data.
+            }
+        }
     }
 
     public boolean authenticate(String password) {
@@ -65,7 +68,7 @@ public class StoredOdinUser {
     }
 
     public int getID() {
-        return this.id;
+        return (Integer) this.data.get(OdinUserField.ID);
     }
 
     public String getUsername() {
@@ -73,20 +76,20 @@ public class StoredOdinUser {
     }
 
     public String getLinkedName() {
-        return this.linkedName;
+        return (String) this.data.get(OdinUserField.LINKED_NAME);
     }
 
     public void setLinkedName(String linkedName) {
-        this.linkedName = linkedName;
+        this.data.put(OdinUserField.LINKED_NAME, linkedName);
     }
 
     public String getPassword() {
-        return this.password;
+        return (String) this.data.get(OdinUserField.PASSWORD);
     }
 
     public void setPassword(String password) {
         try {
-            this.password = OdinManager.getScript().hashPassword(getUsername(), password);
+            this.data.put(OdinUserField.PASSWORD, OdinManager.getScript().hashPassword(getUsername(), password));
         } catch (ScriptException e) {
             OdinManager.getLogger().error("Failed hashing password for user '" + getUsername() + "'.");
             OdinManager.getLogger().stackTrace(e);
@@ -94,63 +97,63 @@ public class StoredOdinUser {
     }
 
     public String getPasswordSalt() {
-        return this.passwordSalt;
+        return (String) this.data.get(OdinUserField.PASSWORD_SALT);
     }
 
     public void setPasswordSalt(String passwordSalt) {
-        this.passwordSalt = passwordSalt;
+        this.data.put(OdinUserField.PASSWORD_SALT, passwordSalt);
     }
 
     public String getEmail() {
-        return this.email;
+        return (String) this.data.get(OdinUserField.EMAIL);
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.data.put(OdinUserField.EMAIL, email);
     }
 
     public String getIPAddress() {
-        return this.ipAddress;
+        return (String) this.data.get(OdinUserField.IP_ADDRESS);
     }
 
     public void setIPAddress(IPAddress ipAddress) {
-        if (this.ipAddress == null) {
-            this.ipAddress = "";
+        if (this.data.get(OdinUserField.IP_ADDRESS) == null) {
+            this.data.put(OdinUserField.IP_ADDRESS, "");
         } else {
-            this.ipAddress = ipAddress.toIPv4().toString();
+            this.data.put(OdinUserField.IP_ADDRESS, ipAddress.toIPv4().toString());
         }
     }
 
     public void setIPAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+        this.data.put(OdinUserField.IP_ADDRESS, ipAddress);
     }
 
     public boolean isActivated() {
-        return this.activated == 1;
+        return ((Integer) this.data.get(OdinUserField.ACTIVATED)) == 1;
     }
 
     public void setActivated(boolean activated) {
         if (activated) {
-            this.activated = 1;
+            this.data.put(OdinUserField.ACTIVATED, 1);
         } else {
-            this.activated = 0;
+            this.data.put(OdinUserField.ACTIVATED, 0);
         }
     }
 
     public boolean isRegistered() {
-        return this.registered == 1;
+        return ((Integer) this.data.get(OdinUserField.REGISTERED)) == 1;
     }
 
     public void setRegistered(boolean registered) {
         if (registered) {
-            this.registered = 1;
+            this.data.put(OdinUserField.REGISTERED, 1);
         } else {
-            this.registered = 0;
+            this.data.put(OdinUserField.REGISTERED, 0);
         }
     }
 
     public long getSessionTime() {
-        return this.sessionTime;
+        return (Long) this.data.get(OdinUserField.SESSION_TIME);
     }
 
     public void setSessionTime() {
@@ -158,11 +161,11 @@ public class StoredOdinUser {
     }
 
     public void setSessionTime(long sessionTime) {
-        this.sessionTime = sessionTime;
+        this.data.put(OdinUserField.SESSION_TIME, sessionTime);
     }
 
     public long getReloadTime() {
-        return this.reloadTime;
+        return (Long) this.data.get(OdinUserField.RELOAD_TIME);
     }
 
     public void setReloadTime() {
@@ -170,6 +173,6 @@ public class StoredOdinUser {
     }
 
     public void setReloadTime(long reloadTime) {
-        this.reloadTime = reloadTime;
+        this.data.put(OdinUserField.RELOAD_TIME, reloadTime);
     }
 }
