@@ -199,6 +199,23 @@ public class StorageManager {
         }
     }
 
+    public void saveUser(String username, Map<String, Object> data) {
+        // TODO: add debug and set ID?
+        try {
+            if (userExists(Table.USERS, username)) {
+                getDataManager().updateFields(data,
+                                              Table.USERS.getName(),
+                                              Table.USERS.getPrimary() + " = '" + username + "'");
+            } else {
+                getDataManager().insertFields(data,
+                                              Table.USERS.getName());
+            }
+        } catch (SQLException e) {
+            OdinManager.getLogger().error("Could not save user '" + username + "' due to error: " + e.getMessage());
+            OdinManager.getLogger().stackTrace(e);
+        }
+    }
+
     public String getInfo(String info) {
         return getDataManager().getStringField(Table.INFORMATION.getName(), "DATA", Table.INFORMATION.getPrimary() + " = '" + info + "'");
     }

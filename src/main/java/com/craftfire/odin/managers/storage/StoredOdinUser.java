@@ -50,10 +50,14 @@ public class StoredOdinUser {
 
     public void save() {
         // TODO: sync with script database
+        Map<String, Object> saveData = new HashMap<String, Object>();
         for (OdinUserField field : OdinUserField.values()) {
             if (!this.original.get(field).equals(this.data.get(field))) {
-                // TODO: do something with the modified data.
+                saveData.put(field.getName(), this.data.get(field));
             }
+        }
+        if (!saveData.isEmpty()) {
+            OdinManager.getStorage().saveUser(getUsername(), saveData);
         }
     }
 
