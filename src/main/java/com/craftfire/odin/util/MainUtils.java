@@ -22,6 +22,9 @@ package com.craftfire.odin.util;
 import java.io.*;
 import java.net.URL;
 import java.security.CodeSource;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -183,6 +186,29 @@ public class MainUtils {
             if (OdinManager.getCommands().getDefaultNodes().size() == 0) {
                 OdinManager.getLogger().error("Failed loading default commands!");
             }
+            if (OdinManager.getCommands().getDefaultNodes().size() > OdinManager.getCommands().getNodes().size()) {
+                OdinManager.getLogger().info("You are missing "
+                                            + (OdinManager.getCommands().getDefaultNodes().size()
+                                                - OdinManager.getCommands().getNodes().size())
+                                            + " command nodes "
+                                            + "(" + OdinManager.getCommands().getDefaultNodes().size()
+                                            + " > "
+                                            + OdinManager.getCommands().getNodes().size() + ")"
+                                            + ((OdinManager.getConfig().getBoolean("plugin.debug")) ? "."
+                                                : ", enable debug to see which."));
+                OdinManager.getLogger().debug("You are missing the following command nodes ("
+                                            + (OdinManager.getCommands().getDefaultNodes().size()
+                                                - OdinManager.getCommands().getNodes().size()) + "):");
+                for (Map.Entry<String, Object> stringObjectEntry : OdinManager.getCommands().getDefaultNodes().entrySet()) {
+                    Map.Entry pairs = (Map.Entry) stringObjectEntry;
+                    if (OdinManager.getCommands().getNodes().containsKey(pairs.getKey())) {
+                        OdinManager.getLogger().debug("- " + pairs.getKey());
+                    }
+                }
+                OdinManager.getLogger().debug("Finished listing all of the "
+                                            + (OdinManager.getCommands().getDefaultNodes().size()
+                                            - OdinManager.getCommands().getNodes().size()) + " missing command nodes.");
+            }
             try {
                 OdinManager.getCommands().initialize();
             } catch (IllegalAccessException e) {
@@ -199,6 +225,29 @@ public class MainUtils {
             }
             if (OdinManager.getMessages().getDefaultNodes().size() == 0) {
                 OdinManager.getLogger().error("Failed loading default messages!");
+            }
+            if (OdinManager.getMessages().getDefaultNodes().size() > OdinManager.getMessages().getNodes().size()) {
+                OdinManager.getLogger().info("You are missing "
+                                            + (OdinManager.getMessages().getDefaultNodes().size()
+                                                - OdinManager.getMessages().getNodes().size())
+                                            + " message nodes "
+                                            + "(" + OdinManager.getMessages().getDefaultNodes().size()
+                                            + " > "
+                                            + OdinManager.getMessages().getNodes().size() + ")"
+                                            + ((OdinManager.getConfig().getBoolean("plugin.debug")) ? "."
+                                                : ", enable debug to see which."));
+                OdinManager.getLogger().debug("You are missing the following message nodes ("
+                                            + (OdinManager.getMessages().getDefaultNodes().size()
+                                                - OdinManager.getMessages().getNodes().size()) + "):");
+                for (Map.Entry<String, Object> stringObjectEntry : OdinManager.getMessages().getDefaultNodes().entrySet()) {
+                    Map.Entry pairs = (Map.Entry) stringObjectEntry;
+                    if (OdinManager.getMessages().getNodes().containsKey(pairs.getKey())) {
+                        OdinManager.getLogger().debug("- " + pairs.getKey());
+                    }
+                }
+                OdinManager.getLogger().debug("Finished listing all of the "
+                        + (OdinManager.getMessages().getDefaultNodes().size()
+                        - OdinManager.getMessages().getNodes().size()) + " missing message nodes.");
             }
         }
     }
