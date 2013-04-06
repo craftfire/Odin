@@ -32,7 +32,7 @@ public class LoggingHandler extends LoggingManager {
     }
 
     @Override
-    public void stackTrace(final Exception e) {
+    public void stackTrace(final Throwable e) {
         HashMap<Integer, String> map = new HashMap<Integer, String>();
         map.put(0, "Odin version: " + OdinManager.getPluginVersion());
         if (OdinManager.getBifrost() != null) {
@@ -53,7 +53,7 @@ public class LoggingHandler extends LoggingManager {
             ResultSet rs = null;
             try {
                 rs = OdinManager.getScript().getDataManager().getResultSet(
-                                    "SELECT * FROM `" + OdinManager.getConfig().getString("customdb.table") + "` LIMIT 1");
+                        "SELECT * FROM `" + OdinManager.getConfig().getString("customdb.table") + "` LIMIT 1");
                 ResultSetMetaData metaData = rs.getMetaData();
                 int rowCount = metaData.getColumnCount();
                 map.put(11, "Table Name : " + metaData.getTableName(2));
@@ -61,8 +61,8 @@ public class LoggingHandler extends LoggingManager {
                 for (int i = 0; i < rowCount; i++) {
                     map.put(13,
                             metaData.getColumnName(i + 1) + "\t" +
-                            metaData.getColumnTypeName(i + 1) + "(" +
-                            metaData.getColumnDisplaySize(i + 1) + ")");
+                                    metaData.getColumnTypeName(i + 1) + "(" +
+                                    metaData.getColumnDisplaySize(i + 1) + ")");
                 }
             } catch (SQLException a) {
                 error("Failed while getting MySQL table schema.");
@@ -80,12 +80,12 @@ public class LoggingHandler extends LoggingManager {
                 map.put(14, "Script chosen: " + OdinManager.getScript().getScriptName());
                 map.put(15, "Script version: " + OdinManager.getScript().getVersion());
                 map.put(16, "Table prefix: " + OdinManager.getConfig().getString("script.tableprefix"));
-            } else if (OdinManager.getConfig().isInitialized() ) {
+            } else if (OdinManager.getConfig().isInitialized()) {
                 map.put(17, "Odin will not work because you've set the wrong script name in basic.yml, " +
-                            "please correct this node (script.name).");
+                        "please correct this node (script.name).");
                 map.put(18, "Script in config: " + OdinManager.getConfig().getString("script.name"));
-                map.put(19, "Script version in config: " +  OdinManager.getConfig().getString("script.version"));
-                map.put(20, "Table prefix in config: " +  OdinManager.getConfig().getString("script.tableprefix"));
+                map.put(19, "Script version in config: " + OdinManager.getConfig().getString("script.version"));
+                map.put(20, "Table prefix in config: " + OdinManager.getConfig().getString("script.tableprefix"));
             }
         }
         stackTrace(e, map);
