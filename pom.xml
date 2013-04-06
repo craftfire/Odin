@@ -9,13 +9,13 @@
     <version>0.0.1-SNAPSHOT</version>
     <url>http://www.craftfire.com</url>
     <inceptionYear>2011</inceptionYear>
-    <description>Authentication and web script integration plugin for the Spout platform and Bukkit Minecraft API.</description>
+    <description>Authentication and web script integration plugin for the Spout platform and Bukkit Minecraft server API.</description>
 
-    <!-- Project properties -->
+    <!-- Build properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bifrostVersion>0.0.1-SNAPSHOT</bifrostVersion>
-        <bukkitVersion>1.5.1-R0.1-SNAPSHOT</bukkitVersion>
+        <bukkitVersion>1.5.1-R0.2-SNAPSHOT</bukkitVersion>
         <spoutVersion>dev-SNAPSHOT</spoutVersion>
         <vaultVersion>1.2.25-SNAPSHOT</vaultVersion>
         <buildNumber>0</buildNumber>
@@ -77,7 +77,7 @@
 
     <!-- Build dependencies -->
     <dependencies>
-        <!-- Included in final JAR -->
+        <!-- Include in final JAR -->
         <dependency>
             <groupId>com.craftfire</groupId>
             <artifactId>bifrost</artifactId>
@@ -113,16 +113,16 @@
         <resources>
             <!-- Static resources -->
             <resource>
-                <targetPath>.</targetPath>
                 <filtering>false</filtering>
-                <directory>${project.basedir}</directory>
+                <directory>.</directory>
+                <targetPath>.</targetPath>
                 <includes>
                     <include>LICENSE.txt</include>
                 </includes>
             </resource>
             <resource>
                 <filtering>false</filtering>
-                <directory>${project.basedir}/src/main/resources/config</directory>
+                <directory>src/main/resources/config</directory>
                 <targetPath>files/config</targetPath>
                 <includes>
                     <include>**/*</include>
@@ -130,7 +130,7 @@
             </resource>
             <resource>
                 <filtering>false</filtering>
-                <directory>${project.basedir}/src/main/resources/translations</directory>
+                <directory>src/main/resources/translations</directory>
                 <targetPath>files/translations</targetPath>
                 <includes>
                     <include>**/*</include>
@@ -139,7 +139,7 @@
             <!-- Filtered resources -->
             <resource>
                 <filtering>true</filtering>
-                <directory>${project.basedir}/src/main/resources</directory>
+                <directory>src/main/resources</directory>
                 <targetPath>.</targetPath>
                 <includes>
                     <include>plugin.yml</include>
@@ -166,7 +166,7 @@
                             <quiet>true</quiet>
                             <encoding>UTF-8</encoding>
                             <strictCheck>true</strictCheck>
-                            <header>${project.basedir}/HEADER.txt</header>
+                            <header>HEADER.txt</header>
                             <mapping>
                                 <java>SLASHSTAR_STYLE</java>
                             </mapping>
@@ -236,6 +236,56 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Javadocs GitHub deployment -->
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.7</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <server>github-deploy</server>
+                            <repositoryName>${project.name}</repositoryName>
+                            <repositoryOwner>${project.organization.name}</repositoryOwner>
+                            <branch>refs/heads/gh-pages</branch>
+                            <merge>true</merge>
+                            <path>commons</path>
+                            <message>Javadocs for ${project.name} ${project.version}-b${buildNumber}</message>
+                        </configuration>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <!-- Reporting configuration -->
+    <reporting>
+        <!-- Reporting plugins -->
+        <plugins>
+            <!-- Javadoc creation plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <windowtitle>Javadoc | ${project.name} ${project.version}-b${buildNumber}</windowtitle>
+                    <doctitle><![CDATA[${project.name} ${project.version}-b${buildNumber}]]></doctitle>
+                    <header><![CDATA[<a href="https://github.com/CraftFire/${project.name}" target="_blank"><img src="#"></a>]]></header>
+                    <bottom><![CDATA[Copyright (c) {inceptionYear} <a href="${project.organization.url}" target="_blank">${project.organization.name}</a>. ${project.name} is licensed under <a href="http://www.gnu.org/licenses/lgpl.html" target="_blank">GNU Lesser General Public License Version 3</a>]]></bottom>
+                    <stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>
+                    <author>false</author>
+                    <version>false</version>
+                    <detectLinks>true</detectLinks>
+                    <linksource>true</linksource>
+                    <links>
+                        <link>http://${project.artifactID}.craftfire.com/apidocs</link>
+                    </links>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

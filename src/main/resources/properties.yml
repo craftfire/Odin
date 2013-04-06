@@ -4,6 +4,6 @@ description: ${project.description}
 website: ${project.url}
 author: ${project.organization.name}
 
-main: ${project.groupId}.${project.artifactId}.layer.spout.${project.artifactName}
+main: ${project.groupId}.${project.artifactId}.layer.spout.${project.name}
 load: startup
 platform: SERVER
