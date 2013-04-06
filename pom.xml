@@ -143,6 +143,7 @@
                 <targetPath>.</targetPath>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>properties.yml</include>
                 </includes>
             </resource>
         </resources>
