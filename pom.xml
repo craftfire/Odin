@@ -126,6 +126,12 @@
             <version>${bifrostVersion}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.craftfire</groupId>
+            <artifactId>commons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- Provided by third-party -->
         <dependency>
             <groupId>org.bukkit</groupId>
